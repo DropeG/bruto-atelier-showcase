@@ -1,14 +1,15 @@
 import { motion } from "framer-motion";
+import heroImage from "../images/heroImage.jpeg"
 
 const HeroSection = () => {
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative w-full h-[70vh] md:h-screen overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
-          src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=2070&auto=format&fit=crop"
+          src={heroImage}
           alt="Luxury furniture in minimalist interior"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover object-center"
         />
         <div className="absolute inset-0 bg-foreground/20" />
       </div>

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Search, ShoppingBag, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import CurrencyDropdown from "./CurrencyDropdown";
 
 const navLinks = [
   { label: "Colección", href: "#coleccion" },
@@ -13,6 +15,7 @@ const Navigation = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,39 +47,73 @@ const Navigation = () => {
         }`}
       >
         <nav className="flex items-center justify-between">
-          {/* Logo */}
-          <a href="#" className="relative z-50">
-            <h1 className="font-serif text-xl md:text-2xl font-medium tracking-wide text-foreground">
-              BRUTO <span className="font-normal italic">Atelier</span>
-            </h1>
-          </a>
+          {/* Left side - Hamburger and Search */}
+          <div className="flex items-center gap-4 order-1">
+            {/* Hamburger always left */}
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="relative z-50 p-2"
+              aria-label="Toggle menu"
+            >
+              {isMenuOpen ? (
+                <X className="w-6 h-6 text-foreground" />
+              ) : (
+                <Menu className="w-6 h-6 text-foreground" />
+              )}
+            </button>
 
-          {/* Desktop Navigation */}
-          <ul className="hidden md:flex items-center gap-12">
-            {navLinks.map((link) => (
-              <li key={link.label}>
-                <a
-                  href={link.href}
-                  className="text-editorial text-foreground hover:opacity-60 transition-opacity duration-300"
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
+            {/* Search icon - next to hamburger on desktop */}
+            <button
+              className="hidden md:block relative z-50 p-2"
+              aria-label="Search"
+            >
+              <Search className="w-5 h-5 text-foreground" />
+            </button>
+          </div>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden relative z-50 p-2"
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? (
-              <X className="w-6 h-6 text-foreground" />
-            ) : (
-              <Menu className="w-6 h-6 text-foreground" />
-            )}
-          </button>
+          {/* Desktop Navigation - Right side elements like Studio Jadad */}
+          <div className="hidden md:flex items-center gap-6 order-2 ml-auto">
+            {/* Currency selector */}
+            <CurrencyDropdown />
+
+            {/* User/Login icon */}
+            <button
+              onClick={() => navigate("/auth")}
+              className="p-2 hover:opacity-60 transition-opacity"
+              aria-label="User account"
+            >
+              <User className="w-5 h-5 text-foreground" />
+            </button>
+
+            {/* Shopping cart icon */}
+            <button
+              className="p-2 hover:opacity-60 transition-opacity"
+              aria-label="Shopping cart"
+            >
+              <ShoppingBag className="w-5 h-5 text-foreground" />
+            </button>
+          </div>
+
+          {/* Right side icons - mobile only */}
+          <div className="flex md:hidden items-center gap-4 order-3">
+            {/* Search icon - mobile */}
+            <button
+              className="relative z-50 p-2"
+              aria-label="Search"
+            >
+              <Search className="w-5 h-5 text-foreground" />
+            </button>
+
+            {/* Shopping bag - mobile */}
+            <button
+              className="relative z-50 p-2"
+              aria-label="Shopping cart"
+            >
+              <ShoppingBag className="w-5 h-5 text-foreground" />
+            </button>
+          </div>
+
+          {/* Spacer removed - ml-auto handles alignment */}
         </nav>
       </motion.header>
 

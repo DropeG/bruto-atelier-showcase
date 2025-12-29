@@ -1,15 +1,16 @@
 import Navigation from "@/components/Navigation";
-import CustomCursor from "@/components/CustomCursor";
 import StackingSection from "@/components/StackingSection";
 import HeroSection from "@/components/HeroSection";
 import ProductSection from "@/components/ProductSection";
 import QuoteSection from "@/components/QuoteSection";
 import Footer from "@/components/Footer";
+import sillaWachi from "@/images/sillaWachi.jpeg";  
+import banquetaWachi from "@/images/banquetaWachi.jpeg";
+import mesaWachi from "@/images/mesaWachi.jpeg";
 
 const Index = () => {
   return (
     <div className="relative">
-      <CustomCursor />
       <Navigation />
 
       {/* Stacking Sections Container */}
@@ -24,7 +25,7 @@ const Index = () => {
           <ProductSection
             name="Silla Wachi"
             subtitle="Asientos"
-            imageUrl="https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?q=80&w=1974&auto=format&fit=crop"
+            imageUrl={sillaWachi}
             imagePosition="right"
             labelPosition="bottom-left"
           />
@@ -35,7 +36,7 @@ const Index = () => {
           <ProductSection
             name="Banqueta Wachi"
             subtitle="Asientos"
-            imageUrl="https://images.unsplash.com/photo-1549497538-303791108f95?q=80&w=1974&auto=format&fit=crop"
+            imageUrl={banquetaWachi}
             imagePosition="left"
             labelPosition="bottom-right"
           />
@@ -51,7 +52,7 @@ const Index = () => {
           <ProductSection
             name="Mesa Wachi"
             subtitle="Mesas"
-            imageUrl="https://images.unsplash.com/photo-1611464908623-07f19927264e?q=80&w=1974&auto=format&fit=crop"
+            imageUrl={mesaWachi}
             imagePosition="center"
             labelPosition="bottom-left"
           />

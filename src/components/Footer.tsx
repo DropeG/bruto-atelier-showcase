@@ -81,7 +81,7 @@ const Footer = () => {
               </a>
               <div className="flex items-center gap-4 text-primary-foreground/70">
                 <MapPin className="w-5 h-5" />
-                <span className="text-editorial">Ciudad de México</span>
+                <span className="text-editorial">Santiago de Chile</span>
               </div>
             </motion.div>
           </div>

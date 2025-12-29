@@ -35,10 +35,10 @@ const ProductSection = ({
   return (
     <div
       ref={ref}
-      className="relative w-full h-screen bg-background flex items-center overflow-hidden"
+      className="relative w-full h-[70vh] md:h-screen bg-background flex items-center overflow-hidden"
     >
       {/* Image Container */}
-      <div className={`flex w-full h-full py-16 ${imageLayoutClasses[imagePosition]}`}>
+      <div className={`flex w-full h-full py-8 md:py-16 ${imageLayoutClasses[imagePosition]}`}>
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={isInView ? { opacity: 1, scale: 1 } : {}}
@@ -48,7 +48,7 @@ const ProductSection = ({
           <img
             src={imageUrl}
             alt={name}
-            className="h-full w-auto object-cover"
+            className="w-full h-auto max-h-[60vh] md:w-auto md:h-full object-contain md:object-cover"
           />
         </motion.div>
       </div>
