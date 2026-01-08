@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import heroImage from "../images/heroImage.jpeg"
+import heroImage from "../images/heroImage.jpg"
 
 const HeroSection = () => {
   return (
@@ -36,7 +36,7 @@ const HeroSection = () => {
           transition={{ duration: 1, delay: 1.2 }}
           className="absolute bottom-12 text-editorial text-primary-foreground/80"
         >
-          Mobiliario de autor
+          Sitio en Construcción
         </motion.p>
 
         {/* Scroll indicator */}
