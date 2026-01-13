@@ -61,16 +61,16 @@ export const galleryItems: GalleryItem[] = [
         id: 7, 
         category: "colection",
         title: "sabi",
-        thumbnail: "/images/gallery/colection-01-thumb.jpg",
-        detailImage: "/images/gallery/colection-01-detail.jpg",
+        thumbnail: "/images/gallery/colection-02-thumb.jpg",
+        detailImage: "/images/gallery/colection-02-detail.jpg",
         route: "/categoria/colection/sabi/7"
     },
     {
         id: 8, 
         category: "colection",
         title: "formo",
-        thumbnail: "/images/gallery/colection-02-thumb.jpg",
-        detailImage: "/images/gallery/colection-02-detail.jpg",
+        thumbnail: "/images/gallery/colection-03-thumb.jpg",
+        detailImage: "/images/gallery/colection-03-detail.jpg",
         route: "/categoria/colection/formo/8"
     },
     {
@@ -83,7 +83,7 @@ export const galleryItems: GalleryItem[] = [
     },
     {
         id: 10, 
-        category: "series",
+        category: "cabina",
         title: "bespoke",
         thumbnail: "/images/gallery/cabina-02-thumb.jpg",
         detailImage: "/images/gallery/cabina-02-detail.jpg",
