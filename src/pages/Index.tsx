@@ -1,13 +1,18 @@
 import Navigation from "@/components/Navigation";
-import StackingSection from "@/components/StackingSection";
 import HeroSection from "@/components/HeroSection";
-import ProductSection from "@/components/ProductSection";
-import QuoteSection from "@/components/QuoteSection";
 import Footer from "@/components/Footer";
-import sillaWachi from "@/images/sillaWachi.jpeg";  
-import banquetaWachi from "@/images/banquetaWachi.jpeg";
-import mesaWachi from "@/images/mesaWachi.jpeg";
-
+import Cocina from "/images/cocinaPrueba.jpg";
+import MuebleAzul from "/images/muebleAzulPrueba.jpg";
+import Comedor from "/images/comedorPrueba.jpg";
+import Paisaje from "/images/paisajePrueba.jpg";
+import CasitaArbol from "/images/casitaArbolPrueba.jpg";
+import Morar from "/images/morarPrueba.jpg";
+import Banqueta from "/images/banquetaPrueba.jpg";
+import Ceramica from "/images/ceramicaPrueba.jpg";
+import MuebleRojo from "/images/muebleRojoPrueba.jpg";
+import Cabina from "/images/cabinaPrueba.jpg";
+import ImageRow from "@/components/ImageRow";
+ 
 const Index = () => {
   return (
     <div className="relative">
@@ -16,9 +21,53 @@ const Index = () => {
       {/* Stacking Sections Container */}
       <div id="coleccion">
         {/* Section 1: Hero */}
-        <StackingSection index={1}>
           <HeroSection />
-        </StackingSection>
+          <ImageRow
+            leftSrc={Cocina}
+            leftAlt="Cocina"
+            leftHref="/categoria/morar/bespoke/1"
+            rightSrc={MuebleAzul}
+            rightAlt="Mueble Azul"
+            rightHref="/categoria/series/bespoke/2"
+          />
+          <ImageRow
+            leftSrc={Comedor}
+            leftAlt="Comedor"
+            leftHref="/categoria/colection/wachi/3"
+            rightSrc={Paisaje}
+            rightAlt="Paisaje"
+            rightHref="/categoria/morar/bespoke/4"
+          />
+          <ImageRow
+            leftSrc={CasitaArbol}
+            leftAlt="Casita Arbol"
+            leftHref="/categoria/cabina/bespoke/5"
+            rightSrc={Morar}
+            rightAlt="Morar"
+            rightHref="/categoria/morar/bespoke/6"
+          />
+          <ImageRow
+            leftSrc={Banqueta}
+            leftAlt="Banqueta"
+            leftHref="/categoria/colection/sabi/7"
+            rightSrc={Ceramica}
+            rightAlt="Ceramica"
+            rightHref="/categoria/colection/formo/8"
+          />
+          <ImageRow
+            leftSrc={MuebleRojo}
+            leftAlt="Mueble Rojo"
+            leftHref="/categoria/series/bespoke/9"     
+            rightSrc={Cabina}
+            rightAlt="Cabina"
+            rightHref="/categoria/cabina/bespoke/10"
+          />
+
+
+          <Footer />
+
+        
+        
       </div>
        
     </div>

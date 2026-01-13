@@ -1,16 +1,24 @@
 import { motion } from "framer-motion";
-import heroImage from "../images/heroImage.jpg"
+import heroDesktop from "/images/heroImage.jpg"
+import heroMobile from "/images/heroMobile.jpg"
 
 const HeroSection = () => {
   return (
-    <div className="relative w-full h-[70vh] md:h-screen overflow-hidden">
+    <div className="relative w-full min-h-screen h-screen overflow-hidden">
       {/* Background Image */}
-      <div className="absolute inset-0">
-        <img
-          src={heroImage}
-          alt="Luxury furniture in minimalist interior"
-          className="w-full h-full object-cover object-center"
-        />
+      <div className="absolute inset-0 w-full h-full">
+        <picture className="w-full h-full block">
+          <source 
+            media="(max-width: 767px)"
+            srcSet={heroMobile}
+          />
+          <img
+            src={heroDesktop}
+            alt="Luxury furniture in minimalist interior"
+            className="w-full h-full object-cover object-[right_center] absolute inset-0"
+            style={{ minHeight: '100vh', objectPosition: 'right center' }}
+          />
+        </picture>
         <div className="absolute inset-0 bg-foreground/20" />
       </div>
 
