@@ -7,6 +7,7 @@ import { galleryItems } from "../data/Gallery";
 const Category = () => {
   const { category, title, id } = useParams();
   const [showFront, setShowFront] = useState(false);
+  const [showButton, setShowButton] = useState(false);
   const triggered = useRef(false);
   const item = galleryItems.find(
     (i) =>
@@ -41,6 +42,13 @@ const Category = () => {
     };
   }, []);
 
+  useEffect(() => {
+    if (showFront) {
+      const buttonTimer = setTimeout(() => setShowButton(true), 2000);
+      return () => clearTimeout(buttonTimer);
+    }
+  }, [showFront]);
+
   if (!item) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
@@ -74,11 +82,45 @@ const Category = () => {
         </div>
       )}
 
+      {/* Botón Cotizar con animación tintineante */}
+      {showButton && (
+        <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2 z-30">
+          <button
+            onClick={() => {/* Aquí va la lógica de cotización */}}
+            className="relative px-8 py-3 bg-transparent text-white font-serif text-base tracking-widest
+                       border-2 border-white hover:border-white/80 transition-all duration-300
+                       shadow-lg animate-button-appear cursor-pointer"
+            style={{
+              animation: 'buttonAppear 0.5s cubic-bezier(.23,1.01,.32,1), shimmer 2s ease-in-out infinite'
+            }}
+          >
+            COTIZAR
+            {/* Efecto de brillo que se mueve */}
+            <span className="absolute inset-0 overflow-hidden">
+              <span className="animate-shine absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+                    style={{ animation: 'shine 3s ease-in-out infinite' }} />
+            </span>
+          </button>
+        </div>
+      )}
+
       {/* Animación CSS */}
       <style>{`
         @keyframes fadeInUp {
           0% { opacity: 0; transform: translateY(40px) scale(0.95); }
           100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes buttonAppear {
+          0% { opacity: 0; transform: translateY(20px) scale(0.9); }
+          100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes shimmer {
+          0%, 100% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.15), 0 0 25px rgba(255, 255, 255, 0.1); }
+          50% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.25), 0 0 35px rgba(255, 255, 255, 0.15); }
+        }
+        @keyframes shine {
+          0% { transform: translateX(-100%) skewX(-15deg); }
+          100% { transform: translateX(200%) skewX(-15deg); }
         }
         .animate-fade-in-up {
           animation: fadeInUp 1s cubic-bezier(.23,1.01,.32,1);
