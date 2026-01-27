@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { galleryItems } from "../data/Gallery";
 
@@ -6,6 +6,7 @@ import { galleryItems } from "../data/Gallery";
 
 const Category = () => {
   const { category, title, id } = useParams();
+  const navigate = useNavigate();
   const [showFront, setShowFront] = useState(false);
   const [showButton, setShowButton] = useState(false);
   const triggered = useRef(false);
@@ -17,17 +18,14 @@ const Category = () => {
   );
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowFront(true), 5000);
-
+    // Solo se muestra la foto cuando el usuario hace scroll
     const handleWheel = () => {
       setShowFront(true);
-      clearTimeout(timer);
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("touchmove", handleTouchMove);
     };
     const handleTouchMove = () => {
       setShowFront(true);
-      clearTimeout(timer);
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("touchmove", handleTouchMove);
     };
@@ -36,18 +34,18 @@ const Category = () => {
     window.addEventListener("touchmove", handleTouchMove, { passive: true });
 
     return () => {
-      clearTimeout(timer);
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("touchmove", handleTouchMove);
     };
   }, []);
 
-  useEffect(() => {
-    if (showFront) {
-      const buttonTimer = setTimeout(() => setShowButton(true), 2000);
-      return () => clearTimeout(buttonTimer);
-    }
-  }, [showFront]);
+  // Botón comentado temporalmente - se mostrará después del scroll
+  // useEffect(() => {
+  //   if (showFront) {
+  //     const buttonTimer = setTimeout(() => setShowButton(true), 2000);
+  //     return () => clearTimeout(buttonTimer);
+  //   }
+  // }, [showFront]);
 
   if (!item) {
     return (
@@ -59,12 +57,33 @@ const Category = () => {
 
   return (
     <div className="relative w-full min-h-screen h-screen overflow-hidden">
+      {/* Botón de volver */}
+      <button
+        onClick={() => navigate(-1)}
+        className="absolute top-8 left-8 z-40 text-white/70 hover:text-white transition-all duration-300 group"
+        aria-label="Volver"
+      >
+        <svg 
+          xmlns="http://www.w3.org/2000/svg" 
+          className="h-8 w-8 transform group-hover:-translate-x-1 transition-transform duration-300" 
+          fill="none" 
+          viewBox="0 0 24 24" 
+          stroke="currentColor"
+          strokeWidth={1.5}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      </button>
+
       {/* Imagen de fondo */}
       <img
         src={item.thumbnail}
         alt={item.title}
         className={`absolute inset-0 w-full h-full object-cover object-center transition-all duration-1500 ${showFront ? 'blur-[1px] scale-105' : ''}`}
         style={{ minHeight: "100vh" }}
+        loading="eager"
+        decoding="async"
+        fetchpriority="high"
       />
       <div className="absolute inset-0 bg-black/20" />
 
@@ -78,15 +97,18 @@ const Category = () => {
             style={{
               animation: 'fadeInUp 1s cubic-bezier(.23,1.01,.32,1)'
             }}
+            loading="lazy"
+            decoding="async"
+            fetchpriority="low"
           />
         </div>
       )}
 
-      {/* Botón Cotizar con animación tintineante */}
-      {showButton && (
+      {/* Botón Cotizar - Comentado temporalmente para uso futuro */}
+      {/* {showButton && (
         <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2 z-30">
           <button
-            onClick={() => {/* Aquí va la lógica de cotización */}}
+            onClick={() => {}}
             className="relative px-8 py-3 bg-transparent text-white font-serif text-base tracking-widest
                        border-2 border-white hover:border-white/80 transition-all duration-300
                        shadow-lg animate-button-appear cursor-pointer"
@@ -95,14 +117,13 @@ const Category = () => {
             }}
           >
             COTIZAR
-            {/* Efecto de brillo que se mueve */}
             <span className="absolute inset-0 overflow-hidden">
               <span className="animate-shine absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
                     style={{ animation: 'shine 3s ease-in-out infinite' }} />
             </span>
           </button>
         </div>
-      )}
+      )} */}
 
       {/* Animación CSS */}
       <style>{`

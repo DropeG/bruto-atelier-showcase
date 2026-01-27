@@ -15,6 +15,9 @@ const HoverableImage: React.FC<HoverableImageProps> = ({ src, alt = "", href }) 
         src={src}
         alt={alt}
         className="w-full h-full object-contain transition duration-300 group-hover:blur-[2px]"
+        loading="lazy"
+        decoding="async"
+        fetchpriority="low"
       />
       <span
         className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300"
@@ -23,7 +26,7 @@ const HoverableImage: React.FC<HoverableImageProps> = ({ src, alt = "", href }) 
         <span
           className="select-none"
           style={{
-            fontSize: "3rem",
+            fontSize: "2rem",
             color: "#e0e0e0", 
             fontWeight: 300, 
             textShadow: "0 1px 8px rgba(0,0,0,0.10)",

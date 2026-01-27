@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import heroDesktop from "/images/heroImage.jpg"
-import heroMobile from "/images/heroMobile.jpg"
+import heroDesktop from "/images/hero.webp"
+import heroMobile from "/images/heroMobile.webp"
 
 const HeroSection = () => {
   return (
@@ -17,6 +17,9 @@ const HeroSection = () => {
             alt="Luxury furniture in minimalist interior"
             className="w-full h-full object-cover object-[right_center] absolute inset-0"
             style={{ minHeight: '100vh', objectPosition: 'right center' }}
+            loading="eager"
+            decoding="async"
+            fetchpriority="high"
           />
         </picture>
         <div className="absolute inset-0 bg-foreground/20" />

@@ -1,16 +1,16 @@
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import Footer from "@/components/Footer";
-import Cocina from "/images/cocinaPrueba.jpg";
-import MuebleAzul from "/images/muebleAzulPrueba.jpg";
-import Comedor from "/images/comedorPrueba.jpg";
-import Paisaje from "/images/paisajePrueba.jpg";
-import CasitaArbol from "/images/casitaArbolPrueba.jpg";
-import Morar from "/images/morarPrueba.jpg";
-import Banqueta from "/images/banquetaPrueba.jpg";
-import Ceramica from "/images/ceramicaPrueba.jpg";
-import MuebleRojo from "/images/muebleRojoPrueba.jpg";
-import Cabina from "/images/cabinaPrueba.jpg";
+import Cocina from "/images/cocina.webp";
+import MuebleAzul from "/images/muebleAzul.webp";
+import Comedor from "/images/comedor.webp";
+import Paisaje from "/images/paisaje.webp";
+import CasitaArbol from "/images/casitaArbol.webp";
+import Morar from "/images/morar.webp";
+import Banqueta from "/images/banqueta.webp";
+import Ceramica from "/images/ceramica.webp";
+import MuebleRojo from "/images/muebleRojo.webp";
+import Cabina from "/images/cabina.webp";
 import ImageRow from "@/components/ImageRow";
  
 const Index = () => {
