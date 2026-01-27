@@ -47,7 +47,7 @@ const Navigation = () => {
         }`}
       >
         <nav className="flex items-center justify-between">
-          {/* Left side - Hamburger and Search */}
+          {/* Left side - Hamburger */}
           <div className="flex items-center gap-4 order-1">
             {/* Hamburger always left */}
             <button
@@ -60,14 +60,6 @@ const Navigation = () => {
               ) : (
                 <Menu className="w-6 h-6 text-foreground" />
               )}
-            </button>
-
-            {/* Search icon - next to hamburger on desktop */}
-            <button
-              className="hidden md:block relative z-50 p-2"
-              aria-label="Search"
-            >
-              <Search className="w-5 h-5 text-foreground" />
             </button>
           </div>
 
@@ -96,14 +88,6 @@ const Navigation = () => {
 
           {/* Right side icons - mobile only */}
           <div className="flex md:hidden items-center gap-4 order-3">
-            {/* Search icon - mobile */}
-            <button
-              className="relative z-50 p-2"
-              aria-label="Search"
-            >
-              <Search className="w-5 h-5 text-foreground" />
-            </button>
-
             {/* Shopping bag - mobile */}
             <button
               className="relative z-50 p-2"

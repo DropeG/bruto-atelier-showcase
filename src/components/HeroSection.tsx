@@ -49,20 +49,6 @@ const HeroSection = () => {
         >
           Sitio en Construcción
         </motion.p>
-
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.5 }}
-          className="absolute bottom-12 right-8 md:right-16"
-        >
-          <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-            className="w-px h-12 bg-primary-foreground/50"
-          />
-        </motion.div>
       </div>
     </div>
   );

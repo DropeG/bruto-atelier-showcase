@@ -1,6 +1,8 @@
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import Footer from "@/components/Footer";
+import ContactSection from "@/components/ContactSection";
+import NewsletterModal from "@/components/NewsletterModal";
 import Cocina from "/images/cocina.webp";
 import MuebleAzul from "/images/muebleAzul.webp";
 import Comedor from "/images/comedor.webp";
@@ -17,6 +19,7 @@ const Index = () => {
   return (
     <div className="relative">
       <Navigation />
+      <NewsletterModal />
 
       {/* Stacking Sections Container */}
       <div id="coleccion">
@@ -63,11 +66,10 @@ const Index = () => {
             rightHref="/categoria/cabina/bespoke/10"
           />
 
-
+          <ContactSection />
           <Footer />
 
-        
-        
+      
       </div>
        
     </div>
