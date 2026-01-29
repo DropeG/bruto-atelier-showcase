@@ -41,8 +41,8 @@ const Footer = () => {
             </a>
           </p>
           <hr className="my-6 border-foreground/30" />
-          <p className="mb-2 text-sm">Diseño sitio web: Bruto Atelier x DROPE — Design System International</p>
-          <p className="mb-2 text-sm">Retratos equipo: Bruto Atelier</p>
+          <p className="mb-2 text-sm">Diseño sitio web: BRUTO Atelier x DROPE — Design System International</p>
+          <p className="mb-2 text-sm">Retratos equipo: BRUTO Atelier</p>
           <hr className="my-6 border-foreground/30" />
           <p className="font-bold text-sm md:text-base">© 2026 BRUTO ATELIER</p>
           <p className="mt-2 text-xs md:text-sm">Este sitio web y su contenido son propiedad intelectual de BRUTO ATELIER, reservados todos los derechos.</p>

@@ -18,14 +18,17 @@ const Category = () => {
   );
 
   useEffect(() => {
-    // Solo se muestra la foto cuando el usuario hace scroll
+    const timer = setTimeout(() => setShowFront(true), 1000);
+
     const handleWheel = () => {
       setShowFront(true);
+      clearTimeout(timer);
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("touchmove", handleTouchMove);
     };
     const handleTouchMove = () => {
       setShowFront(true);
+      clearTimeout(timer);
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("touchmove", handleTouchMove);
     };
@@ -34,6 +37,7 @@ const Category = () => {
     window.addEventListener("touchmove", handleTouchMove, { passive: true });
 
     return () => {
+      clearTimeout(timer);
       window.removeEventListener("wheel", handleWheel);
       window.removeEventListener("touchmove", handleTouchMove);
     };
