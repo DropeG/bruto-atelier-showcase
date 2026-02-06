@@ -14,7 +14,7 @@ const HoverableImage: React.FC<HoverableImageProps> = ({ src, alt = "", href }) 
       <img
         src={src}
         alt={alt}
-        className="w-full h-full object-contain transition duration-300 group-hover:blur-[2px]"
+        className="w-full h-full object-cover transition duration-300 group-hover:blur-[2px]"
         loading="lazy"
         decoding="async"
         fetchpriority="low"

@@ -25,12 +25,12 @@ const ImageRow: React.FC<ImageRowProps> = ({
     gap: "0px",
     width: "100%",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "stretch"
   }}>
-    <div style={{ width: "50%" }}>
+    <div className="w-1/2 h-64 md:h-screen">
       <HoverableImage src={leftSrc} alt={leftAlt} href={leftHref} />
     </div>
-    <div style={{ width: "50%" }}>
+    <div className="w-1/2 h-64 md:h-screen">
       <HoverableImage src={rightSrc} alt={rightAlt} href={rightHref} />
     </div>
   </div>

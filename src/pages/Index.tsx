@@ -1,25 +1,43 @@
+import { useEffect, useState } from "react";
 import Navigation from "@/components/Navigation";
 import HeroSection from "@/components/HeroSection";
 import Footer from "@/components/Footer";
 import ContactSection from "@/components/ContactSection";
 import NewsletterModal from "@/components/NewsletterModal";
+import WhatsAppButton from "@/components/WhatsAppButton";
+import DiscountButton from "@/components/DiscountButton";
 import Cocina from "/images/cocina.webp";
 import MuebleAzul from "/images/muebleAzul.webp";
 import Comedor from "/images/comedor.webp";
 import Paisaje from "/images/paisaje.webp";
 import CasitaArbol from "/images/casitaArbol.webp";
 import Morar from "/images/morar.webp";
-import Banqueta from "/images/banqueta.webp";
-import Ceramica from "/images/ceramica.webp";
+import Banqueta from "/images/banquetaBlanca.webp";
+import Flores from "/images/flores.webp";
 import MuebleRojo from "/images/muebleRojo.webp";
 import Cabina from "/images/cabina.webp";
 import ImageRow from "@/components/ImageRow";
  
 const Index = () => {
+  const [openModal, setOpenModal] = useState(false);
+  const [showDiscount, setShowDiscount] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowDiscount(window.scrollY < 100);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <div className="relative">
+    <div className="relative overflow-x-hidden">
       <Navigation />
-      <NewsletterModal />
+      <NewsletterModal openModal={openModal} onClose={() => setOpenModal(false)} />
+      <WhatsAppButton />
+      <DiscountButton onClick={() => setOpenModal(true)} isVisible={showDiscount} />
 
       {/* Stacking Sections Container */}
       <div id="coleccion">
@@ -53,8 +71,8 @@ const Index = () => {
             leftSrc={Banqueta}
             leftAlt="Banqueta"
             leftHref="/categoria/colection/sabi/7"
-            rightSrc={Ceramica}
-            rightAlt="Ceramica"
+            rightSrc={Flores}
+            rightAlt="Flores"
             rightHref="/categoria/colection/formo/8"
           />
           <ImageRow
@@ -66,7 +84,8 @@ const Index = () => {
             rightHref="/categoria/cabina/bespoke/10"
           />
 
-          <ContactSection />
+          {/* ContactSection - Hidden for now, will be shown when user clicks "Contacto" in menu */}
+          {/* <ContactSection /> */}
           <Footer />
 
       

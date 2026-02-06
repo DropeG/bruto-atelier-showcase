@@ -43,13 +43,13 @@ const Category = () => {
     };
   }, []);
 
-  // Botón comentado temporalmente - se mostrará después del scroll
-  // useEffect(() => {
-  //   if (showFront) {
-  //     const buttonTimer = setTimeout(() => setShowButton(true), 2000);
-  //     return () => clearTimeout(buttonTimer);
-  //   }
-  // }, [showFront]);
+  // Botón se muestra después del scroll
+  useEffect(() => {
+    if (showFront) {
+      const buttonTimer = setTimeout(() => setShowButton(true), 1500);
+      return () => clearTimeout(buttonTimer);
+    }
+  }, [showFront]);
 
   if (!item) {
     return (
@@ -93,11 +93,11 @@ const Category = () => {
 
       {/* Imagen de adelante con animación */}
       {showFront && (
-        <div className="absolute inset-0 flex items-center justify-center z-20">
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
           <img
             src={item.detailImage}
             alt={item.title + ' detalle'}
-            className="max-w-[80vw] max-h-[80vh] shadow-2xl animate-fade-in-up"
+            className="max-w-[80vw] max-h-[80vh] md:max-h-[70vh] md:max-w-[70vw] shadow-2xl animate-fade-in-up"
             style={{
               animation: 'fadeInUp 1s cubic-bezier(.23,1.01,.32,1)'
             }}
@@ -105,29 +105,26 @@ const Category = () => {
             decoding="async"
             fetchpriority="low"
           />
+          {/* Botón Hablemos */}
+          {showButton && (
+            <button
+              onClick={() => window.open("https://wa.me/56949569887", "_blank", "noopener,noreferrer")}
+              className="relative mt-6 px-8 py-3 bg-transparent text-white font-serif text-base tracking-widest
+                         border-2 border-white hover:border-white/80 transition-all duration-300
+                         shadow-lg animate-button-appear cursor-pointer"
+              style={{
+                animation: 'buttonAppear 0.5s cubic-bezier(.23,1.01,.32,1), shimmer 2s ease-in-out infinite'
+              }}
+            >
+              HABLEMOS
+              <span className="absolute inset-0 overflow-hidden">
+                    <span className="animate-shine absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"
+                      style={{ animation: 'shine 3s ease-in-out infinite' }} />
+              </span>
+            </button>
+          )}
         </div>
       )}
-
-      {/* Botón Cotizar - Comentado temporalmente para uso futuro */}
-      {/* {showButton && (
-        <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2 z-30">
-          <button
-            onClick={() => {}}
-            className="relative px-8 py-3 bg-transparent text-white font-serif text-base tracking-widest
-                       border-2 border-white hover:border-white/80 transition-all duration-300
-                       shadow-lg animate-button-appear cursor-pointer"
-            style={{
-              animation: 'buttonAppear 0.5s cubic-bezier(.23,1.01,.32,1), shimmer 2s ease-in-out infinite'
-            }}
-          >
-            COTIZAR
-            <span className="absolute inset-0 overflow-hidden">
-              <span className="animate-shine absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-                    style={{ animation: 'shine 3s ease-in-out infinite' }} />
-            </span>
-          </button>
-        </div>
-      )} */}
 
       {/* Animación CSS */}
       <style>{`
@@ -140,8 +137,8 @@ const Category = () => {
           100% { opacity: 1; transform: translateY(0) scale(1); }
         }
         @keyframes shimmer {
-          0%, 100% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.15), 0 0 25px rgba(255, 255, 255, 0.1); }
-          50% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.25), 0 0 35px rgba(255, 255, 255, 0.15); }
+          0%, 100% { box-shadow: 0 0 8px rgba(255, 255, 255, 0.08), 0 0 14px rgba(255, 255, 255, 0.06); }
+          50% { box-shadow: 0 0 12px rgba(255, 255, 255, 0.12), 0 0 18px rgba(255, 255, 255, 0.08); }
         }
         @keyframes shine {
           0% { transform: translateX(-100%) skewX(-15deg); }

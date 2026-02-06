@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 
-const NewsletterModal: React.FC = () => {
+interface NewsletterModalProps {
+  openModal?: boolean;
+  onClose?: () => void;
+}
+
+const NewsletterModal: React.FC<NewsletterModalProps> = ({ openModal, onClose }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -11,8 +16,15 @@ const NewsletterModal: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (openModal) {
+      setIsOpen(true);
+    }
+  }, [openModal]);
+
   const handleClose = () => {
     setIsOpen(false);
+    if (onClose) onClose();
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

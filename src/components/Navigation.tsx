@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Search, ShoppingBag, User } from "lucide-react";
+import { Menu, X, Search, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import CurrencyDropdown from "./CurrencyDropdown";
 
@@ -22,25 +22,17 @@ const Navigation = () => {
       const currentScrollY = window.scrollY;
       
       setIsAtTop(currentScrollY < 50);
-      
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setIsVisible(false);
-      } else {
-        setIsVisible(true);
-      }
-      
-      setLastScrollY(currentScrollY);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
+  }, []);
 
   return (
     <>
       <motion.header
         initial={{ y: 0 }}
-        animate={{ y: isVisible ? 0 : -100 }}
+        animate={{ y: isAtTop ? 0 : -100 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className={`fixed top-0 left-0 right-0 z-50 section-padding py-6 transition-colors duration-300 ${
           isAtTop ? "bg-transparent" : "bg-background/80 backdrop-blur-sm"
@@ -64,9 +56,9 @@ const Navigation = () => {
           </div>
 
           {/* Desktop Navigation - Right side elements like Studio Jadad */}
-          <div className="hidden md:flex items-center gap-6 order-2 ml-auto">
+          <div className="hidden md:flex items-center gap-2 order-2 ml-auto">
             {/* Currency selector */}
-            <CurrencyDropdown />
+            {/* <CurrencyDropdown /> */}
 
             {/* User/Login icon */}
             <button
@@ -82,7 +74,7 @@ const Navigation = () => {
               className="p-2 hover:opacity-60 transition-opacity"
               aria-label="Shopping cart"
             >
-              <ShoppingBag className="w-5 h-5 text-foreground" />
+              <img src="/bag.svg" alt="Carrito" className="w-12 h-12" />
             </button>
           </div>
 
@@ -93,7 +85,7 @@ const Navigation = () => {
               className="relative z-50 p-2"
               aria-label="Shopping cart"
             >
-              <ShoppingBag className="w-5 h-5 text-foreground" />
+              <img src="/bag.svg" alt="Carrito" className="w-5 h-5" />
             </button>
           </div>
 
