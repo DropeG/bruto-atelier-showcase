@@ -85,7 +85,7 @@ const Navigation = () => {
               className="relative z-50 p-2"
               aria-label="Shopping cart"
             >
-              <img src="/bag.svg" alt="Carrito" className="w-5 h-5" />
+              <img src="/bag.svg" alt="Carrito" className="w-14 h-14" />
             </button>
           </div>
 

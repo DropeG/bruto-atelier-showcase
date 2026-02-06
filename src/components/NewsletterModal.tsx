@@ -10,10 +10,16 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({ openModal, onClose })
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsOpen(true);
-    }, 2000);
-    return () => clearTimeout(timer);
+    // Check if modal has been shown before
+    const hasShown = localStorage.getItem('newsletterModalShown');
+    
+    if (!hasShown) {
+      const timer = setTimeout(() => {
+        setIsOpen(true);
+        localStorage.setItem('newsletterModalShown', 'true');
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
   }, []);
 
   useEffect(() => {
