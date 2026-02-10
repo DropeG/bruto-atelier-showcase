@@ -31,7 +31,7 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="text-center"
+          className="text-center hero-title transition-opacity duration-200"
         >
           <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl text-primary-foreground font-medium tracking-wide mb-4">
             BRUTO
@@ -41,15 +41,14 @@ const HeroSection = () => {
           </p>
         </motion.div>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 1.2 }}
-          className="absolute bottom-12 text-editorial text-primary-foreground/80"
-        >
-          Sitio en Construcción
-        </motion.p>
       </div>
+      <style>{`
+        body.menu-open .hero-title,
+        html.menu-open .hero-title {
+          opacity: 0 !important;
+          visibility: hidden;
+        }
+      `}</style>
     </div>
   );
 };

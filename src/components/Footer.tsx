@@ -6,8 +6,8 @@ const Footer = () => {
       <div className="max-w-6xl mx-auto w-full">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-12 items-start">
           {/* Seccion BRUTO ATELIER */}
-          <div className="flex flex-col h-full">
-            <div className="flex-1">
+          <div className="flex flex-col">
+            <div>
               <h2 className="font-bold text-lg md:text-4xl mb-2">BRUTO ATELIER</h2>
               <div className="space-y-1 text-xs md:text-lg">
                 <p>Vitacura 4747</p>
@@ -35,8 +35,9 @@ const Footer = () => {
             </div>
 
             {/* Seccion COPYRIGHT - aparece debajo en mobile */}
-            <div className="md:hidden">
+            <div className="md:hidden mt-6">
               <p className="font-bold text-xs">© 2026 BRUTO ATELIER</p>
+              <p className="pt-2 text-xs">Todos los derechos reservados.</p>
             </div>
           </div>
 

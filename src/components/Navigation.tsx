@@ -5,9 +5,14 @@ import { useNavigate } from "react-router-dom";
 import CurrencyDropdown from "./CurrencyDropdown";
 
 const navLinks = [
-  { label: "Colección", href: "#coleccion" },
-  { label: "Atelier", href: "#atelier" },
+  { label: "Arquitectura", href: "#arquitectura" },
+  { label: "Interior", href: "#interior" },
+  { label: "Mobiliario", href: "#mobiliario" },
+  { label: "Tienda", href: "#tienda" },
+  { label: "Nosotros", href: "#nosotros" },
+  { label: "Preguntas frecuentes", href: "#faq" },
   { label: "Contacto", href: "#contacto" },
+  { label: "Rebajas", href: "#rebajas" },
 ];
 
 const Navigation = () => {
@@ -27,6 +32,15 @@ const Navigation = () => {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    document.body.classList.toggle("menu-open", isMenuOpen);
+    document.documentElement.classList.toggle("menu-open", isMenuOpen);
+    return () => {
+      document.body.classList.remove("menu-open");
+      document.documentElement.classList.remove("menu-open");
+    };
+  }, [isMenuOpen]);
 
   return (
     <>
@@ -101,32 +115,36 @@ const Navigation = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 bg-background flex items-center justify-center"
+            className="fixed inset-0 z-40 bg-black/20"
+            onClick={() => setIsMenuOpen(false)}
           >
-            <motion.ul
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              transition={{ duration: 0.3, delay: 0.1 }}
-              className="flex flex-col items-center gap-8"
+            <motion.div
+              initial={{ x: -40, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: -40, opacity: 0 }}
+              transition={{ duration: 0.3, delay: 0.05 }}
+              className="absolute top-24 left-6 w-[220px] md:w-[260px] bg-[#9C7B66] text-white p-6"
+              onClick={(e) => e.stopPropagation()}
             >
-              {navLinks.map((link, index) => (
-                <motion.li
-                  key={link.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 + index * 0.1 }}
-                >
-                  <a
-                    href={link.href}
-                    onClick={() => setIsMenuOpen(false)}
-                    className="font-serif text-3xl text-foreground hover:opacity-60 transition-opacity"
+              <motion.ul className="flex flex-col gap-3 text-sm tracking-wide">
+                {navLinks.map((link, index) => (
+                  <motion.li
+                    key={link.label}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.1 + index * 0.08 }}
                   >
-                    {link.label}
-                  </a>
-                </motion.li>
-              ))}
-            </motion.ul>
+                    <a
+                      href={link.href}
+                      onClick={() => setIsMenuOpen(false)}
+                      className="block px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  </motion.li>
+                ))}
+              </motion.ul>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
