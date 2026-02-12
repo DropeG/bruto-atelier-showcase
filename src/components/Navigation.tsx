@@ -10,7 +10,6 @@ const navLinks = [
   { label: "Mobiliario", href: "#mobiliario" },
   { label: "Tienda", href: "#tienda" },
   { label: "Nosotros", href: "#nosotros" },
-  { label: "Preguntas frecuentes", href: "#faq" },
   { label: "Contacto", href: "#contacto" },
   { label: "Rebajas", href: "#rebajas" },
 ];

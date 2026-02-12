@@ -18,7 +18,7 @@ const DiscountButton: React.FC<DiscountButtonProps> = ({ onClick, isVisible = tr
       aria-label="Inicia sesión y obtén 10% descuento"
     >
       <User className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" />
-      <span className="text-[10px] md:text-xs font-medium tracking-wide">INICIA SESIÓN Y OBTÉN 10% DCTO</span>
+      <span className="text-[10px] md:text-xs font-medium tracking-wide">-10%</span>
     </button>
   );
 };

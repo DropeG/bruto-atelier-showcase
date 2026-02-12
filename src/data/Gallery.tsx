@@ -12,7 +12,7 @@ export const galleryItems: GalleryItem[] = [
         id: 1, 
         category: "morar",
         title: "bespoke",
-        thumbnail: "/images/gallery/morar-01-thumb.webp",
+        thumbnail: "/images/gallery/lampara.jpeg",
         detailImage: "/images/gallery/morar-01-detail.webp",
         route: "/categoria/morar/bespoke/1"
     },
@@ -38,7 +38,7 @@ export const galleryItems: GalleryItem[] = [
         category: "morar",
         title: "bespoke",
         thumbnail: "/images/gallery/morar-02-thumb.webp",
-        detailImage: "/images/gallery/morar-02-detail.webp",
+        detailImage: "/images/gallery/sombras.jpeg",
         route: "/categoria/morar/bespoke/4"
     },
     {
@@ -53,7 +53,7 @@ export const galleryItems: GalleryItem[] = [
         id: 6, 
         category: "morar",
         title: "bespoke",
-        thumbnail: "/images/gallery/morar-03-thumb.webp",
+        thumbnail: "/images/gallery/bano.jpeg",
         detailImage: "/images/gallery/morar-03-detail.webp",
         route: "/categoria/morar/bespoke/6"
     },
@@ -77,7 +77,7 @@ export const galleryItems: GalleryItem[] = [
         id: 9, 
         category: "series",
         title: "bespoke",
-        thumbnail: "/images/gallery/series-02-thumb.webp",
+        thumbnail: "/images/gallery/rojo.jpeg",
         detailImage: "/images/gallery/series-02-detail.webp",
         route: "/categoria/series/bespoke/9"
     },
@@ -85,7 +85,7 @@ export const galleryItems: GalleryItem[] = [
         id: 10, 
         category: "cabina",
         title: "bespoke",
-        thumbnail: "/images/gallery/cabina-02-thumb.webp",
+        thumbnail: "/images/gallery/chilote.jpeg",
         detailImage: "/images/gallery/cabina-02-detail.webp",
         route: "/categoria/cabina/bespoke/10"
     }
