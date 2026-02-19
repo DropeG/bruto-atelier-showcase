@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import Navigation from "@/components/Navigation";
+import { useEffect, useRef, useState } from "react";
 import HeroSection from "@/components/HeroSection";
 import Footer from "@/components/Footer";
 import ContactSection from "@/components/ContactSection";
@@ -21,26 +20,35 @@ import ImageRow from "@/components/ImageRow";
 const Index = () => {
   const [openModal, setOpenModal] = useState(false);
   const [showDiscount, setShowDiscount] = useState(true);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (!container) {
+      return;
+    }
+
     const handleScroll = () => {
-      setShowDiscount(window.scrollY < 100);
+      setShowDiscount(container.scrollTop < 50);
     };
 
     handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    container.addEventListener("scroll", handleScroll, { passive: true });
+    return () => container.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
-    <div className="relative overflow-x-hidden">
-      <Navigation />
+    <div className="relative">
       <NewsletterModal openModal={openModal} onClose={() => setOpenModal(false)} />
       <WhatsAppButton />
       <DiscountButton onClick={() => setOpenModal(true)} isVisible={showDiscount} />
 
-      {/* Stacking Sections Container */}
-      <div id="coleccion">
+      {/* Scroll Snap Container */}
+      <div
+        ref={scrollContainerRef}
+        className="h-screen overflow-y-scroll snap-y snap-mandatory"
+        id="coleccion"
+      >
         {/* Section 1: Hero */}
           <HeroSection />
           <ImageRow

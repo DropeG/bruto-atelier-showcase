@@ -1,10 +1,12 @@
 import { motion } from "framer-motion";
+import Navigation from "@/components/Navigation";
 import heroDesktop from "/images/hero.webp"
 import heroMobile from "/images/heroMobile.webp"
 
 const HeroSection = () => {
   return (
-    <div className="relative w-full min-h-screen h-screen overflow-hidden">
+    <div className="snap-start snap-always relative w-full min-h-screen h-screen overflow-hidden">
+      <Navigation position="absolute" />
       {/* Background Image */}
       <div className="absolute inset-0 w-full h-full">
         <picture className="w-full h-full block">
