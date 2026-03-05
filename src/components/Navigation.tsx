@@ -8,7 +8,11 @@ const navLinks = [
   { label: "Arquitectura", href: "#arquitectura" },
   { label: "Interiorismo", href: "#interiorismo" },
   { label: "Mobiliario", href: "#mobiliario" },
-  { label: "Tienda", href: "#tienda" },
+  { label: "Ilumicación", href: "#iluminacion" },
+  { label: "Esenciales", href: "#esenciales" },
+  { label: "Joyeria", href: "#joyeria" },
+  { label: "Vestuario", href: "#vestuario" },
+  { label: "Accesorios", href: "#accesorios" },
   { label: "Nosotros", href: "#nosotros" },
   { label: "Contacto", href: "#contacto" }
 ];
@@ -24,7 +28,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
   const [isAtTop, setIsAtTop] = useState(true);
   const [activePanel, setActivePanel] = useState<"nosotros" | "contacto" | null>(null);
   const [contactMessage, setContactMessage] = useState(
-    "Que tal, me resuelven una duda?"
+    "Qué tal, me resuelven una duda?"
   );
   const navigate = useNavigate();
   const whatsappNumber = "56949569887";
@@ -176,7 +180,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                             type="button"
                             onClick={() => {
                               setIsMenuOpen(false);
-                              navigate("/categoria/series/bespoke/3");
+                              navigate("/categoria/series/bespoke/2");
                             }}
                             className="block w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
                           >
@@ -254,10 +258,10 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                                     de manera local con materiales y artesanos seleccionados.
                                   </p>
                                   <p>
-                                    Nuestros servicios y productos buscan entregar una experiencia al trabajar con el
+                                    Nuestra visión busca entregar una experiencia al trabajar con el
                                     Atelier, que se entiende al conocerla.
                                   </p>
-                                  <p>Pruebalo.</p>
+                                  <p>Pruebanos.</p>
                                 </div>
                               </div>
                             </div>
