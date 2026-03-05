@@ -10,8 +10,7 @@ const navLinks = [
   { label: "Mobiliario", href: "#mobiliario" },
   { label: "Tienda", href: "#tienda" },
   { label: "Nosotros", href: "#nosotros" },
-  { label: "Contacto", href: "#contacto" },
-  { label: "Rebajas", href: "#rebajas" },
+  { label: "Contacto", href: "#contacto" }
 ];
 
 type NavigationProps = {
@@ -150,7 +149,42 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.1 + index * 0.08 }}
                       >
-                        {link.label === "Nosotros" ? (
+                        {link.label === "Arquitectura" ? (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setIsMenuOpen(false);
+                              navigate("/categoria/cabina/bespoke/10");
+                            }}
+                            className="block w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
+                          >
+                            {link.label}
+                          </button>
+                        ) : link.label === "Interior" ? (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setIsMenuOpen(false);
+                              navigate("/categoria/morar/bespoke/1");
+                            }}
+                            className="block w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
+                          >
+                            {link.label}
+                          </button>
+                        ) : link.label === "Mobiliario" ? (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setIsMenuOpen(false);
+                              navigate("/categoria/series/bespoke/3");
+                            }}
+                            className="block w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
+                          >
+                            {link.label}
+                          </button>
+                        )
+                        
+                        : link.label === "Nosotros" ? (
                           <button
                             type="button"
                             onClick={() =>
@@ -195,7 +229,11 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -12 }}
                       transition={{ duration: 0.25, ease: "easeOut" }}
-                      className="w-[640px] bg-[#9C7B66] text-white p-6 border-l border-white/20"
+                      className={
+                        activePanel === "contacto"
+                          ? "w-[800px] bg-[#9C7B66] text-white p-6 border-l border-white/20"
+                          : "w-[800px] bg-[#9C7B66] text-white p-6 border-l border-white/20"
+                      }
                     >
                       {activePanel === "nosotros" ? (
                         <>
@@ -223,47 +261,58 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                                 </div>
                               </div>
                             </div>
-                            <div className="flex items-center justify-center">
+                            <div className="flex items-center justify-center ml-8">
                               <img
                                 src="/images/nosotros/nosotros.webp"
                                 alt="Foto Nosotros"
-                                className="w-[300px] h-[300px] object-cover rounded-md shadow"
+                                className="w-[360px] aspect-square object-cover rounded-md shadow"
                               />
                             </div>
                           </div>
                         </>
                       ) : (
                         <>
-                          <div className="text-xs tracking-wide uppercase">Contacto</div>
-                          <div className="mt-4 space-y-4 text-sm leading-relaxed">
-                            <div className="text-lg font-semibold">Hablemos</div>
-                            <p>Simple y directo.</p>
-                            <form
-                              onSubmit={(event) => {
-                                event.preventDefault();
-                                const message = contactMessage.trim();
-                                if (!message) {
-                                  return;
-                                }
-                                const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-                                window.open(url, "_blank", "noopener,noreferrer");
-                              }}
-                              className="space-y-3"
-                            >
-                              <input
-                                type="text"
-                                value={contactMessage}
-                                onChange={(event) => setContactMessage(event.target.value)}
-                                placeholder="Escribe tu mensaje"
-                                className="w-full rounded-md bg-white/10 border border-white/20 px-3 py-2 text-sm text-white placeholder:text-white/70 focus:outline-none focus:ring-2 focus:ring-white/40"
+                          <div className="flex">
+                            <div className="w-[440px]">
+                              <div className="text-xs tracking-wide uppercase">Contacto</div>
+                              <div className="mt-4 space-y-4 text-sm leading-relaxed">
+                                <div className="text-lg font-semibold">Hablemos</div>
+                                <p>Simple y directo.</p>
+                                <form
+                                  onSubmit={(event) => {
+                                    event.preventDefault();
+                                    const message = contactMessage.trim();
+                                    if (!message) {
+                                      return;
+                                    }
+                                    const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+                                    window.open(url, "_blank", "noopener,noreferrer");
+                                  }}
+                                  className="space-y-3"
+                                >
+                                  <input
+                                    type="text"
+                                    value={contactMessage}
+                                    onChange={(event) => setContactMessage(event.target.value)}
+                                    placeholder="Escribe tu mensaje"
+                                    className="w-full rounded-md bg-white/10 border border-white/20 px-3 py-2 text-sm text-white placeholder:text-white/70 focus:outline-none focus:ring-2 focus:ring-white/40"
+                                  />
+                                  <button
+                                    type="submit"
+                                    className="w-full rounded-md bg-white text-[#9C7B66] px-3 py-2 text-xs font-semibold uppercase tracking-wide hover:bg-white/90 transition-colors"
+                                  >
+                                    Enviar por WhatsApp
+                                  </button>
+                                </form>
+                              </div>
+                            </div>
+                            <div className="flex items-center justify-center ml-8">
+                              <img
+                                src="/images/contacto/contacto.webp"
+                                alt="Foto Contacto"
+                                className="w-[360px] aspect-square object-cover rounded-md shadow"
                               />
-                              <button
-                                type="submit"
-                                className="w-full rounded-md bg-white text-[#9C7B66] px-3 py-2 text-xs font-semibold uppercase tracking-wide hover:bg-white/90 transition-colors"
-                              >
-                                Enviar por WhatsApp
-                              </button>
-                            </form>
+                            </div>
                           </div>
                         </>
                       )}
