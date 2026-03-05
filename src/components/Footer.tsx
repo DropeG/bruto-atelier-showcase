@@ -2,7 +2,7 @@
 
 const Footer = () => {
   return (
-    <footer className="snap-start snap-always bg-background text-foreground py-8 px-6 h-screen flex items-center justify-center">
+    <footer className="md:snap-start md:snap-always bg-background text-foreground py-8 px-6 min-h-auto md:h-screen md:flex md:items-center md:justify-center">
       <div className="max-w-6xl mx-auto w-full">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-12 items-start">
           {/* Seccion BRUTO ATELIER */}

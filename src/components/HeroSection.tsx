@@ -5,7 +5,7 @@ import heroMobile from "/images/heroMobile.webp"
 
 const HeroSection = () => {
   return (
-    <div className="snap-start snap-always relative w-full min-h-screen h-screen overflow-hidden">
+    <div className="md:snap-start md:snap-always relative w-full min-h-screen h-screen overflow-hidden">
       <Navigation position="absolute" />
       {/* Background Image */}
       <div className="absolute inset-0 w-full h-full">

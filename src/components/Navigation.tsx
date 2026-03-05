@@ -25,7 +25,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
   const [isAtTop, setIsAtTop] = useState(true);
   const [activePanel, setActivePanel] = useState<"nosotros" | "contacto" | null>(null);
   const [contactMessage, setContactMessage] = useState(
-    "Hola, quiero hacer una consulta."
+    "Que tal, me resuelven una duda?"
   );
   const navigate = useNavigate();
   const whatsappNumber = "56949569887";
@@ -141,7 +141,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="hidden md:flex">
-                <div className="w-[260px] md:w-[300px] min-h-[70vh] bg-[#9C7B66] text-white p-6">
+                <div className="w-[260px] md:w-[300px] min-h-[40vh] bg-[#9C7B66] text-white p-6">
                   <motion.ul className="flex flex-col gap-3 text-sm tracking-wide">
                     {navLinks.map((link, index) => (
                       <motion.li
@@ -195,28 +195,41 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: -12 }}
                       transition={{ duration: 0.25, ease: "easeOut" }}
-                      className="w-[440px] bg-[#9C7B66] text-white p-6 border-l border-white/20"
+                      className="w-[640px] bg-[#9C7B66] text-white p-6 border-l border-white/20"
                     >
                       {activePanel === "nosotros" ? (
                         <>
-                          <div className="text-xs tracking-wide uppercase">Nosotros</div>
-                          <div className="mt-4 space-y-5 text-sm leading-relaxed max-h-[70vh] overflow-y-auto pr-2">
-                            <div className="text-lg font-semibold">BRUTO ATELIER</div>
-                            <p>
-                              Nuestra marca se enfoca en la solucion de encargos de diseno de un amplio
-                              espectro. Creamos vision, resolvemos espacio y sus componentes: el habitar
-                              completo.
-                            </p>
-                            <p>
-                              Creemos en lo que se diferencia en silencio y trasciende en el tiempo, lo que
-                              perdura con elegancia y desarrolla caracter. Disenamos singularidad, fabricando
-                              de manera local con materiales y artesanos seleccionados.
-                            </p>
-                            <p>
-                              Nuestros servicios y productos buscan entregar una experiencia al trabajar con el
-                              Atelier, que se entiende al conocerla.
-                            </p>
-                            <p>Pruebalo.</p>
+                          <div className="flex">
+                            <div className="w-[440px]">
+                              <div className="text-xs tracking-wide uppercase">Nosotros</div>
+                              <div className="mt-2 flex gap-4">
+                                <div className="space-y-2 text-sm leading-tight flex-1 pr-2 text-justify">
+                                  <div className="text-lg font-semibold">BRUTO ATELIER</div>
+                                  <p>
+                                    Nuestra marca se enfoca en la solucion de encargos de diseno de un amplio
+                                    espectro. Creamos vision, resolvemos espacio y sus componentes: el habitar
+                                    completo.
+                                  </p>
+                                  <p>
+                                    Creemos en lo que se diferencia en silencio y trasciende en el tiempo, lo que
+                                    perdura con elegancia y desarrolla caracter. Disenamos singularidad, fabricando
+                                    de manera local con materiales y artesanos seleccionados.
+                                  </p>
+                                  <p>
+                                    Nuestros servicios y productos buscan entregar una experiencia al trabajar con el
+                                    Atelier, que se entiende al conocerla.
+                                  </p>
+                                  <p>Pruebalo.</p>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex items-center justify-center">
+                              <img
+                                src="/images/nosotros/nosotros.webp"
+                                alt="Foto Nosotros"
+                                className="w-[300px] h-[300px] object-cover rounded-md shadow"
+                              />
+                            </div>
                           </div>
                         </>
                       ) : (
@@ -224,7 +237,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                           <div className="text-xs tracking-wide uppercase">Contacto</div>
                           <div className="mt-4 space-y-4 text-sm leading-relaxed">
                             <div className="text-lg font-semibold">Hablemos</div>
-                            <p>Envianos un mensaje y te respondemos por WhatsApp.</p>
+                            <p>Simple y directo.</p>
                             <form
                               onSubmit={(event) => {
                                 event.preventDefault();
@@ -301,7 +314,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                         <>
                           <div className="space-y-4 text-sm leading-relaxed">
                             <div className="text-lg font-semibold">Hablemos</div>
-                            <p>Envianos un mensaje y te respondemos por WhatsApp.</p>
+                            <p>Simple y directo.</p>
                             <form
                               onSubmit={(event) => {
                                 event.preventDefault();

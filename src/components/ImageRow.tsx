@@ -20,7 +20,7 @@ const ImageRow: React.FC<ImageRowProps> = ({
   rightAlt = "",
   rightHref,
 }) => (
-  <div className="snap-start snap-always h-screen w-full flex">
+  <div className="md:snap-start md:snap-always h-64 md:h-screen w-full flex">
     <div className="w-1/2 h-full">
       <HoverableImage src={leftSrc} alt={leftAlt} href={leftHref} />
     </div>

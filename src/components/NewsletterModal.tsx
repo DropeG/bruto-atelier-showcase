@@ -105,34 +105,6 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({ openModal, onClose })
                   className="w-full px-4 py-3 border border-gray-300 text-sm focus:outline-none focus:border-black"
                 />
               </div>
-
-              <div>
-                <p className="text-xs text-gray-600 mb-2">Fecha de nacimiento</p>
-                <div className="grid grid-cols-3 gap-2">
-                  <input
-                    type="text"
-                    name="day"
-                    placeholder="DD"
-                    maxLength={2}
-                    className="px-3 py-2 border border-gray-300 text-sm text-center focus:outline-none focus:border-black"
-                  />
-                  <input
-                    type="text"
-                    name="month"
-                    placeholder="MM"
-                    maxLength={2}
-                    className="px-3 py-2 border border-gray-300 text-sm text-center focus:outline-none focus:border-black"
-                  />
-                  <input
-                    type="text"
-                    name="year"
-                    placeholder="YYYY"
-                    maxLength={4}
-                    className="px-3 py-2 border border-gray-300 text-sm text-center focus:outline-none focus:border-black"
-                  />
-                </div>
-              </div>
-
               <button
                 type="submit"
                 className="w-full bg-black text-white py-3 text-sm font-medium hover:bg-gray-800 transition-colors"
