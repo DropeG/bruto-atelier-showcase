@@ -6,7 +6,7 @@ import CurrencyDropdown from "./CurrencyDropdown";
 
 const navLinks = [
   { label: "Arquitectura", href: "#arquitectura" },
-  { label: "Interior", href: "#interior" },
+  { label: "Interiorismo", href: "#interiorismo" },
   { label: "Mobiliario", href: "#mobiliario" },
   { label: "Tienda", href: "#tienda" },
   { label: "Nosotros", href: "#nosotros" },
@@ -160,7 +160,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                           >
                             {link.label}
                           </button>
-                        ) : link.label === "Interior" ? (
+                        ) : link.label === "Interiorismo" ? (
                           <button
                             type="button"
                             onClick={() => {
