@@ -357,10 +357,9 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                               de manera local con materiales y artesanos seleccionados.
                             </p>
                             <p>
-                              Nuestros servicios y productos buscan entregar una experiencia al trabajar con el
-                              Atelier, que se entiende al conocerla.
+                              Nuestra vision busca entregar una experiencia, que se entiende al conocerla.
                             </p>
-                            <p>Pruebalo.</p>
+                            <p>Pruebanos.</p>
                           </div>
                         </>
                       ) : (

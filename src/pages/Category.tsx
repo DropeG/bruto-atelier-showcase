@@ -46,7 +46,7 @@ const Category = () => {
   // Botón se muestra después del scroll
   useEffect(() => {
     if (showFront) {
-      const buttonTimer = setTimeout(() => setShowButton(true), 1500);
+      const buttonTimer = setTimeout(() => setShowButton(true), 0);
       return () => clearTimeout(buttonTimer);
     }
   }, [showFront]);
@@ -87,42 +87,42 @@ const Category = () => {
         style={{ minHeight: "100vh" }}
         loading="eager"
         decoding="async"
-        fetchpriority="high"
       />
       <div className="absolute inset-0 bg-black/20" />
 
-      {/* Imagen de adelante con animación */}
+      {/* Imagen de adelante con animación */}  
       {showFront && (
         <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
-          <div className="bg-white rounded-md shadow-2xl animate-fade-in-up flex flex-col items-center" style={{maxWidth: '80vw', maxHeight: '80vh'}}>
+          {/* Contenedor relativo que envuelve la imagen física */}
+          <div 
+            className="relative bg-white shadow-2xl animate-fade-in-up" 
+            style={{ maxWidth: '85vw', maxHeight: '80vh' }}
+          >
             <img
               src={item.detailImage}
-              alt={item.title + ' detalle'}
-              className="w-full object-cover rounded-t-md"
-              style={{maxWidth: '100%', maxHeight: '60vh', animation: 'fadeInUp 1s cubic-bezier(.23,1.01,.32,1)'}}
+              alt={item.title}
+              className="w-full h-auto block"
+              style={{ 
+                maxHeight: '80vh', 
+                animation: 'fadeInUp 1s cubic-bezier(.23,1.01,.32,1)' 
+              }}
               loading="lazy"
-              decoding="async"
-              fetchpriority="low"
             />
-            <div className="w-full flex flex-col items-center py-6">
-              {showButton && (
+
+            {/* Capa del Botón: Posicionada sobre el espacio en blanco de la foto */}
+            {showButton && (
+              <div className="absolute bottom-[9%] md:bottom-[10%] left-0 w-full flex justify-center">
                 <button
                   onClick={() => window.open("https://wa.me/56949569887", "_blank", "noopener,noreferrer")}
-                  className="absolute px-8 py-2 bg-transparent text-gray-800 font-serif text-base tracking-widest
-                             border-2 border-gray-400 hover:border-gray-600 transition-all duration-300
-                             shadow-lg animate-button-appear cursor-pointer"
-                  style={{
-                    animation: 'buttonAppear 0.5s cubic-bezier(.23,1.01,.32,1), shimmer 2s ease-in-out infinite'
-                  }}
+                  className="group flex items-center px-6 py-2 md:px-10 md:py-2.5 bg-transparent text-gray-800 font-serif text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.25em]
+                             border border-gray-400 hover:border-gray-600 transition-all duration-700 ease-out 
+                             cursor-pointer relative overflow-hidden 
+                             hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.07)]"
                 >
                   HABLEMOS
-                  <span className="absolute inset-0 overflow-hidden">
-                        <span className="animate-shine absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"
-                          style={{ animation: 'shine 3s ease-in-out infinite' }} />
-                  </span>
                 </button>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       )}
