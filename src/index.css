@@ -112,3 +112,12 @@
     @apply sticky top-0 min-h-screen w-full;
   }
 }
+
+@media (max-width: 767px) {
+  body.menu-open .floating-whatsapp,
+  body.menu-open .floating-discount {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(12px);
+  }
+}

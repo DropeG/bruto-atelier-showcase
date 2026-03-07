@@ -9,7 +9,7 @@ const DiscountButton: React.FC<DiscountButtonProps> = ({ onClick, isVisible = tr
   return (
     <button
       onClick={onClick}
-      className={`fixed bottom-4 left-4 md:bottom-8 md:left-8 z-50 flex items-center gap-2 
+      className={`floating-discount fixed bottom-4 left-4 md:bottom-8 md:left-8 z-50 flex items-center gap-2 
                  px-3 py-2 md:px-5 md:py-2.5 bg-white text-foreground 
                  border border-foreground/20 rounded-full shadow-lg 
                  hover:bg-foreground hover:text-white hover:border-foreground hover:shadow-2xl hover:scale-105
