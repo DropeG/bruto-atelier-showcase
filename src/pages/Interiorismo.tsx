@@ -2,21 +2,21 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { galleryItems } from "../data/Gallery";
 
-const Arquitectura = () => {
+const Interiorismo = () => {
   const navigate = useNavigate();
   const [showFront, setShowFront] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [imagesLoaded, setImagesLoaded] = useState<Record<number, boolean>>({});
 
-  // IDs de las imágenes de arquitectura
-  const arquitecturaIds = [5, 10];
-  const arquitecturaItems = galleryItems.filter(item => 
-    arquitecturaIds.includes(item.id)
+  // IDs de las imágenes de interiorismo
+  const interiorismoIds = [1, 6];
+  const interiorismoItems = galleryItems.filter(item => 
+    interiorismoIds.includes(item.id)
   );
 
   // Precargar todas las imágenes
   useEffect(() => {
-    arquitecturaItems.forEach(item => {
+    interiorismoItems.forEach(item => {
       const img = new Image();
       img.src = item.detailImage;
       img.onload = () => {
@@ -32,12 +32,12 @@ const Arquitectura = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => 
-        (prevIndex + 1) % arquitecturaItems.length
+        (prevIndex + 1) % interiorismoItems.length
       );
-    }, 4000);
+    }, 10000);
 
     return () => clearInterval(interval);
-  }, [arquitecturaItems.length]);
+  }, [interiorismoItems.length]);
 
   useEffect(() => {
     const timer = setTimeout(() => setShowFront(true), 1000);
@@ -65,7 +65,7 @@ const Arquitectura = () => {
     };
   }, []);
 
-  if (arquitecturaItems.length === 0) {
+  if (interiorismoItems.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <h1 className="text-2xl text-gray-800">No encontrado</h1>
@@ -73,7 +73,7 @@ const Arquitectura = () => {
     );
   }
 
-  const allImagesLoaded = arquitecturaItems.every(item => imagesLoaded[item.id]);
+  const allImagesLoaded = interiorismoItems.every(item => imagesLoaded[item.id]);
 
   return (
     <div className="relative w-full min-h-screen h-screen overflow-hidden bg-black">
@@ -97,7 +97,7 @@ const Arquitectura = () => {
 
       {/* Indicador de carrusel */}
       <div className="absolute top-8 right-8 z-40 flex gap-2">
-        {arquitecturaItems.map((_, index) => (
+        {interiorismoItems.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentIndex(index)}
@@ -112,7 +112,7 @@ const Arquitectura = () => {
       </div>
 
       {/* Capas de fondo - todas renderizadas */}
-      {arquitecturaItems.map((item, index) => (
+      {interiorismoItems.map((item, index) => (
         <div
           key={`bg-${item.id}`}
           className="absolute inset-0 transition-opacity duration-[1500ms] ease-in-out"
@@ -134,7 +134,7 @@ const Arquitectura = () => {
       {/* Imágenes principales - todas renderizadas con crossfade */}  
       {showFront && allImagesLoaded && (
         <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
-          {arquitecturaItems.map((item, index) => (
+          {interiorismoItems.map((item, index) => (
             <div
               key={`detail-${item.id}`}
               className="absolute inset-0 flex items-center justify-center transition-opacity duration-[1500ms] ease-in-out"
@@ -175,4 +175,4 @@ const Arquitectura = () => {
   );
 };
 
-export default Arquitectura;
+export default Interiorismo;

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Menu, X, Search, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import CurrencyDropdown from "./CurrencyDropdown";
+import NewsletterModal from "./NewsletterModal";
 
 const navLinks = [
   { label: "Arquitectura", href: "#arquitectura" },
@@ -30,6 +31,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
   const [contactMessage, setContactMessage] = useState(
     "Qué tal, me resuelven una duda?"
   );
+  const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
   const whatsappNumber = "56949569887";
 
@@ -93,7 +95,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
 
             {/* User/Login icon */}
             <button
-              onClick={() => navigate("/auth")}
+              onClick={() => setOpenModal(true)}
               className="p-2 hover:opacity-60 transition-opacity"
               aria-label="User account"
             >
@@ -169,7 +171,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                             type="button"
                             onClick={() => {
                               setIsMenuOpen(false);
-                              navigate("/categoria/morar/bespoke/1");
+                              navigate("/interiorismo");
                             }}
                             className="block w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
                           >
@@ -245,14 +247,20 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                           <div className="space-y-1 text-sm">
                             <button
                               type="button"
-                              onClick={() => setIsMenuOpen(false)}
+                              onClick={() => {
+                                setIsMenuOpen(false);
+                                navigate("/coleccion");
+                              }}
                               className="block w-full text-left px-2 py-1.5 -mx-2 hover:bg-[#EAD0B9] transition-colors"
                             >
                               Colección
                             </button>
                             <button
                               type="button"
-                              onClick={() => setIsMenuOpen(false)}
+                              onClick={() => {
+                                setIsMenuOpen(false);
+                                navigate("/serie");
+                              }}
                               className="block w-full text-left px-2 py-1.5 -mx-2 hover:bg-[#EAD0B9] transition-colors"
                             >
                               Serie
@@ -462,14 +470,20 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                                   <div className="space-y-1 text-sm leading-relaxed pl-2">
                                     <button
                                       type="button"
-                                      onClick={() => setIsMenuOpen(false)}
+                                      onClick={() => {
+                                        setIsMenuOpen(false);
+                                        navigate("/coleccion");
+                                      }}
                                       className="block w-full text-left px-2 py-1.5 hover:bg-[#EAD0B9] transition-colors focus:outline-none active:bg-transparent"
                                     >
                                       Colección
                                     </button>
                                     <button
                                       type="button"
-                                      onClick={() => setIsMenuOpen(false)}
+                                      onClick={() => {
+                                        setIsMenuOpen(false);
+                                        navigate("/serie");
+                                      }}
                                       className="block w-full text-left px-2 py-1.5 hover:bg-[#EAD0B9] transition-colors focus:outline-none active:bg-transparent"
                                     >
                                       Serie
@@ -520,6 +534,8 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <NewsletterModal openModal={openModal} onClose={() => setOpenModal(false)} />
     </>
   );
 };
