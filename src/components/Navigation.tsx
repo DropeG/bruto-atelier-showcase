@@ -158,7 +158,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                             type="button"
                             onClick={() => {
                               setIsMenuOpen(false);
-                              navigate("/categoria/cabina/bespoke/10");
+                              navigate("/arquitectura");
                             }}
                             className="block w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
                           >
@@ -262,7 +262,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                               onClick={() => setIsMenuOpen(false)}
                               className="block w-full text-left px-2 py-1.5 -mx-2 hover:bg-[#EAD0B9] transition-colors"
                             >
-                              Pieza
+                              Piezas
                             </button>
                           </div>
                         </>
@@ -479,7 +479,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                                       onClick={() => setIsMenuOpen(false)}
                                       className="block w-full text-left px-2 py-1.5 hover:bg-[#EAD0B9] transition-colors focus:outline-none active:bg-transparent"
                                     >
-                                      Pieza
+                                      Piezas
                                     </button>
                                   </div>
                                 </motion.div>
