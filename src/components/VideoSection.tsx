@@ -1,12 +1,12 @@
 const VideoSection = () => {
   const videos = [
-    { src: "/videos/video1.webm", alt: "Video 1" },
-    { src: "/videos/video2.webm", alt: "Video 2" },
+    { src: "/videos/video2.webm", alt: "Video 1" },
+    { src: "/videos/video1.webm", alt: "Video 2" },
     { src: "/videos/video3.webm", alt: "Video 3" },
   ];
 
   return (
-    <div className="h-screen w-full flex bg-black md:snap-center">
+    <div className="hidden md:flex h-screen w-full bg-black md:snap-center">
       {videos.map((video, index) => (
         <div key={index} className="h-screen w-1/3 flex items-center justify-center">
           <video
