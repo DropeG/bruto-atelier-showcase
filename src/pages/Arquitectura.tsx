@@ -5,8 +5,8 @@ import { galleryItems } from "../data/Gallery";
 const Arquitectura = () => {
   const navigate = useNavigate();
   const [showFront, setShowFront] = useState(false);
-  const [isDetailLoaded, setIsDetailLoaded] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [imagesLoaded, setImagesLoaded] = useState<Record<number, boolean>>({});
 
   // IDs de las imágenes de arquitectura
   const arquitecturaIds = [5, 10];
@@ -14,7 +14,19 @@ const Arquitectura = () => {
     arquitecturaIds.includes(item.id)
   );
 
-  const currentItem = arquitecturaItems[currentIndex];
+  // Precargar todas las imágenes
+  useEffect(() => {
+    arquitecturaItems.forEach(item => {
+      const img = new Image();
+      img.src = item.detailImage;
+      img.onload = () => {
+        setImagesLoaded(prev => ({ ...prev, [item.id]: true }));
+      };
+      
+      const thumbImg = new Image();
+      thumbImg.src = item.thumbnail;
+    });
+  }, []);
 
   // Cambiar automáticamente cada 10 segundos
   useEffect(() => {
@@ -22,8 +34,7 @@ const Arquitectura = () => {
       setCurrentIndex((prevIndex) => 
         (prevIndex + 1) % arquitecturaItems.length
       );
-      setIsDetailLoaded(false);
-    }, 5000);
+    }, 10000);
 
     return () => clearInterval(interval);
   }, [arquitecturaItems.length]);
@@ -54,7 +65,7 @@ const Arquitectura = () => {
     };
   }, []);
 
-  if (!currentItem) {
+  if (arquitecturaItems.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <h1 className="text-2xl text-gray-800">No encontrado</h1>
@@ -62,8 +73,10 @@ const Arquitectura = () => {
     );
   }
 
+  const allImagesLoaded = arquitecturaItems.every(item => imagesLoaded[item.id]);
+
   return (
-    <div className="relative w-full min-h-screen h-screen overflow-hidden">
+    <div className="relative w-full min-h-screen h-screen overflow-hidden bg-black">
       {/* Botón de volver */}
       <button
         onClick={() => navigate(-1)}
@@ -87,10 +100,7 @@ const Arquitectura = () => {
         {arquitecturaItems.map((_, index) => (
           <button
             key={index}
-            onClick={() => {
-              setCurrentIndex(index);
-              setIsDetailLoaded(false);
-            }}
+            onClick={() => setCurrentIndex(index)}
             className={`h-2 rounded-full transition-all duration-700 ease-out ${
               index === currentIndex 
                 ? 'bg-white w-6' 
@@ -101,74 +111,66 @@ const Arquitectura = () => {
         ))}
       </div>
 
-      {/* Imagen de fondo */}
-      <img
-        key={`thumb-${currentItem.id}`}
-        src={currentItem.thumbnail}
-        alt={currentItem.title}
-        className={`absolute inset-0 w-full h-full object-cover object-center transition-all duration-[2000ms] ${showFront ? 'blur-[1px] scale-105 opacity-100' : 'opacity-0'}`}
-        style={{ minHeight: "100vh" }}
-        loading="eager"
-        decoding="async"
-      />
-      <div className="absolute inset-0 bg-black/20 transition-opacity duration-[2000ms]" />
+      {/* Capas de fondo - todas renderizadas */}
+      {arquitecturaItems.map((item, index) => (
+        <div
+          key={`bg-${item.id}`}
+          className="absolute inset-0 transition-opacity duration-[1500ms] ease-in-out"
+          style={{ 
+            opacity: index === currentIndex ? 1 : 0,
+            pointerEvents: index === currentIndex ? 'auto' : 'none'
+          }}
+        >
+          <img
+            src={item.thumbnail}
+            alt={item.title}
+            className="absolute inset-0 w-full h-full object-cover object-center blur-[1px] scale-105"
+            style={{ minHeight: "100vh" }}
+          />
+          <div className="absolute inset-0 bg-black/20" />
+        </div>
+      ))}
 
-      {/* Imagen de adelante con animación */}  
-      {showFront && (
+      {/* Imágenes principales - todas renderizadas con crossfade */}  
+      {showFront && allImagesLoaded && (
         <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
-          {/* Contenedor relativo que envuelve la imagen física */}
-          <div 
-            key={`detail-${currentItem.id}`}
-            className="relative bg-white shadow-2xl animate-fade-in-up-slow" 
-            style={{ maxWidth: '85vw', maxHeight: '80vh' }}
-          >
-            <img
-              src={currentItem.detailImage}
-              alt={currentItem.title}
-              className="w-full h-auto block transition-opacity duration-1000"
+          {arquitecturaItems.map((item, index) => (
+            <div
+              key={`detail-${item.id}`}
+              className="absolute inset-0 flex items-center justify-center transition-opacity duration-[1500ms] ease-in-out"
               style={{ 
-                maxHeight: '80vh', 
-                animation: 'fadeInUpSlow 1.5s cubic-bezier(.23,1.01,.32,1)' 
+                opacity: index === currentIndex ? 1 : 0,
+                pointerEvents: index === currentIndex ? 'auto' : 'none'
               }}
-              loading="lazy"
-              onLoad={() => setIsDetailLoaded(true)}
-            />
+            >
+              <div 
+                className="relative bg-white shadow-2xl" 
+                style={{ maxWidth: '85vw', maxHeight: '80vh' }}
+              >
+                <img
+                  src={item.detailImage}
+                  alt={item.title}
+                  className="w-full h-auto block"
+                  style={{ maxHeight: '80vh' }}
+                />
 
-            {/* Capa del Botón: Posicionada sobre el espacio en blanco de la foto */}
-            {isDetailLoaded && (
-              <div className="absolute bottom-[9%] md:bottom-[10%] left-0 w-full flex justify-center animate-button-appear">
-                <button
-                  onClick={() => window.open("https://wa.me/56949569887", "_blank", "noopener,noreferrer")}
-                  className="group flex items-center px-6 py-2 md:px-10 md:py-2.5 bg-transparent text-gray-800 font-serif text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.25em]
-                             border border-gray-400 hover:border-gray-600 transition-all duration-700 ease-out 
-                             cursor-pointer relative overflow-hidden 
-                             hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.07)]"
-                >
-                  HABLEMOS
-                </button>
+                {/* Botón HABLEMOS */}
+                <div className="absolute bottom-[9%] md:bottom-[10%] left-0 w-full flex justify-center">
+                  <button
+                    onClick={() => window.open("https://wa.me/56949569887", "_blank", "noopener,noreferrer")}
+                    className="group flex items-center px-6 py-2 md:px-10 md:py-2.5 bg-transparent text-gray-800 font-serif text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.25em]
+                               border border-gray-400 hover:border-gray-600 transition-all duration-700 ease-out 
+                               cursor-pointer relative overflow-hidden 
+                               hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.07)]"
+                  >
+                    HABLEMOS
+                  </button>
+                </div>
               </div>
-            )}
-          </div>
+            </div>
+          ))}
         </div>
       )}
-
-      {/* Animación CSS */}
-      <style>{`
-        @keyframes fadeInUpSlow {
-          0% { opacity: 0; transform: translateY(30px) scale(0.97); }
-          100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        @keyframes buttonAppear {
-          0% { opacity: 0; transform: translateY(15px); }
-          100% { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in-up-slow {
-          animation: fadeInUpSlow 1.5s cubic-bezier(.23,1.01,.32,1);
-        }
-        .animate-button-appear {
-          animation: buttonAppear 1.2s cubic-bezier(.23,1.01,.32,1) 0.3s both;
-        }
-      `}</style>
     </div>
   );
 };
