@@ -8,7 +8,7 @@ const navLinks = [
   { label: "Arquitectura", href: "#arquitectura" },
   { label: "Interiorismo", href: "#interiorismo" },
   { label: "Mobiliario", href: "#mobiliario" },
-  { label: "Ilumicación", href: "#iluminacion" },
+  { label: "Iluminación", href: "#iluminacion" },
   { label: "Esenciales", href: "#esenciales" },
   { label: "Joyeria", href: "#joyeria" },
   { label: "Vestuario", href: "#vestuario" },
@@ -26,7 +26,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
-  const [activePanel, setActivePanel] = useState<"nosotros" | "contacto" | null>(null);
+  const [activePanel, setActivePanel] = useState<"mobiliario" | "nosotros" | "contacto" | null>(null);
   const [contactMessage, setContactMessage] = useState(
     "Qué tal, me resuelven una duda?"
   );
@@ -143,7 +143,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
               className="absolute top-24 left-6"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="hidden md:flex">
+              <div className="hidden md:flex items-start">
                 <div className="w-[260px] md:w-[300px] min-h-[40vh] bg-[#9C7B66] text-white p-6">
                   <motion.ul className="flex flex-col gap-3 text-sm tracking-wide">
                     {navLinks.map((link, index) => (
@@ -178,17 +178,16 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                         ) : link.label === "Mobiliario" ? (
                           <button
                             type="button"
-                            onClick={() => {
-                              setIsMenuOpen(false);
-                              navigate("/categoria/series/bespoke/2");
-                            }}
+                            onClick={() =>
+                              setActivePanel((prev) =>
+                                prev === "mobiliario" ? null : "mobiliario"
+                              )
+                            }
                             className="block w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
                           >
                             {link.label}
                           </button>
-                        )
-                        
-                        : link.label === "Nosotros" ? (
+                        ) : link.label === "Nosotros" ? (
                           <button
                             type="button"
                             onClick={() =>
@@ -234,12 +233,40 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                       exit={{ opacity: 0, x: -12 }}
                       transition={{ duration: 0.25, ease: "easeOut" }}
                       className={
-                        activePanel === "contacto"
-                          ? "w-[800px] bg-[#9C7B66] text-white p-6 border-l border-white/20"
-                          : "w-[800px] bg-[#9C7B66] text-white p-6 border-l border-white/20"
+                        activePanel === "mobiliario"
+                          ? "w-[200px] bg-[#9C7B66] text-white py-3 px-4 border-l border-white/20 self-start"
+                          : activePanel === "contacto"
+                            ? "w-[800px] bg-[#9C7B66] text-white p-6 border-l border-white/20"
+                            : "w-[800px] bg-[#9C7B66] text-white p-6 border-l border-white/20"
                       }
                     >
-                      {activePanel === "nosotros" ? (
+                      {activePanel === "mobiliario" ? (
+                        <>
+                          <div className="space-y-1 text-sm">
+                            <button
+                              type="button"
+                              onClick={() => setIsMenuOpen(false)}
+                              className="block w-full text-left px-2 py-1.5 -mx-2 hover:bg-[#EAD0B9] transition-colors"
+                            >
+                              Colección
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setIsMenuOpen(false)}
+                              className="block w-full text-left px-2 py-1.5 -mx-2 hover:bg-[#EAD0B9] transition-colors"
+                            >
+                              Serie
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setIsMenuOpen(false)}
+                              className="block w-full text-left px-2 py-1.5 -mx-2 hover:bg-[#EAD0B9] transition-colors"
+                            >
+                              Pieza
+                            </button>
+                          </div>
+                        </>
+                      ) : activePanel === "nosotros" ? (
                         <>
                           <div className="flex">
                             <div className="w-[440px]">
@@ -325,7 +352,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                 </AnimatePresence>
               </div>
 
-              <div className="md:hidden w-[300px] min-h-[70vh] bg-[#9C7B66] text-white p-6">
+              <div className="md:hidden w-[300px] bg-[#9C7B66] text-white p-6">
                 {activePanel ? (
                   <div>
                     <div className="relative flex items-center justify-center">
@@ -338,11 +365,41 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                         <ArrowLeft className="w-4 h-4" />
                       </button>
                       <div className="text-xs tracking-wide uppercase">
-                        {activePanel === "nosotros" ? "Nosotros" : "Contacto"}
+                        {activePanel === "mobiliario"
+                          ? ""
+                          : activePanel === "nosotros"
+                            ? "Nosotros"
+                            : "Contacto"}
                       </div>
                     </div>
                     <div className="mt-5">
-                      {activePanel === "nosotros" ? (
+                      {activePanel === "mobiliario" ? (
+                        <>
+                          <div className="space-y-1 text-sm leading-relaxed">
+                            <button
+                              type="button"
+                              onClick={() => setIsMenuOpen(false)}
+                              className="block w-full text-left px-2 py-1.5 -mx-2 hover:bg-[#EAD0B9] transition-colors"
+                            >
+                              Colección
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setIsMenuOpen(false)}
+                              className="block w-full text-left px-2 py-1.5 -mx-2 hover:bg-[#EAD0B9] transition-colors"
+                            >
+                              Serie
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setIsMenuOpen(false)}
+                              className="block w-full text-left px-2 py-1.5 -mx-2 hover:bg-[#EAD0B9] transition-colors"
+                            >
+                              Pieza
+                            </button>
+                          </div>
+                        </>
+                      ) : activePanel === "nosotros" ? (
                         <>
                           <div className="space-y-5 text-sm leading-relaxed max-h-[65vh] overflow-y-auto pr-2">
                             <div className="text-lg font-semibold">BRUTO ATELIER</div>
@@ -407,7 +464,15 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.1 + index * 0.08 }}
                       >
-                        {link.label === "Nosotros" ? (
+                        {link.label === "Mobiliario" ? (
+                          <button
+                            type="button"
+                            onClick={() => setActivePanel("mobiliario")}
+                            className="block w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
+                          >
+                            {link.label}
+                          </button>
+                        ) : link.label === "Nosotros" ? (
                           <button
                             type="button"
                             onClick={() => setActivePanel("nosotros")}
