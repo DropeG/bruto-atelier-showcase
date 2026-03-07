@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import HeroSection from "@/components/HeroSection";
+import VideoSection from "@/components/VideoSection";
 import Footer from "@/components/Footer";
 import ContactSection from "@/components/ContactSection";
 import NewsletterModal from "@/components/NewsletterModal";
@@ -51,6 +52,8 @@ const Index = () => {
       >
         {/* Section 1: Hero */}
           <HeroSection />
+          {/* Section 2: Videos */}
+          <VideoSection />
           <ImageRow
             leftSrc={Cocina}
             leftAlt="Cocina"
