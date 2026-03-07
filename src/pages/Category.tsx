@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { galleryItems } from "../data/Gallery";
 
 
@@ -8,8 +8,7 @@ const Category = () => {
   const { category, title, id } = useParams();
   const navigate = useNavigate();
   const [showFront, setShowFront] = useState(false);
-  const [showButton, setShowButton] = useState(false);
-  const triggered = useRef(false);
+  const [isDetailLoaded, setIsDetailLoaded] = useState(false);
   const item = galleryItems.find(
     (i) =>
       i.category.toLowerCase() === (category || "").toLowerCase() &&
@@ -43,13 +42,9 @@ const Category = () => {
     };
   }, []);
 
-  // Botón se muestra después del scroll
   useEffect(() => {
-    if (showFront) {
-      const buttonTimer = setTimeout(() => setShowButton(true), 0);
-      return () => clearTimeout(buttonTimer);
-    }
-  }, [showFront]);
+    setIsDetailLoaded(false);
+  }, [item?.detailImage]);
 
   if (!item) {
     return (
@@ -107,10 +102,11 @@ const Category = () => {
                 animation: 'fadeInUp 1s cubic-bezier(.23,1.01,.32,1)' 
               }}
               loading="lazy"
+              onLoad={() => setIsDetailLoaded(true)}
             />
 
             {/* Capa del Botón: Posicionada sobre el espacio en blanco de la foto */}
-            {showButton && (
+            {isDetailLoaded && (
               <div className="absolute bottom-[9%] md:bottom-[10%] left-0 w-full flex justify-center">
                 <button
                   onClick={() => window.open("https://wa.me/56949569887", "_blank", "noopener,noreferrer")}
