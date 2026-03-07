@@ -34,7 +34,7 @@ const Serie = () => {
       setCurrentIndex((prevIndex) => 
         (prevIndex + 1) % serieItems.length
       );
-    }, 10000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [serieItems.length]);

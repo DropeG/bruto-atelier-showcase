@@ -34,7 +34,7 @@ const Arquitectura = () => {
       setCurrentIndex((prevIndex) => 
         (prevIndex + 1) % arquitecturaItems.length
       );
-    }, 4000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [arquitecturaItems.length]);

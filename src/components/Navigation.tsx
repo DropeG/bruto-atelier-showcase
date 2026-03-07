@@ -145,7 +145,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
               className="absolute top-24 left-6"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="hidden md:flex items-start">
+              <div className="hidden md:flex items-start gap-4">
                 <div className="w-[260px] md:w-[300px] min-h-[40vh] bg-[#9C7B66] text-white p-6">
                   <motion.ul className="flex flex-col gap-3 text-sm tracking-wide">
                     {navLinks.map((link, index) => (
@@ -300,11 +300,11 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                                 </div>
                               </div>
                             </div>
-                            <div className="flex items-center justify-center ml-8">
+                            <div className="flex items-center justify-center ml-6">
                               <img
                                 src="/images/nosotros/nosotros.webp"
                                 alt="Foto Nosotros"
-                                className="w-[360px] aspect-square object-cover rounded-md shadow"
+                                className="w-[280px] h-[280px] object-contain rounded-md"
                               />
                             </div>
                           </div>
@@ -349,7 +349,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                               <img
                                 src="/images/contacto/contacto.webp"
                                 alt="Foto Contacto"
-                                className="w-[360px] aspect-square object-cover rounded-md shadow"
+                                className="w-[280px] h-[280px] object-contain rounded-md"
                               />
                             </div>
                           </div>

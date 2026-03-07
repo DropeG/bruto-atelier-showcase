@@ -38,7 +38,7 @@ export const galleryItems: GalleryItem[] = [
         category: "morar",
         title: "bespoke",
         thumbnail: "/images/gallery/morar-02-thumb.webp",
-        detailImage: "/images/gallery/sombras.jpeg",
+        detailImage: "/images/gallery/morar-02-detail.webp",
         route: "/categoria/morar/bespoke/4"
     },
     {

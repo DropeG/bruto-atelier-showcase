@@ -34,7 +34,7 @@ const Interiorismo = () => {
       setCurrentIndex((prevIndex) => 
         (prevIndex + 1) % interiorismoItems.length
       );
-    }, 10000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [interiorismoItems.length]);

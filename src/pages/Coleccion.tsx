@@ -34,7 +34,7 @@ const Coleccion = () => {
       setCurrentIndex((prevIndex) => 
         (prevIndex + 1) % coleccionItems.length
       );
-    }, 10000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [coleccionItems.length]);
