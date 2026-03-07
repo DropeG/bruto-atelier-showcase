@@ -353,7 +353,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
               </div>
 
               <div className="md:hidden w-[300px] bg-[#9C7B66] text-white p-6">
-                {activePanel ? (
+                {activePanel === "nosotros" || activePanel === "contacto" ? (
                   <div>
                     <div className="relative flex items-center justify-center">
                       <button
@@ -365,41 +365,11 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                         <ArrowLeft className="w-4 h-4" />
                       </button>
                       <div className="text-xs tracking-wide uppercase">
-                        {activePanel === "mobiliario"
-                          ? ""
-                          : activePanel === "nosotros"
-                            ? "Nosotros"
-                            : "Contacto"}
+                        {activePanel === "nosotros" ? "Nosotros" : "Contacto"}
                       </div>
                     </div>
                     <div className="mt-5">
-                      {activePanel === "mobiliario" ? (
-                        <>
-                          <div className="space-y-1 text-sm leading-relaxed">
-                            <button
-                              type="button"
-                              onClick={() => setIsMenuOpen(false)}
-                              className="block w-full text-left px-2 py-1.5 -mx-2 hover:bg-[#EAD0B9] transition-colors"
-                            >
-                              Colección
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => setIsMenuOpen(false)}
-                              className="block w-full text-left px-2 py-1.5 -mx-2 hover:bg-[#EAD0B9] transition-colors"
-                            >
-                              Serie
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => setIsMenuOpen(false)}
-                              className="block w-full text-left px-2 py-1.5 -mx-2 hover:bg-[#EAD0B9] transition-colors"
-                            >
-                              Pieza
-                            </button>
-                          </div>
-                        </>
-                      ) : activePanel === "nosotros" ? (
+                      {activePanel === "nosotros" ? (
                         <>
                           <div className="space-y-5 text-sm leading-relaxed max-h-[65vh] overflow-y-auto pr-2">
                             <div className="text-lg font-semibold">BRUTO ATELIER</div>
@@ -456,27 +426,71 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                     </div>
                   </div>
                 ) : (
-                  <motion.ul className="flex flex-col gap-3 text-sm tracking-wide">
+                  <motion.ul className="flex flex-col gap-3 text-sm tracking-wide overflow-visible">
                     {navLinks.map((link, index) => (
                       <motion.li
                         key={link.label}
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.1 + index * 0.08 }}
+                        className="relative w-full"
                       >
                         {link.label === "Mobiliario" ? (
-                          <button
-                            type="button"
-                            onClick={() => setActivePanel("mobiliario")}
-                            className="block w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
-                          >
-                            {link.label}
-                          </button>
+                          <>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setActivePanel((prev) =>
+                                  prev === "mobiliario" ? null : "mobiliario"
+                                )
+                              }
+                              className="block w-full text-left px-2 py-1 -mx-2 transition-colors focus:outline-none active:bg-transparent"
+                            >
+                              {link.label}
+                            </button>
+                            <AnimatePresence>
+                              {activePanel === "mobiliario" && (
+                                <motion.div
+                                  initial={{ opacity: 0, x: -8 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -8 }}
+                                  transition={{ duration: 0.2, ease: "easeOut" }}
+                                  className="absolute left-[120px] -top-2 w-[150px] text-white z-50"
+                                >
+                                  <div className="absolute -left-10 top-6 w-8 h-px bg-white/50" />
+
+                                  <div className="space-y-1 text-sm leading-relaxed pl-2">
+                                    <button
+                                      type="button"
+                                      onClick={() => setIsMenuOpen(false)}
+                                      className="block w-full text-left px-2 py-1.5 hover:bg-[#EAD0B9] transition-colors focus:outline-none active:bg-transparent"
+                                    >
+                                      Colección
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => setIsMenuOpen(false)}
+                                      className="block w-full text-left px-2 py-1.5 hover:bg-[#EAD0B9] transition-colors focus:outline-none active:bg-transparent"
+                                    >
+                                      Serie
+                                    </button>
+                                    <button
+                                      type="button"
+                                      onClick={() => setIsMenuOpen(false)}
+                                      className="block w-full text-left px-2 py-1.5 hover:bg-[#EAD0B9] transition-colors focus:outline-none active:bg-transparent"
+                                    >
+                                      Pieza
+                                    </button>
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </>
                         ) : link.label === "Nosotros" ? (
                           <button
                             type="button"
                             onClick={() => setActivePanel("nosotros")}
-                            className="block w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
+                            className="block w-full text-left px-2 py-1 -mx-2 transition-colors focus:outline-none active:bg-transparent"
                           >
                             {link.label}
                           </button>
@@ -484,7 +498,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                           <button
                             type="button"
                             onClick={() => setActivePanel("contacto")}
-                            className="block w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
+                            className="block w-full text-left px-2 py-1 -mx-2 transition-colors focus:outline-none active:bg-transparent"
                           >
                             {link.label}
                           </button>
@@ -492,7 +506,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                           <a
                             href={link.href}
                             onClick={() => setIsMenuOpen(false)}
-                            className="block px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
+                            className="block px-2 py-1 -mx-2 transition-colors"
                           >
                             {link.label}
                           </a>

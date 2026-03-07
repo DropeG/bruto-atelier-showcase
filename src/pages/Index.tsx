@@ -12,7 +12,7 @@ import Paisaje from "/images/paisaje.webp";
 import CasitaArbol from "/images/casitaArbol.webp";
 import Morar from "/images/morar.webp";
 import Banqueta from "/images/banquetaBlanca.webp";
-import Flores from "/images/flores.webp";
+import Flores from "/images/gallery/flore.webp";
 import MuebleRojo from "/images/muebleRojo.webp";
 import Cabina from "/images/cabina.webp";
 import ImageRow from "@/components/ImageRow";
