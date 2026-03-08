@@ -286,13 +286,13 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                                 <div className="space-y-2 text-sm leading-tight flex-1 pr-2 text-justify">
                                   <div className="text-lg font-semibold">BRUTO ATELIER</div>
                                   <p>
-                                    Nuestra marca se enfoca en la solucion de encargos de diseno de un amplio
-                                    espectro. Creamos vision, resolvemos espacio y sus componentes: el habitar
+                                    Nuestra marca se enfoca en la solución de encargos de diseño de un amplio
+                                    espectro. Creamos visión, resolvemos espacio y sus componentes: el habitar
                                     completo.
                                   </p>
                                   <p>
                                     Creemos en lo que se diferencia en silencio y trasciende en el tiempo, lo que
-                                    perdura con elegancia y desarrolla caracter. Disenamos singularidad, fabricando
+                                    perdura con elegancia y desarrolla carácter. Diseñamos singularidad, fabricando
                                     de manera local con materiales y artesanos seleccionados.
                                   </p>
                                   <p>
@@ -385,17 +385,17 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                           <div className="space-y-5 text-sm leading-relaxed max-h-[65vh] overflow-y-auto pr-2">
                             <div className="text-lg font-semibold">BRUTO ATELIER</div>
                             <p>
-                              Nuestra marca se enfoca en la solucion de encargos de diseno de un amplio
-                              espectro. Creamos vision, resolvemos espacio y sus componentes: el habitar
+                              Nuestra marca se enfoca en la solución de encargos de diseño de un amplio
+                              espectro. Creamos visión, resolvemos espacio y sus componentes: el habitar
                               completo.
                             </p>
                             <p>
                               Creemos en lo que se diferencia en silencio y trasciende en el tiempo, lo que
-                              perdura con elegancia y desarrolla caracter. Disenamos singularidad, fabricando
+                              perdura con elegancia y desarrolla carácter. Diseñamos singularidad, fabricando
                               de manera local con materiales y artesanos seleccionados.
                             </p>
                             <p>
-                              Nuestra vision busca entregar una experiencia, que se entiende al conocerla.
+                              Nuestra visión busca entregar una experiencia, que se entiende al conocerla.
                             </p>
                             <p>Pruebanos.</p>
                           </div>
