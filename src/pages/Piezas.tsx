@@ -2,21 +2,21 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { galleryItems } from "../data/Gallery";
 
-const Coleccion = () => {
+const Piezas = () => {
   const navigate = useNavigate();
   const [showFront, setShowFront] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [imagesLoaded, setImagesLoaded] = useState<Record<number, boolean>>({});
 
-  // IDs de las imágenes de colección
-  const coleccionIds = [3];
-  const coleccionItems = galleryItems.filter(item => 
-    coleccionIds.includes(item.id)
+  // IDs de las imágenes de piezas
+  const piezasIds = [7, 8];
+  const piezasItems = galleryItems.filter(item => 
+    piezasIds.includes(item.id)
   );
 
   // Precargar todas las imágenes
   useEffect(() => {
-    coleccionItems.forEach(item => {
+    piezasItems.forEach(item => {
       const img = new Image();
       img.src = item.detailImage;
       img.onload = () => {
@@ -28,16 +28,16 @@ const Coleccion = () => {
     });
   }, []);
 
-  // Cambiar automáticamente cada 10 segundos
+  // Cambiar automáticamente cada 5 segundos
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => 
-        (prevIndex + 1) % coleccionItems.length
+        (prevIndex + 1) % piezasItems.length
       );
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [coleccionItems.length]);
+  }, [piezasItems.length]);
 
   useEffect(() => {
     const timer = setTimeout(() => setShowFront(true), 1000);
@@ -65,7 +65,7 @@ const Coleccion = () => {
     };
   }, []);
 
-  if (coleccionItems.length === 0) {
+  if (piezasItems.length === 0) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <h1 className="text-2xl text-gray-800">No encontrado</h1>
@@ -73,7 +73,7 @@ const Coleccion = () => {
     );
   }
 
-  const allImagesLoaded = coleccionItems.every(item => imagesLoaded[item.id]);
+  const allImagesLoaded = piezasItems.every(item => imagesLoaded[item.id]);
 
   return (
     <div className="relative w-full min-h-screen h-screen overflow-hidden bg-black">
@@ -97,7 +97,7 @@ const Coleccion = () => {
 
       {/* Indicador de carrusel */}
       <div className="absolute top-8 right-8 z-40 flex gap-2">
-        {coleccionItems.map((_, index) => (
+        {piezasItems.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentIndex(index)}
@@ -112,7 +112,7 @@ const Coleccion = () => {
       </div>
 
       {/* Capas de fondo - todas renderizadas */}
-      {coleccionItems.map((item, index) => (
+      {piezasItems.map((item, index) => (
         <div
           key={`bg-${item.id}`}
           className="absolute inset-0 transition-opacity duration-[1500ms] ease-in-out"
@@ -134,7 +134,7 @@ const Coleccion = () => {
       {/* Imágenes principales - todas renderizadas con crossfade */}  
       {showFront && allImagesLoaded && (
         <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
-          {coleccionItems.map((item, index) => (
+          {piezasItems.map((item, index) => (
             <div
               key={`detail-${item.id}`}
               className="absolute inset-0 flex items-center justify-center transition-opacity duration-[1500ms] ease-in-out"
@@ -175,4 +175,4 @@ const Coleccion = () => {
   );
 };
 
-export default Coleccion;
+export default Piezas;

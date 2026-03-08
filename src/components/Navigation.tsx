@@ -267,7 +267,10 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                             </button>
                             <button
                               type="button"
-                              onClick={() => setIsMenuOpen(false)}
+                              onClick={() => {
+                                setIsMenuOpen(false);
+                                navigate("/piezas");
+                              }}
                               className="block w-full text-left px-2 py-1.5 -mx-2 hover:bg-[#EAD0B9] transition-colors"
                             >
                               Piezas
@@ -443,7 +446,29 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                         transition={{ delay: 0.1 + index * 0.08 }}
                         className="relative w-full"
                       >
-                        {link.label === "Mobiliario" ? (
+                        {link.label === "Arquitectura" ? (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setIsMenuOpen(false);
+                              navigate("/arquitectura");
+                            }}
+                            className="block w-full text-left px-2 py-1 -mx-2 transition-colors focus:outline-none active:bg-transparent"
+                          >
+                            {link.label}
+                          </button>
+                        ) : link.label === "Interiorismo" ? (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setIsMenuOpen(false);
+                              navigate("/interiorismo");
+                            }}
+                            className="block w-full text-left px-2 py-1 -mx-2 transition-colors focus:outline-none active:bg-transparent"
+                          >
+                            {link.label}
+                          </button>
+                        ) : link.label === "Mobiliario" ? (
                           <>
                             <button
                               type="button"
@@ -490,7 +515,10 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                                     </button>
                                     <button
                                       type="button"
-                                      onClick={() => setIsMenuOpen(false)}
+                                      onClick={() => {
+                                        setIsMenuOpen(false);
+                                        navigate("/piezas");
+                                      }}
                                       className="block w-full text-left px-2 py-1.5 hover:bg-[#EAD0B9] transition-colors focus:outline-none active:bg-transparent"
                                     >
                                       Piezas
