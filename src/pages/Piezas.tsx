@@ -14,19 +14,21 @@ const Piezas = () => {
     piezasIds.includes(item.id)
   );
 
-  // Precargar todas las imágenes
+  // Precargar todas las imágenes con mejor optimización
   useEffect(() => {
     piezasItems.forEach(item => {
+      // Precargar imagen detalle (con mayor prioridad)
       const img = new Image();
       img.src = item.detailImage;
       img.onload = () => {
         setImagesLoaded(prev => ({ ...prev, [item.id]: true }));
       };
       
+      // Precargar thumbnail (con menor prioridad)
       const thumbImg = new Image();
       thumbImg.src = item.thumbnail;
     });
-  }, []);
+  }, [piezasItems.length]);
 
   // Cambiar automáticamente cada 5 segundos
   useEffect(() => {
@@ -124,8 +126,15 @@ const Piezas = () => {
           <img
             src={item.thumbnail}
             alt={item.title}
-            className="absolute inset-0 w-full h-full object-cover object-center blur-[1px] scale-105"
-            style={{ minHeight: "100vh" }}
+            className="absolute inset-0 w-full h-full object-cover object-center scale-105"
+            style={{ 
+              minHeight: "100vh",
+              filter: index === currentIndex ? "blur(1px)" : "blur(4px)",
+              transition: "filter 0.6s ease-out"
+            }}
+            loading="lazy"
+            decoding="async"
+            fetchPriority={index === currentIndex ? "high" : "low"}
           />
           <div className="absolute inset-0 bg-black/20" />
         </div>
@@ -152,6 +161,9 @@ const Piezas = () => {
                   alt={item.title}
                   className="w-full h-auto block"
                   style={{ maxHeight: '80vh' }}
+                  loading="eager"
+                  decoding="async"
+                  fetchPriority="high"
                 />
 
                 {/* Botón HABLEMOS */}

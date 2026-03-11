@@ -300,6 +300,13 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                                     Atelier, que se entiende al conocerla.
                                   </p>
                                   <p>Pruebanos.</p>
+                                  <div className="pt-3 space-y-1 leading-snug text-xs">
+                                    <p>Firma.</p>
+                                    <p>Mladen Marinovic´</p>
+                                    <p>Creative Director</p>
+                                    <p>BRUTO Atelier. © 2026</p>
+                                  </div>
+
                                 </div>
                               </div>
                             </div>
@@ -398,6 +405,13 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                               Nuestra visión busca entregar una experiencia, que se entiende al conocerla.
                             </p>
                             <p>Pruebanos.</p>
+                            <div className="space-y-1 leading-snug text-xs">
+                              <p>Firma.</p>
+                              <p>Mladen Marinovic´</p>
+                              <p>Creative Director</p>
+                              <p>Mobile +56 949569887</p>
+                              <p>BRUTO Atelier. © 2026</p>
+                            </div>
                           </div>
                         </>
                       ) : (

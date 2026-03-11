@@ -10,6 +10,7 @@ import {
   ImageRow as ImageRowComp,
 } from "@/components";
 import { useScroll } from "@/contexts/ScrollContext";
+import { blurPlaceholders } from "@/lib/blur-placeholders";
 import imageHome1 from "/images/home/image1.webp";
 import imageHome2 from "/images/home/image2.webp";
 import imageHome3 from "/images/home/image3.webp";
@@ -74,65 +75,79 @@ const Index = () => {
           <VideoSection />
         </div>
 
-        {/* ImageRow 1: Cocina y Mueble Azul */}
-        <div id="section-row-1">
-          <ImageRow
-            leftSrc={imageHome1}
-            leftAlt="Cocina"
-            leftHref="/categoria/morar/bespoke/1"
-            rightSrc={imageHome2}
-            rightAlt="Mueble Azul"
-            rightHref="/categoria/series/bespoke/2"
-          />
-        </div>
+         {/* ImageRow 1: Cocina y Mueble Azul */}
+         <div id="section-row-1">
+           <ImageRow
+             leftSrc={imageHome1}
+             leftAlt="Cocina"
+             leftHref="/categoria/morar/bespoke/1"
+             leftIpadPosition="0% center"
+             leftBlurDataUrl={blurPlaceholders.imageHome1}
+             rightSrc={imageHome2}
+             rightAlt="Mueble Azul"
+             rightHref="/categoria/series/bespoke/2"
+             rightBlurDataUrl={blurPlaceholders.imageHome2}
+           />
+         </div>
 
-        {/* ImageRow 2: Comedor y Paisaje */}
-        <div id="section-row-2">
-          <ImageRow
-            leftSrc={imageHome3}
-            leftAlt="Comedor"
-            leftHref="/categoria/colection/wachi/3"
-            rightSrc={imageHome4}
-            rightAlt="Paisaje"
-            rightHref="/categoria/morar/bespoke/4"
-          />
-        </div>
+         {/* ImageRow 2: Comedor y Paisaje */}
+         <div id="section-row-2">
+           <ImageRow
+             leftSrc={imageHome3}
+             leftAlt="Comedor"
+             leftHref="/categoria/colection/wachi/3"
+             leftIpadPosition="34% center"
+             leftBlurDataUrl={blurPlaceholders.imageHome3}
+             rightSrc={imageHome4}
+             rightAlt="Paisaje"
+             rightHref="/categoria/morar/bespoke/4"
+             rightBlurDataUrl={blurPlaceholders.imageHome4}
+           />
+         </div>
 
-        {/* ImageRow 3: Casita Arbol y Morar */}
-        <div id="section-row-3">
-          <ImageRow
-            leftSrc={imageHome5}
-            leftAlt="Casita Arbol"
-            leftHref="/categoria/cabina/bespoke/5"
-            rightSrc={imageHome6}
-            rightAlt="Morar"
-            rightHref="/categoria/morar/bespoke/6"
-          />
-        </div>
+         {/* ImageRow 3: Casita Arbol y Morar */}
+         <div id="section-row-3">
+           <ImageRow
+             leftSrc={imageHome5}
+             leftAlt="Casita Arbol"
+             leftHref="/categoria/cabina/bespoke/5"
+             leftBlurDataUrl={blurPlaceholders.imageHome5}
+             rightSrc={imageHome6}
+             rightAlt="Morar"
+             rightHref="/categoria/morar/bespoke/6"
+             rightIpadPosition="30% center"
+             rightBlurDataUrl={blurPlaceholders.imageHome6}
+           />
+         </div>
 
-        {/* ImageRow 4: Banqueta y Flores */}
-        <div id="section-row-4">
-          <ImageRow
-            leftSrc={imageHome7}
-            leftAlt="Banqueta"
-            leftHref="/categoria/colection/sabi/7"
-            rightSrc={imageHome8}
-            rightAlt="Flores"
-            rightHref="/categoria/colection/formo/8"
-          />
-        </div>
+         {/* ImageRow 4: Banqueta y Flores */}
+         <div id="section-row-4">
+           <ImageRow
+             leftSrc={imageHome7}
+             leftAlt="Banqueta"
+             leftHref="/categoria/colection/sabi/7"
+             leftIpadPosition="50% center"
+             leftBlurDataUrl={blurPlaceholders.imageHome7}
+             rightSrc={imageHome8}
+             rightAlt="Flores"
+             rightHref="/categoria/colection/formo/8"
+             rightBlurDataUrl={blurPlaceholders.imageHome8}
+           />
+         </div>
 
-        {/* ImageRow 5: Mueble Rojo y Cabina */}
-        <div id="section-row-5">
-          <ImageRow
-            leftSrc={imageHome9}  
-            leftAlt="Mueble Rojo"
-            leftHref="/categoria/series/bespoke/9"
-            rightSrc={imageHome10}
-            rightAlt="Cabina"
-            rightHref="/categoria/cabina/bespoke/10"
-          />
-        </div>
+         {/* ImageRow 5: Mueble Rojo y Cabina */}
+         <div id="section-row-5">
+           <ImageRow
+             leftSrc={imageHome9}  
+             leftAlt="Mueble Rojo"
+             leftHref="/categoria/series/bespoke/9"
+             leftBlurDataUrl={blurPlaceholders.imageHome9}
+             rightSrc={imageHome10}
+             rightAlt="Cabina"
+             rightHref="/categoria/cabina/bespoke/10"
+             rightBlurDataUrl={blurPlaceholders.imageHome10}
+           />
+         </div>
 
         {/* Footer */}
         <Footer />
