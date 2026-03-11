@@ -1,0 +1,326 @@
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                                                                                ║
+║                        🎨 BRUTO ATELIER SHOWCASE 🎨                           ║
+║                                                                                ║
+║                     GUÍA DE INICIO RÁPIDO Y DOCUMENTACIÓN                     ║
+║                                                                                ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+
+🚀 COMENZAR EN 5 MINUTOS
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Clonar el repo:
+   $ git clone https://github.com/DropeG/bruto-atelier-showcase.git
+   $ cd bruto-atelier-showcase
+
+2. Instalar dependencias:
+   $ npm install
+
+3. Iniciar servidor:
+   $ npm run dev
+
+4. Abrir en navegador:
+   → http://localhost:8080
+
+5. Ver en producción:
+   → https://bruto-atelier-showcase.vercel.app
+
+
+📚 DOCUMENTACIÓN COMPLETA
+═══════════════════════════════════════════════════════════════════════════════
+
+Archivos de documentación disponibles:
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 📄 START_HERE.txt (este archivo)                                           │
+│ → Punto de entrada rápido                                                  │
+│ → Tiempo: 2 minutos                                                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 📄 DOCUMENTACION.txt                                                        │
+│ → Índice centralizado y referencia rápida                                  │
+│ → Estructura, rutas, contextos, componentes                                │
+│ → Tiempo: 5 minutos                                                        │
+│                                                                             │
+│ LEER SI: Necesitas encontrar algo rápidamente                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 📄 README.md                                                                │
+│ → Documentación general completa de la app                                 │
+│ → Stack, estructura, funcionalidades, guía de desarrollo                   │
+│ → Tiempo: 15 minutos                                                       │
+│                                                                             │
+│ LEER SI: Quieres entender la app completamente                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 📄 CONTEXT_FOR_AI.md ⭐                                                     │
+│ → Documentación técnica para IAs/Developers                                │
+│ → Patrones, configuración, reglas, arquitectura                            │
+│ → Tiempo: 10 minutos                                                       │
+│                                                                             │
+│ LEER SI: Eres una IA o developer que necesita entender el código          │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 📄 OPTIMIZACION_FASE1.md                                                    │
+│ → Lazy loading + blur backgrounds implementados                            │
+│ → Cómo probarlo, próximos pasos                                            │
+│ → Tiempo: 5 minutos                                                        │
+│                                                                             │
+│ LEER SI: Quieres saber qué optimizaciones se hicieron                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 📄 CURRENCY_SETUP.md                                                        │
+│ → Guía de sistema de monedas (12 países)                                   │
+│ → Cómo agregar/modificar monedas                                           │
+│ → Tiempo: 10 minutos                                                       │
+│                                                                             │
+│ LEER SI: Necesitas trabajar con monedas                                   │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ 📄 DOCS_SUMMARY.md                                                          │
+│ → Resumen de toda la documentación creada                                  │
+│ → Estadísticas, cobertura, cómo mantenerla                                 │
+│ → Tiempo: 5 minutos                                                        │
+│                                                                             │
+│ LEER SI: Quieres saber qué hay documentado                                │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+
+🎯 RECOMENDACIÓN DE LECTURA POR TIPO DE USUARIO
+═══════════════════════════════════════════════════════════════════════════════
+
+SI ERES UN DEVELOPER:
+  1. START_HERE.txt (este archivo) → 2 min
+  2. README.md (secciones 1-6) → 15 min
+  3. README.md (sección "Guía de desarrollo") → 10 min
+  4. DOCUMENTACION.txt (referencia rápida) → 5 min
+  ─────────────────────────────────────
+  TOTAL: 32 minutos para estar productivo
+
+SI ERES UN DISEÑADOR:
+  1. START_HERE.txt → 2 min
+  2. README.md (secciones 1-7) → 15 min
+  3. README.md (sección "Funcionalidades") → 10 min
+  ─────────────────────────────────────
+  TOTAL: 27 minutos
+
+SI ERES UNA IA (Claude, GPT, Copilot):
+  1. CONTEXT_FOR_AI.md → 10 min (CRÍTICO)
+  2. README.md → 15 min
+  3. DOCUMENTACION.txt (búsqueda rápida) → 5 min
+  ─────────────────────────────────────
+  TOTAL: 30 minutos para entender completamente
+
+SI NECESITAS OPTIMIZAR:
+  1. OPTIMIZACION_FASE1.md → 5 min
+  2. OPTIMIZACION_FASE1.md (sección "Próximos pasos") → 5 min
+  3. README.md (sección "Optimizaciones") → 10 min
+  ─────────────────────────────────────
+  TOTAL: 20 minutos
+
+SI TIENES UN PROBLEMA:
+  1. DOCUMENTACION.txt (Troubleshooting) → 3 min
+  2. README.md (Problemas comunes) → 5 min
+  3. Busca en CONTEXT_FOR_AI.md si es técnico → 5 min
+
+
+💻 INFORMACIÓN CRÍTICA
+═══════════════════════════════════════════════════════════════════════════════
+
+Tipo de app:
+  ✓ React 18 SPA (Single Page Application)
+  ✓ NO es Next.js
+  ✓ Enrutamiento: React Router v6
+  ✓ Build: Vite
+  ✓ Deploy: Vercel (estático)
+
+Propósito:
+  ✓ Showcase/Portafolio de estudio de diseño
+  ✓ Catálogo de muebles, arquitectura e interiorismo
+  ✓ Soporte multimoneda (12 países)
+  ✓ Carrusel de imágenes con efectos
+
+Stack principal:
+  ✓ React 18.3.1 - UI
+  ✓ TypeScript 5.8.3 - Type safety
+  ✓ Vite 5.4.19 - Build
+  ✓ Tailwind CSS 3.4.17 - Styling
+  ✓ Framer Motion 12.23.26 - Animaciones
+  ✓ shadcn/ui + Radix UI - Componentes
+  ✓ React Router 6.30.1 - Enrutamiento
+
+Base de datos:
+  ✗ NO hay base de datos
+  → Todo es datos estáticos en /src/data/Gallery.tsx
+  → Autenticación es fake (simulada)
+  → Monedas son conversiones estáticas
+
+Performance:
+  ✓ Lazy loading de imágenes
+  ✓ Blur backgrounds
+  ✓ Caché en Vercel (1 año)
+  ✓ Bundle: 481KB gzip (muy bueno)
+
+
+🗂️ ESTRUCTURA RÁPIDA
+═══════════════════════════════════════════════════════════════════════════════
+
+src/
+  pages/         → 8 páginas SPA (Index, Arquitectura, Piezas, etc.)
+  components/    → 20+ componentes reutilizables
+  components/ui/ → 30+ componentes shadcn/ui
+  contexts/      → 3 contextos globales (Auth, Currency, Scroll)
+  data/          → Galería con 10 items (20 imágenes)
+  lib/           → Utilidades (blur-placeholders.ts)
+
+public/images/ → 20+ carpetas de imágenes
+
+Configuración:
+  vite.config.ts       → Build tool
+  tailwind.config.ts   → Estilos
+  vercel.json         → Caché Vercel
+
+
+🛣️ RUTAS PRINCIPALES
+═══════════════════════════════════════════════════════════════════════════════
+
+/                           → Home (10 imágenes + scroll snap)
+/arquitectura              → Proyectos de arquitectura
+/interiorismo              → Proyectos de interiorismo
+/coleccion                 → Catálogo de colecciones
+/serie                     → Series de productos
+/piezas                    → Piezas con carrusel automático
+/categoria/:cat/:col/:id   → Página dinámica
+/auth                      → Login/Signup
+
+
+🌐 CONTEXTOS GLOBALES
+═══════════════════════════════════════════════════════════════════════════════
+
+1. AuthContext
+   → user, login(), logout(), signup()
+   → Uso: const { user } = useAuth()
+
+2. CurrencyContext
+   → 12 países, conversión de monedas
+   → Uso: const { selectedCountry } = useCurrency()
+
+3. ScrollContext
+   → Guarda posición al navegar
+   → Uso: const { saveSectionId } = useScroll()
+
+
+📦 SCRIPTS DISPONIBLES
+═══════════════════════════════════════════════════════════════════════════════
+
+npm run dev         → Desarrollo (http://localhost:8080)
+npm run build       → Build producción
+npm run lint        → Verificar código (ESLint)
+npm run preview     → Preview del build
+
+
+✨ FUNCIONALIDADES PRINCIPALES
+═══════════════════════════════════════════════════════════════════════════════
+
+✓ Galería de proyectos (10 imágenes en home)
+✓ Carrusel automático en piezas
+✓ Sistema multimoneda (12 países)
+✓ Autenticación fake (login/signup modal)
+✓ Newsletter subscription modal
+✓ Contacto por WhatsApp
+✓ Animaciones con Framer Motion
+✓ Lazy loading de imágenes
+✓ Blur backgrounds
+✓ Responsive design (mobile, tablet, desktop)
+
+
+⚡ OPTIMIZACIONES IMPLEMENTADAS
+═══════════════════════════════════════════════════════════════════════════════
+
+✓ Lazy loading nativo (loading="lazy")
+✓ Blur backgrounds (transición suave)
+✓ Image preloading (estratégico)
+✓ fetchPriority dinámico (high/low)
+✓ Vercel cache (1 año para imágenes)
+✓ WebP format (con fallback)
+
+Resultados esperados:
+  → +30-40% mejor LCP
+  → +20-30% mejor FID
+  → Mejor percepción de velocidad
+
+
+🐛 TROUBLESHOOTING RÁPIDO
+═══════════════════════════════════════════════════════════════════════════════
+
+Build falla:
+  → npm install && npm run build
+
+Dev no inicia:
+  → npm install
+  → Matar puerto 8080
+
+ESLint errors:
+  → npm run lint -- --fix
+
+Imágenes no cargan:
+  → Verificar /public/images/
+  → DevTools > Network
+
+
+🔗 LINKS IMPORTANTES
+═══════════════════════════════════════════════════════════════════════════════
+
+App en vivo: https://bruto-atelier-showcase.vercel.app
+GitHub Repo: https://github.com/DropeG/bruto-atelier-showcase
+Vercel Dashboard: https://vercel.com/dashboard
+
+Documentación oficial:
+  React: https://react.dev
+  Tailwind: https://tailwindcss.com
+  Vite: https://vitejs.dev
+  Framer Motion: https://www.framer.com/motion
+  React Router: https://reactrouter.com
+
+
+📞 SOPORTE Y AYUDA
+═══════════════════════════════════════════════════════════════════════════════
+
+Si necesitas ayuda:
+  1. Lee el archivo de documentación relevante
+  2. Consulta DOCUMENTACION.txt (búsqueda rápida)
+  3. Revisa README.md (sección Troubleshooting)
+  4. Abre un issue en GitHub
+  5. Contacta por WhatsApp: +56 9 4956 9887
+
+
+✅ PRÓXIMOS PASOS
+═══════════════════════════════════════════════════════════════════════════════
+
+Si quieres ENTENDER la app:
+  → Lee README.md completo
+
+Si quieres DESARROLLAR:
+  → Lee CONTEXT_FOR_AI.md y README.md (sección desarrollo)
+  → Empieza en /src/App.tsx para entender rutas
+
+Si quieres OPTIMIZAR:
+  → Lee OPTIMIZACION_FASE1.md (sección próximos pasos)
+
+Si quieres AGREGAR MONEDAS:
+  → Lee CURRENCY_SETUP.md
+
+
+═══════════════════════════════════════════════════════════════════════════════
+
+Última actualización: Marzo 2026
+Versión: 1.1.0 (Con optimizaciones FASE 1 + documentación completa)
+
+═══════════════════════════════════════════════════════════════════════════════
