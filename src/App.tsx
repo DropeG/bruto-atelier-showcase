@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ScrollProvider } from "@/contexts/ScrollContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Category from "./pages/Category";
@@ -17,20 +18,22 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/arquitectura" element={<Arquitectura />} />
-          <Route path="/interiorismo" element={<Interiorismo />} />
-          <Route path="/coleccion" element={<Coleccion />} />
-          <Route path="/serie" element={<Serie />} />
-          <Route path="/piezas" element={<Piezas />} />
-          <Route path="/categoria/:category/:title/:id" element={<Category />} />
-          
-        </Routes>
-      </BrowserRouter>
+      <ScrollProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/arquitectura" element={<Arquitectura />} />
+            <Route path="/interiorismo" element={<Interiorismo />} />
+            <Route path="/coleccion" element={<Coleccion />} />
+            <Route path="/serie" element={<Serie />} />
+            <Route path="/piezas" element={<Piezas />} />
+            <Route path="/categoria/:category/:title/:id" element={<Category />} />
+            
+          </Routes>
+        </BrowserRouter>
+      </ScrollProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

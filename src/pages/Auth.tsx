@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useNavigateBack } from "@/hooks/useNavigateBack";
 
 const AuthPage = () => {
   const navigate = useNavigate();
@@ -57,13 +58,17 @@ const AuthPage = () => {
     setName("");
   };
 
+  const goBack = useNavigateBack("/");
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header con botón back */}
       <div className="border-b border-border">
         <div className="section-padding py-4 flex items-center">
           <button
-            onClick={() => navigate("/")}
+            onClick={goBack}
+            type="button"
+            aria-label="Volver"
             className="flex items-center gap-2 text-foreground hover:opacity-60 transition-opacity"
           >
             <ArrowLeft className="w-5 h-5" />
