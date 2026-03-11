@@ -113,6 +113,15 @@
   }
 }
 
+/* Hoverable image utils: only enable hover visual effects on devices that support hover (mouse) */
+.hoverable-overlay { opacity: 0; transition: opacity .3s; pointer-events: none; }
+.hoverable-blur { transition: filter .3s; }
+
+@media (hover: hover) and (pointer: fine) {
+  .group:hover .hoverable-overlay { opacity: 1; }
+  .group:hover .hoverable-blur { filter: blur(2px); }
+}
+
 @media (max-width: 767px) {
   body.menu-open .floating-whatsapp,
   body.menu-open .floating-discount {

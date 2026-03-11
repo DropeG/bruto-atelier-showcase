@@ -56,25 +56,27 @@ const HoverableImage: React.FC<HoverableImageProps> = ({ src, alt = "", href }) 
   };
 
   const image = (
+    // keep the "group" wrapper but move hover behaviour to CSS media queries
     <div className="relative group w-full h-full cursor-pointer">
       <img
         src={src}
         alt={alt}
-        className="w-full h-full object-cover transition duration-300 group-hover:blur-[2px]"
+        // use neutral class names; CSS will enable the visual hover only on devices with mouse
+        className="w-full h-full object-cover transition duration-300 hoverable-blur"
         loading="lazy"
         decoding="async"
         fetchPriority="low"
       />
       <span
-        className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300"
+        className="absolute inset-0 flex items-center justify-center opacity-0 hoverable-overlay transition duration-300"
         style={{ pointerEvents: "none" }}
       >
         <span
           className="select-none"
           style={{
             fontSize: "2rem",
-            color: "#e0e0e0", 
-            fontWeight: 300, 
+            color: "#e0e0e0",
+            fontWeight: 300,
             textShadow: "0 1px 8px rgba(0,0,0,0.10)",
             lineHeight: 1,
           }}
