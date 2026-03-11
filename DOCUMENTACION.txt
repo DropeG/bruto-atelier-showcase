@@ -1,0 +1,310 @@
+================================================================================
+                        BRUTO ATELIER SHOWCASE
+                    Documentación de la Aplicación
+================================================================================
+
+📚 ARCHIVOS DE DOCUMENTACIÓN DISPONIBLES:
+
+1. README.md
+   ├─ Descripción general del proyecto
+   ├─ Stack tecnológico completo
+   ├─ Estructura de carpetas detallada
+   ├─ Configuración inicial
+   ├─ Scripts disponibles
+   ├─ Funcionalidades principales
+   ├─ Contextos globales (Auth, Currency, Scroll)
+   ├─ Sistema de rutas
+   ├─ Componentes principales
+   ├─ Data y galería
+   ├─ Optimizaciones de performance
+   └─ Troubleshooting
+
+2. CONTEXT_FOR_AI.md ⭐ LEER PRIMERO
+   ├─ Información crítica para IA
+   ├─ Puntos clave que no es backend
+   ├─ Enrutamiento SPA (React Router, NO Next.js)
+   ├─ Data flow (componentes → contexto → render)
+   ├─ Estructura mental de la app
+   ├─ Configuración importante (Vite, TypeScript, Tailwind)
+   ├─ Patrones de código (contexto, componentes, lazy loading)
+   ├─ Reglas de desarrollo (✅ HACER vs ❌ NO HACER)
+   ├─ Búsqueda rápida de archivos
+   ├─ Testing checklist
+   └─ Referencia rápida de imports
+
+3. OPTIMIZACION_FASE1.md
+   ├─ Lo que se implementó
+   ├─ Lazy loading nativo + blur backgrounds
+   ├─ Cómo verificar en localhost
+   ├─ Qué observar en localhost
+   ├─ Próximos pasos para optimización (FASE 2)
+   ├─ Nota importante sobre blur placeholders
+   ├─ Resultados esperados
+   └─ Archivos modificados
+
+4. CURRENCY_SETUP.md
+   ├─ Guía completa de sistema de monedas
+   ├─ 12 países soportados
+   └─ Cómo agregar/modificar monedas
+
+5. Este archivo: DOCUMENTACION.txt
+   └─ Índice y guía de lectura
+
+================================================================================
+                        RECOMENDACIÓN DE LECTURA
+================================================================================
+
+Para ENTENDER la app:
+  1️⃣  README.md (15 min)
+  2️⃣  CONTEXT_FOR_AI.md (10 min)
+
+Para DESARROLLAR:
+  1️⃣  CONTEXT_FOR_AI.md (sección "Patrones de código")
+  2️⃣  README.md (sección "Guía de desarrollo")
+  3️⃣  Revisar /src/App.tsx para entender rutas
+
+Para OPTIMIZAR:
+  1️⃣  OPTIMIZACION_FASE1.md (que ya está hecho)
+  2️⃣  OPTIMIZACION_FASE1.md (sección "Próximos pasos")
+
+Para AGREGAR MONEDAS:
+  1️⃣  CURRENCY_SETUP.md (guía paso a paso)
+
+================================================================================
+                        INFORMACIÓN CRÍTICA
+================================================================================
+
+🎯 TIPO DE APP:
+  → React SPA (Single Page Application)
+  → NO es Next.js
+  → Enrutamiento con React Router v6
+  → Despliegue estático en Vercel
+
+💾 DATOS:
+  → No hay base de datos
+  → Todo es estático en /src/data/Gallery.tsx
+  → Autenticación es fake (localStorage simulado)
+  → Monedas son conversiones estáticas
+
+🎨 ESTILOS:
+  → Tailwind CSS (utility-first)
+  → NO hay CSS modules ni styled-components
+  → TODO es clases Tailwind o inline styles
+
+📦 COMPONENTES:
+  → 30+ componentes de Radix UI/shadcn
+  → Todos están importados en /src/components/ui/
+
+📷 IMÁGENES:
+  → /public/images/ (20+ carpetas)
+  → Formato .webp (con fallback)
+  → Lazy loading nativo + blur backgrounds
+  → fetchPriority dinámico
+
+⚡ PERFORMANCE:
+  → Bundle: 481KB gzip (muy bueno)
+  → Lazy loading de imágenes
+  → Blur backgrounds (transición suave)
+  → Caché en Vercel 1 año
+
+================================================================================
+                        ESTRUCTURA RÁPIDA
+================================================================================
+
+src/
+├── pages/              → Páginas SPA (Index, Arquitectura, etc.)
+├── components/         → Componentes (Navigation, HeroSection, etc.)
+│   └── ui/            → shadcn/ui components (30+)
+├── contexts/          → Estado global (Auth, Currency, Scroll)
+├── hooks/             → Custom hooks
+├── lib/               → Utilidades (blur-placeholders.ts)
+├── data/              → Gallery.tsx (datos principales)
+└── App.tsx            → Rutas principales
+
+public/
+└── images/            → Carpetas de imágenes (20+)
+
+Configuración:
+├── vite.config.ts     → Build tool
+├── tailwind.config.ts → Estilos
+├── tsconfig.json      → TypeScript
+├── vercel.json        → Vercel cache
+└── package.json       → Dependencias
+
+================================================================================
+                        RUTAS PRINCIPALES
+================================================================================
+
+/                           → Home (Index.tsx)
+/arquitectura              → Proyectos arquitectura
+/interiorismo              → Proyectos interiorismo
+/coleccion                 → Catálogo colecciones
+/serie                     → Series de productos
+/piezas                    → Piezas con carrusel
+/categoria/:cat/:col/:id   → Página dinámica
+/auth                      → Login/Signup
+/*                         → 404
+
+Ejemplo ruta dinámica:
+  /categoria/morar/bespoke/1
+          ↑     ↑      ↑   ↑
+         cat   col    item id
+
+================================================================================
+                        CONTEXTOS GLOBALES
+================================================================================
+
+1. AuthContext (/src/contexts/AuthContext.tsx)
+   → user, login(), logout(), signup()
+   → Uso: const { user, login } = useAuth()
+
+2. CurrencyContext (/src/contexts/CurrencyContext.tsx)
+   → 12 países soportados
+   → convertPrice(), formatPrice()
+   → Uso: const { selectedCountry } = useCurrency()
+
+3. ScrollContext (/src/contexts/ScrollContext.tsx)
+   → saveSectionId(), getSectionId(), scrollToSection()
+   → Guarda posición al navegar entre páginas
+   → Uso: const { saveSectionId } = useScroll()
+
+================================================================================
+                        COMPONENTES CLAVE
+================================================================================
+
+🖼️  Imágenes:
+   → HoverableImage: Imagen con hover + blur lazy loading
+   → LazyImage: Componente reutilizable de lazy loading
+   → ImageRow: Dos imágenes lado a lado
+
+📱 Layout:
+   → Navigation: Header con animaciones
+   → HeroSection: Sección hero con picture tag
+   → Footer: Pie de página
+   → Layout: Wrapper general
+
+🎬 Secciones:
+   → VideoSection, ProductSection, ContactSection
+   → NewsletterModal, AuthModal
+
+💬 Utilidades:
+   → WhatsAppButton, DiscountButton, CurrencyDropdown, Price
+
+================================================================================
+                        SCRIPTS DISPONIBLES
+================================================================================
+
+npm run dev         → Servidor dev (http://localhost:8080)
+npm run build       → Build producción
+npm run build:dev   → Build desarrollo
+npm run lint        → ESLint check
+npm run preview     → Preview build
+
+Comandos útiles:
+  npm run lint -- --fix     → Auto-fix ESLint
+  npm install               → Instalar dependencias
+  npm install [package]     → Agregar dependencia
+
+================================================================================
+                        OPTIMIZACIONES IMPLEMENTADAS (FASE 1)
+================================================================================
+
+✅ Lazy Loading Nativo
+   → loading="lazy" en todas las imágenes
+   → Cargan solo cuando entran en viewport
+
+✅ Blur Backgrounds
+   → Base64 mini-previews mientras cargan
+   → Transición suave blur(8px) → blur(0px)
+   → Mejor percepción de velocidad
+
+✅ Image Preloading
+   → new Image() para precargar estratégicamente
+   → fetchPriority dinámico (high/low)
+
+✅ Vercel Cache
+   → Imágenes caché 1 año
+   → vercel.json configurado
+
+✅ WebP Format
+   → Todas las imágenes en .webp
+   → Fallback a .jpeg si es necesario
+
+Resultados esperados:
+  → +30-40% mejor LCP (Largest Contentful Paint)
+  → +20-30% mejor FID (First Input Delay)
+
+Ver: OPTIMIZACION_FASE1.md
+
+================================================================================
+                        PRÓXIMOS PASOS (FASE 2)
+================================================================================
+
+[ ] Generar blur placeholders reales (plaiceholder.co)
+[ ] Optimizar Framer Motion (hardware acceleration)
+[ ] Throttle scroll listeners
+[ ] Code splitting por ruta
+[ ] Service Worker + precaching
+[ ] WebP/AVIF con fallback
+
+Ver: OPTIMIZACION_FASE1.md (sección "Próximos pasos")
+
+================================================================================
+                        DEPLOYMENT
+================================================================================
+
+Automático:
+  → Push a main → Vercel detecta → Auto deploy
+
+Manual en Vercel:
+  1. Ir a Vercel dashboard
+  2. Seleccionar proyecto
+  3. Click "Redeploy"
+
+URL: https://bruto-atelier-showcase.vercel.app
+
+================================================================================
+                        TROUBLESHOOTING
+================================================================================
+
+Build falla:
+  → rm -rf node_modules && npm install
+  → npm run build (verificar localmente)
+
+Dev no inicia:
+  → npm install
+  → Matar puerto 8080 si está en uso
+
+ESLint errors:
+  → npm run lint -- --fix
+  → Revisar el código manualmente si autoffix no funciona
+
+Imágenes no cargan:
+  → Verificar que existan en /public/images/
+  → Verificar rutas (case-sensitive en Linux)
+  → DevTools > Network > ver headers
+
+Context no actualiza:
+  → Verificar que está dentro del Provider
+  → React DevTools > ver contexto
+
+================================================================================
+                        CONTACTO Y AYUDA
+================================================================================
+
+GitHub: https://github.com/DropeG/bruto-atelier-showcase
+Vercel: https://vercel.com/dashboard
+WhatsApp: +56 9 4956 9887
+
+Antes de preguntar:
+  1. Lee el README.md
+  2. Lee el CONTEXT_FOR_AI.md
+  3. Lee la sección de troubleshooting
+  4. Revisa los logs (console, network, Vercel)
+
+================================================================================
+
+Última actualización: Marzo 2026
+Versión: 1.1.0 (Con optimizaciones FASE 1 + documentación)
+
+================================================================================
