@@ -10,16 +10,16 @@ import {
   ImageRow as ImageRowComp,
 } from "@/components";
 import { useScroll } from "@/contexts/ScrollContext";
-import Cocina from "/images/cocina.webp";
-import MuebleAzul from "/images/muebleAzul.webp";
-import Comedor from "/images/comedor.webp";
-import Paisaje from "/images/paisaje.webp";
-import CasitaArbol from "/images/casitaArbol.webp";
-import Morar from "/images/morar.webp";
-import Banqueta from "/images/banquetaBlanca.webp";
-import Flores from "/images/gallery/flore.webp";
-import MuebleRojo from "/images/muebleRojo.webp";
-import Cabina from "/images/cabina.webp";
+import imageHome1 from "/images/home/image1.webp";
+import imageHome2 from "/images/home/image2.webp";
+import imageHome3 from "/images/home/image3.webp";
+import imageHome4 from "/images/home/image4.webp";
+import imageHome5 from "/images/home/image5.webp";
+import imageHome6 from "/images/home/image6.webp";
+import imageHome7 from "/images/home/image7.webp";
+import imageHome8 from "/images/home/image8.webp";
+import imageHome9 from "/images/home/image9.webp";
+import imageHome10 from "/images/home/image10.webp";
 import ImageRow from "@/components/ImageRow";
  
 const Index = () => {
@@ -77,10 +77,10 @@ const Index = () => {
         {/* ImageRow 1: Cocina y Mueble Azul */}
         <div id="section-row-1">
           <ImageRow
-            leftSrc={Cocina}
+            leftSrc={imageHome1}
             leftAlt="Cocina"
             leftHref="/categoria/morar/bespoke/1"
-            rightSrc={MuebleAzul}
+            rightSrc={imageHome2}
             rightAlt="Mueble Azul"
             rightHref="/categoria/series/bespoke/2"
           />
@@ -89,10 +89,10 @@ const Index = () => {
         {/* ImageRow 2: Comedor y Paisaje */}
         <div id="section-row-2">
           <ImageRow
-            leftSrc={Comedor}
+            leftSrc={imageHome3}
             leftAlt="Comedor"
             leftHref="/categoria/colection/wachi/3"
-            rightSrc={Paisaje}
+            rightSrc={imageHome4}
             rightAlt="Paisaje"
             rightHref="/categoria/morar/bespoke/4"
           />
@@ -101,10 +101,10 @@ const Index = () => {
         {/* ImageRow 3: Casita Arbol y Morar */}
         <div id="section-row-3">
           <ImageRow
-            leftSrc={CasitaArbol}
+            leftSrc={imageHome5}
             leftAlt="Casita Arbol"
             leftHref="/categoria/cabina/bespoke/5"
-            rightSrc={Morar}
+            rightSrc={imageHome6}
             rightAlt="Morar"
             rightHref="/categoria/morar/bespoke/6"
           />
@@ -113,10 +113,10 @@ const Index = () => {
         {/* ImageRow 4: Banqueta y Flores */}
         <div id="section-row-4">
           <ImageRow
-            leftSrc={Banqueta}
+            leftSrc={imageHome7}
             leftAlt="Banqueta"
             leftHref="/categoria/colection/sabi/7"
-            rightSrc={Flores}
+            rightSrc={imageHome8}
             rightAlt="Flores"
             rightHref="/categoria/colection/formo/8"
           />
@@ -125,10 +125,10 @@ const Index = () => {
         {/* ImageRow 5: Mueble Rojo y Cabina */}
         <div id="section-row-5">
           <ImageRow
-            leftSrc={MuebleRojo}
+            leftSrc={imageHome9}  
             leftAlt="Mueble Rojo"
             leftHref="/categoria/series/bespoke/9"
-            rightSrc={Cabina}
+            rightSrc={imageHome10}
             rightAlt="Cabina"
             rightHref="/categoria/cabina/bespoke/10"
           />

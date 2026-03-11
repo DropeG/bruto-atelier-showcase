@@ -145,7 +145,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
               className="absolute top-24 left-6"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="hidden md:flex items-start gap-4">
+              <div className="hidden md:flex items-start gap-4 font-serif">
                 <div className="w-[260px] md:w-[300px] min-h-[40vh] bg-[#9C7B66] text-white p-6">
                   <motion.ul className="flex flex-col gap-3 text-sm tracking-wide">
                     {navLinks.map((link, index) => (
@@ -363,7 +363,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                 </AnimatePresence>
               </div>
 
-              <div className="md:hidden w-[300px] bg-[#9C7B66] text-white p-6">
+              <div className="md:hidden w-[300px] bg-[#9C7B66] text-white p-6 font-serif">
                 {activePanel === "nosotros" || activePanel === "contacto" ? (
                   <div>
                     <div className="relative flex items-center justify-center">
