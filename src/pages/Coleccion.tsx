@@ -2,31 +2,76 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { galleryItems } from "../data/Gallery";
 
+type CarouselItem = {
+  id: string;
+  title: string;
+  thumbnail: string;
+  detailImage: string;
+  layout?: "single" | "double";
+  secondaryImage?: string;
+};
+
+const coleccionFolderItems: CarouselItem[] = [
+  {
+    id: "coleccion-extra-1",
+    title: "Colección 1",
+    thumbnail: "/images/colección/coleccion1.webp",
+    detailImage: "/images/colección/coleccion1.webp",
+    secondaryImage: "/images/colección/coleccion2.webp",
+    layout: "double",
+  },
+  {
+    id: "coleccion-extra-2",
+    title: "Colección 2",
+    detailImage: "/images/colección/coleccion3.webp",
+    thumbnail: "/images/colección/coleccion3.webp",
+    secondaryImage: "/images/colección/coleccion4.webp",
+    layout: "double",
+  },
+];
+
+const mokaColor = "#9C7B66";
+
 const Coleccion = () => {
   const navigate = useNavigate();
   const [showFront, setShowFront] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [imagesLoaded, setImagesLoaded] = useState<Record<number, boolean>>({});
+  const [imagesLoaded, setImagesLoaded] = useState<Record<string, boolean>>({});
 
   // IDs de las imágenes de colección
   const coleccionIds = [3];
-  const coleccionItems = galleryItems.filter(item => 
-    coleccionIds.includes(item.id)
-  );
+  const coleccionItems: CarouselItem[] = [
+    ...galleryItems
+      .filter((item) => coleccionIds.includes(item.id))
+      .map((item) => ({
+        id: `gallery-${item.id}`,
+        title: item.title,
+        thumbnail: item.thumbnail,
+        detailImage: item.detailImage,
+        layout: "single" as const,
+      })),
+    ...coleccionFolderItems,
+  ];
 
   // Precargar todas las imágenes
   useEffect(() => {
-    coleccionItems.forEach(item => {
-      const img = new Image();
-      img.src = item.detailImage;
-      img.onload = () => {
-        setImagesLoaded(prev => ({ ...prev, [item.id]: true }));
-      };
-      
-      const thumbImg = new Image();
-      thumbImg.src = item.thumbnail;
+    coleccionItems.forEach((item) => {
+      const imageSources = [item.detailImage, item.thumbnail, item.secondaryImage].filter(Boolean) as string[];
+      let loadedCount = 0;
+
+      imageSources.forEach((source) => {
+        const img = new Image();
+        img.src = source;
+        img.onload = () => {
+          loadedCount += 1;
+
+          if (loadedCount === imageSources.length) {
+            setImagesLoaded((prev) => ({ ...prev, [item.id]: true }));
+          }
+        };
+      });
     });
-  }, []);
+  }, [coleccionItems]);
 
   // Cambiar automáticamente cada 10 segundos
   useEffect(() => {
@@ -73,7 +118,7 @@ const Coleccion = () => {
     );
   }
 
-  const allImagesLoaded = coleccionItems.every(item => imagesLoaded[item.id]);
+  const allImagesLoaded = coleccionItems.every((item) => imagesLoaded[item.id]);
 
   return (
     <div className="relative w-full min-h-screen h-screen overflow-hidden bg-black">
@@ -118,16 +163,21 @@ const Coleccion = () => {
           className="absolute inset-0 transition-opacity duration-[1500ms] ease-in-out"
           style={{ 
             opacity: index === currentIndex ? 1 : 0,
-            pointerEvents: index === currentIndex ? 'auto' : 'none'
+            pointerEvents: index === currentIndex ? 'auto' : 'none',
+            backgroundColor: item.layout === "double" ? mokaColor : undefined,
           }}
         >
-          <img
-            src={item.thumbnail}
-            alt={item.title}
-            className="absolute inset-0 w-full h-full object-cover object-center blur-[1px] scale-105"
-            style={{ minHeight: "100vh" }}
-          />
-          <div className="absolute inset-0 bg-black/20" />
+          {item.layout === "single" ? (
+            <>
+              <img
+                src={item.thumbnail}
+                alt={item.title}
+                className="absolute inset-0 w-full h-full object-cover object-center blur-[1px] scale-105"
+                style={{ minHeight: "100vh" }}
+              />
+              <div className="absolute inset-0 bg-black/20" />
+            </>
+          ) : null}
         </div>
       ))}
 
@@ -143,25 +193,46 @@ const Coleccion = () => {
                 pointerEvents: index === currentIndex ? 'auto' : 'none'
               }}
             >
-              <div 
-                className="relative bg-white shadow-2xl" 
-                style={{ maxWidth: '85vw', maxHeight: '80vh' }}
-              >
-                <img
-                  src={item.detailImage}
-                  alt={item.title}
-                  className="w-full h-auto block"
-                  style={{ maxHeight: '80vh' }}
-                />
+              <div className="relative flex flex-col items-center gap-6 px-4">
+                {item.layout === "double" ? (
+                  <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8">
+                    {[item.detailImage, item.secondaryImage].filter(Boolean).map((imageSrc, imageIndex) => (
+                      <div
+                        key={`${item.id}-image-${imageIndex}`}
+                        className="relative bg-white shadow-2xl"
+                        style={{ maxWidth: 'min(34vw, 360px)', maxHeight: '80vh' }}
+                      >
+                        <img
+                          src={imageSrc}
+                          alt={`${item.title} ${imageIndex + 1}`}
+                          className="w-full h-auto block"
+                          style={{ maxHeight: '80vh' }}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div 
+                    className="relative bg-white shadow-2xl" 
+                    style={{ maxWidth: '85vw', maxHeight: '80vh' }}
+                  >
+                    <img
+                      src={item.detailImage}
+                      alt={item.title}
+                      className="w-full h-auto block"
+                      style={{ maxHeight: '80vh' }}
+                    />
+                  </div>
+                )}
 
                 {/* Botón HABLEMOS */}
-                <div className="absolute bottom-[9%] md:bottom-[10%] left-0 w-full flex justify-center">
+                <div className="w-full flex justify-center">
                   <button
                     onClick={() => window.open("https://wa.me/56949569887", "_blank", "noopener,noreferrer")}
-                    className="group flex items-center px-6 py-2 md:px-10 md:py-2.5 bg-transparent text-gray-800 font-serif text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.25em]
-                               border border-gray-400 hover:border-gray-600 transition-all duration-700 ease-out 
+                    className="group flex items-center px-6 py-2 md:px-10 md:py-2.5 bg-transparent text-white font-serif text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.25em]
+                               border border-white/60 hover:border-white transition-all duration-700 ease-out 
                                cursor-pointer relative overflow-hidden 
-                               hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.07)]"
+                               hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.14)]"
                   >
                     HABLEMOS
                   </button>

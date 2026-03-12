@@ -25,10 +25,10 @@ const Footer = () => {
                 </p>
                 <p>
                   <a 
-                    href="mailto:hola@brutoatelier.com"
+                    href="mailto:hola@bruto-atelier.com"
                     className="underline"
                   >
-                    hola@brutoatelier.com
+                    hola@bruto-atelier.com
                   </a>
                 </p>
               </div>
@@ -48,10 +48,10 @@ const Footer = () => {
               <p className="mb-2 text-xs md:text-base">
                 Para publicaciones escríbenos a{" "}
                 <a 
-                  href="mailto:hola@brutoatelier.com"
+                  href="mailto:hola@bruto-atelier.com"
                   className="underline"
                 >
-                  hola@brutoatelier.com
+                  hola@bruto-atelier.com
                 </a>
               </p>
             </div>  

@@ -11,7 +11,7 @@ const ContactSection: React.FC = () => {
 
     const subject = encodeURIComponent("Consulta desde el sitio web");
     const body = encodeURIComponent(`Nombre: ${name}\nEmail: ${email}\n\nMensaje:\n${message}`);
-    window.location.href = `mailto:hola@brutoatelier.com?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:hola@bruto-atelier.com?subject=${subject}&body=${body}`;
   };
 
   return (
@@ -20,7 +20,7 @@ const ContactSection: React.FC = () => {
         <div>
           <h2 className="text-sm tracking-[0.3em] font-semibold mb-3">CONTACT US</h2>
           <p className="text-lg text-gray-700 mb-6">
-            For wholesale inquiries, please contact us at <span className="underline">hola@brutoatelier.com</span>
+            For wholesale inquiries, please contact us at <span className="underline">hola@bruto-atelier.com</span>
           </p>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -63,7 +63,7 @@ const ContactSection: React.FC = () => {
               Enviar
             </button>
             <p className="text-[11px] text-gray-500">
-              Este formulario redirige a tu cliente de correo para enviar la información a hola@brutoatelier.com.
+              Este formulario redirige a tu cliente de correo para enviar la información a hola@bruto-atelier.com.
             </p>
           </form>
         </div>
