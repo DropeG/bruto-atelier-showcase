@@ -199,6 +199,7 @@ npm run build       → Build producción
 npm run build:dev   → Build desarrollo
 npm run lint        → ESLint check
 npm run preview     → Preview build
+npm run generate:blur → Regenerar blur placeholders (si agregas imágenes)
 
 Comandos útiles:
   npm run lint -- --fix     → Auto-fix ESLint
@@ -237,15 +238,21 @@ Resultados esperados:
 Ver: OPTIMIZACION_FASE1.md
 
 ================================================================================
-                        PRÓXIMOS PASOS (FASE 2)
+                         PRÓXIMOS PASOS (FASE 2)
 ================================================================================
 
-[ ] Generar blur placeholders reales (plaiceholder.co)
+✅ Blur placeholders reales - COMPLETADO
+   → Script: npm run generate:blur
+   → Genera 10x10px WebP en Base64 automáticamente
+   → Total: 1.83 KB para 10 imágenes
+
+[ ] Responsive images con srcset (ahorra 50-70% ancho de banda en móvil)
+[ ] Vite image optimization plugin
+[ ] Preload de imágenes críticas
 [ ] Optimizar Framer Motion (hardware acceleration)
 [ ] Throttle scroll listeners
 [ ] Code splitting por ruta
 [ ] Service Worker + precaching
-[ ] WebP/AVIF con fallback
 
 Ver: OPTIMIZACION_FASE1.md (sección "Próximos pasos")
 
@@ -305,6 +312,6 @@ Antes de preguntar:
 ================================================================================
 
 Última actualización: Marzo 2026
-Versión: 1.1.0 (Con optimizaciones FASE 1 + documentación)
+Versión: 1.2.0 (Con blur placeholders automatizados + FASE 2 iniciada)
 
 ================================================================================
