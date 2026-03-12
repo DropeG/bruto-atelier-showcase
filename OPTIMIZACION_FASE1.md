@@ -63,12 +63,17 @@ npm run dev
 
 Si quieres mejorar aún más en Vercel:
 
-### 1. **Generar Blur Placeholders Reales** (15 min)
-   - Ir a https://plaiceholder.co/
-   - Subir cada imagen home (image1.webp - image10.webp)
-   - Copiar el Base64 generado
-   - Actualizar `/src/lib/blur-placeholders.ts`
-   - Esto da MUCHO mejor UX (ves un preview real, no solo blur)
+### 1. **Generar Blur Placeholders Reales** ✅ COMPLETADO
+   - ✅ Creado script `scripts/generate-blur-placeholders.js`
+   - ✅ Genera automáticamente 10x10px WebP previews en Base64
+   - ✅ Actualiza `/src/lib/blur-placeholders.ts` automáticamente
+   - ✅ Total: 1.83 KB (0.18 KB promedio por imagen)
+   - ✅ Cada imagen muestra preview de color real mientras carga
+   
+   **Para regenerar si agregas imágenes:**
+   ```bash
+   npm run generate:blur
+   ```
 
 ### 2. **Optimizar Framer Motion** (45 min)
    - Agregar `will-change: transform` en animaciones
@@ -91,17 +96,19 @@ Si quieres mejorar aún más en Vercel:
 
 ## Nota Importante
 
-**Los blur placeholders actualmente usan un Base64 genérico pequeño.**
+✅ **BLUR PLACEHOLDERS YA SON REALES**
 
-Para que sea REALMENTE efectivo, necesitas generar blur placeholders específicos para cada imagen:
+Los blur placeholders ahora se generan automáticamente de cada imagen:
+- Se crean miniaturascripts de 10x10px en WebP
+- Se convierten a Base64 data URLs
+- Se actualizan automáticamente en `/src/lib/blur-placeholders.ts`
 
-```typescript
-// Ejemplo de cómo se vería optimizado:
-export const blurPlaceholders: { [key: string]: string } = {
-  imageHome1: "data:image/webp;base64,UklGRiYAAABXRUJQVlA4IBIAAAAwAQCdASoBAAEAAADIJaQAA3AA/v3AgAA=", // Blur real de image1.webp
-  imageHome2: "data:image/webp;base64,UklGRiYAAABXRUJQVlA4IBIAAAAwAQCdASoBAAEAAADIJaQAA3AA/v3AgAA=", // Blur real de image2.webp
-  // ...
-};
+**Puedes verlos en acción en localhost:**
+```bash
+npm run dev
+# Abre http://localhost:8080
+# Desactiva la conexión (DevTools > Network > Throttle)
+# Verás el preview de color real mientras cargan las imágenes
 ```
 
 ---
@@ -138,7 +145,13 @@ src/pages/
   └── Piezas.tsx (+ lazy loading + blur dinámico)
 
 src/lib/
-  └── blur-placeholders.ts (NUEVO - base64 pequeños)
+  └── blur-placeholders.ts (Contiene 10 blur placeholders reales generados automáticamente)
+
+scripts/
+  └── generate-blur-placeholders.js (NUEVO - genera blur en Base64 automáticamente)
+
+package.json
+  └── + script "generate:blur": "node scripts/generate-blur-placeholders.js"
 ```
 
 ---
