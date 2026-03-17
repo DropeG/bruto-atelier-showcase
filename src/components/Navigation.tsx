@@ -28,12 +28,11 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
   const [activePanel, setActivePanel] = useState<"mobiliario" | "nosotros" | "contacto" | null>(null);
-  const [contactMessage, setContactMessage] = useState(
-    "Qué tal, me resuelven una duda?"
-  );
+  const [contactMessage, setContactMessage] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
   const whatsappNumber = "56949569887";
+  const defaultContactMessage = "Qué tal, me resuelven una duda?";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -146,7 +145,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="hidden md:flex items-start gap-4 font-serif">
-                <div className="w-[260px] md:w-[300px] min-h-[40vh] bg-[#9C7B66] text-white p-6">
+                <div className="w-[260px] md:w-[300px] bg-[#9C7B66] text-white p-6">
                   <motion.ul className="flex flex-col gap-3 text-sm tracking-wide">
                     {navLinks.map((link, index) => (
                       <motion.li
@@ -236,10 +235,10 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                       transition={{ duration: 0.25, ease: "easeOut" }}
                       className={
                         activePanel === "mobiliario"
-                          ? "w-[200px] bg-[#9C7B66] text-white py-3 px-4 border-l border-white/20 self-start"
+                          ? "w-[200px] bg-[#9C7B66] text-white py-3 px-4 self-start"
                           : activePanel === "contacto"
-                            ? "w-[800px] bg-[#9C7B66] text-white p-6 border-l border-white/20"
-                            : "w-[800px] bg-[#9C7B66] text-white p-6 border-l border-white/20"
+                            ? "w-fit bg-[#9C7B66] text-white p-6"
+                            : "w-[800px] bg-[#9C7B66] text-white p-6 md:max-lg:bg-transparent md:max-lg:p-0"
                       }
                     >
                       {activePanel === "mobiliario" ? (
@@ -279,14 +278,49 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                         </>
                       ) : activePanel === "nosotros" ? (
                         <>
-                          <div className="flex">
+                          <div className="hidden md:max-lg:flex w-[470px] max-w-full flex-col bg-[#9C7B66] px-4 py-4">
+                            <div>
+                              <div className="text-xs tracking-wide uppercase">Nosotros</div>
+                              <div className="mt-2 text-lg font-semibold">BRUTO ATELIER</div>
+                              <p className="mt-2 text-sm leading-tight text-justify">
+                                Nuestra marca resuelve diseño en un amplio espectro. Creamos visión, resolvemos espacio y sus componentes: El habitar, la presencia.
+                              </p>
+                            </div>
+
+                            <div className="mt-4 text-sm leading-tight text-justify">
+                              <img
+                                src="/images/nosotros/nosotros.webp"
+                                alt="Foto Nosotros"
+                                className="float-right ml-4 mb-2 w-[190px] h-[190px] object-contain rounded-md"
+                              />
+                              <p>
+                                Creemos en lo que se diferencia en silencio y trasciende en el tiempo, lo que perdura con elegancia y desarrolla carácter. Diseñamos singularidad, fabricando de manera local con materiales y artesanos seleccionados.
+                              </p>
+                              <p className="mt-3">
+                                Buscamos ser nosotros, generar una experiencia brutalmente delicada que se entiende al conocernos, usarnos, vivirnos.
+                              </p>
+                              <p className="mt-2">Pruebanos.</p>
+                            </div>
+
+                            <div className="mt-4 pt-3 text-[10px] leading-snug">
+                              <div className="overflow-x-auto">
+                                <div className="flex items-center whitespace-nowrap">
+                                  <span className="pr-6">Mladen Marinovic'</span>
+                                  <span className="border-l border-white/40 px-6">Creative Director</span>
+                                  <span className="border-l border-white/40 pl-6">BRUTO Atelier © 2026</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="hidden lg:flex items-center">
                             <div className="w-[440px]">
                               <div className="text-xs tracking-wide uppercase">Nosotros</div>
                               <div className="mt-2 flex gap-4">
                                 <div className="space-y-2 text-sm leading-tight flex-1 pr-2 text-justify">
                                   <div className="text-lg font-semibold">BRUTO ATELIER</div>
                                   <p>
-                                    Nuestra maraca resuelve diseño en un amplio espectro. Creamos visión, resolvemos espacio y sus componentes: El habitar, la presencia. 
+                                    Nuestra marca resuelve diseño en un amplio espectro. Creamos visión, resolvemos espacio y sus componentes: El habitar, la presencia.
                                   </p>
                                   <p>
                                     Creemos en lo que se diferencia en silencio y trasciende en el tiempo, lo que
@@ -294,22 +328,20 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                                     de manera local con materiales y artesanos seleccionados.
                                   </p>
                                   <p>
-                                    Buscamos ser nosotros, generar una experiencia brutalmente delicada que se entiende al conocernos, usarnos, vivimos
+                                    Buscamos ser nosotros, generar una experiencia brutalmente delicada que se entiende al conocernos, usarnos, vivirnos
                                   </p>
                                   <p>Pruebanos.</p>
                                   <div className="pt-3 space-y-1 leading-snug text-xs">
-                                    <p>Firma.</p>
-                                    <div className="flex items-center whitespace-nowrap text-xs leading-snug">
-                                      <span className="pr-6">Mladen Marinovic</span>
+                                    <div className="flex items-center whitespace-nowrap text-[10px] leading-snug">
+                                      <span className="pr-6">Mladen Marinovic'</span>
                                       <span className="border-l border-white/40 px-6">Creative Director</span>
                                       <span className="border-l border-white/40 pl-6">BRUTO Atelier © 2026</span>
                                     </div>
                                   </div>
-
                                 </div>
                               </div>
                             </div>
-                            <div className="flex items-center justify-center ml-6">
+                            <div className="ml-6 flex items-center justify-center">
                               <img
                                 src="/images/nosotros/nosotros.webp"
                                 alt="Foto Nosotros"
@@ -320,8 +352,8 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                         </>
                       ) : (
                         <>
-                          <div className="flex">
-                            <div className="w-[440px]">
+                          <div className="flex items-start">
+                            <div className="w-[320px] max-w-full md:max-lg:w-[250px]">
                               <div className="text-xs tracking-wide uppercase">Contacto</div>
                               <div className="mt-4 space-y-4 text-sm leading-relaxed">
                                 <div className="text-lg font-semibold">Hablemos</div>
@@ -329,36 +361,33 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                                 <form
                                   onSubmit={(event) => {
                                     event.preventDefault();
-                                    const message = contactMessage.trim();
-                                    if (!message) {
-                                      return;
-                                    }
+                                    const message = contactMessage.trim() || defaultContactMessage;
                                     const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
                                     window.open(url, "_blank", "noopener,noreferrer");
                                   }}
-                                  className="space-y-3"
+                                  className="space-y-3 w-[300px] max-w-full md:max-lg:w-[230px]"
                                 >
                                   <input
                                     type="text"
                                     value={contactMessage}
                                     onChange={(event) => setContactMessage(event.target.value)}
-                                    placeholder="Escribe tu mensaje"
-                                    className="w-full rounded-md bg-white/10 border border-white/20 px-3 py-2 text-sm text-white placeholder:text-white/70 focus:outline-none focus:ring-2 focus:ring-white/40"
+                                    placeholder={defaultContactMessage}
+                                    className="w-full rounded-md bg-white/10 border border-white/20 px-3 py-2 text-sm text-white text-left placeholder:text-center placeholder:text-white/70 focus:outline-none focus:ring-2 focus:ring-white/40"
                                   />
                                   <button
                                     type="submit"
                                     className="w-full rounded-md bg-white text-[#9C7B66] px-3 py-2 text-xs font-semibold uppercase tracking-wide hover:bg-white/90 transition-colors"
                                   >
-                                    Enviar por WhatsApp
+                                    Enviar
                                   </button>
                                 </form>
                               </div>
                             </div>
-                            <div className="flex items-center justify-center ml-8">
+                            <div className="ml-8 flex items-center justify-center md:max-lg:ml-5">
                               <img
                                 src="/images/contacto/contacto.webp"
                                 alt="Foto Contacto"
-                                className="w-[280px] h-[280px] object-contain rounded-md"
+                                className="w-[190px] h-[190px] object-contain rounded-md mx-auto md:max-lg:w-[200px] md:max-lg:h-[200px]"
                               />
                             </div>
                           </div>
@@ -405,14 +434,10 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                             </p>
                             <p>Pruebanos.</p>
                             <div className="space-y-1 leading-snug text-xs">
-                              <p>Firma.</p>
-                              <div className="overflow-x-auto">
-                                <div className="flex items-center whitespace-nowrap text-xs leading-snug">
-                                  <span className="pr-3">Mladen Marinovic</span>
-                                  <span className="border-l border-white/40 px-3">Creative Director</span>
-                                  <span className="border-l border-white/40 px-3">Mobile +56 949569887</span>
-                                  <span className="border-l border-white/40 pl-3">BRUTO Atelier © 2026</span>
-                                </div>
+                              <div className="flex flex-col gap-1 text-[10px] leading-snug">
+                                <span>Mladen Marinovic</span>
+                                <span>Creative Director</span>
+                                <span>BRUTO Atelier © 2026</span>
                               </div>
                             </div>
                           </div>
@@ -425,10 +450,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                             <form
                               onSubmit={(event) => {
                                 event.preventDefault();
-                                const message = contactMessage.trim();
-                                if (!message) {
-                                  return;
-                                }
+                                const message = contactMessage.trim() || defaultContactMessage;
                                 const url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
                                 window.open(url, "_blank", "noopener,noreferrer");
                               }}
@@ -438,8 +460,8 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                                 type="text"
                                 value={contactMessage}
                                 onChange={(event) => setContactMessage(event.target.value)}
-                                placeholder="Escribe tu mensaje"
-                                className="w-full rounded-md bg-white/10 border border-white/20 px-3 py-2 text-sm text-white placeholder:text-white/70 focus:outline-none focus:ring-2 focus:ring-white/40"
+                                placeholder={defaultContactMessage}
+                                className="w-full rounded-md bg-white/10 border border-white/20 px-3 py-2 text-sm text-white text-left placeholder:text-center placeholder:text-white/70 focus:outline-none focus:ring-2 focus:ring-white/40"
                               />
                               <button
                                 type="submit"

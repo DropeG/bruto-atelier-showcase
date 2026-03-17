@@ -61,7 +61,7 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({ openModal, onClose })
           {/* Close button */}
           <button
             onClick={handleClose}
-            className="absolute top-4 right-4 z-10 text-gray-600 hover:text-black transition-colors"
+            className="absolute top-4 right-4 z-10 text-white/90 hover:text-white transition-colors"
             aria-label="Cerrar"
           >
             <X className="w-6 h-6" />
@@ -109,7 +109,7 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({ openModal, onClose })
 
               <button
                 type="submit"
-                className="w-full bg-[#2C1810] text-white py-3 mt-2 text-xs uppercase tracking-[0.2em] font-semibold hover:bg-[#3D261C] transition-all duration-300 shadow-md"
+                className="w-full bg-[#74503E] text-white py-3 mt-2 text-xs uppercase tracking-[0.2em] font-semibold hover:bg-[#3D261C] transition-all duration-300 shadow-md"
               >
                 OK
               </button>
