@@ -280,7 +280,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                       ) : activePanel === "nosotros" ? (
                         <>
                           <div className="flex">
-                            <div className="w-[330px] lg:w-[440px]">
+                            <div className="w-[440px]">
                               <div className="text-xs tracking-wide uppercase">Nosotros</div>
                               <div className="mt-2 flex gap-4">
                                 <div className="space-y-2 text-sm leading-tight flex-1 pr-2 text-justify">
@@ -300,9 +300,9 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                                   <div className="pt-3 space-y-1 leading-snug text-xs">
                                     <p>Firma.</p>
                                     <div className="flex items-center whitespace-nowrap text-xs leading-snug">
-                                      <span className="pr-3 lg:pr-6">Mladen Marinovic</span>
-                                      <span className="border-l border-white/40 px-3 lg:px-6">Creative Director</span>
-                                      <span className="border-l border-white/40 pl-3 lg:pl-6">BRUTO Atelier © 2026</span>
+                                      <span className="pr-6">Mladen Marinovic</span>
+                                      <span className="border-l border-white/40 px-6">Creative Director</span>
+                                      <span className="border-l border-white/40 pl-6">BRUTO Atelier © 2026</span>
                                     </div>
                                   </div>
 

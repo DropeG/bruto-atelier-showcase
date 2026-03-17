@@ -70,18 +70,18 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({ openModal, onClose })
           {/* Image side */}
           <div className="md:w-1/2 h-56 md:h-auto bg-gray-100">
             <img
-              src="/images/newsLetterModal/newsLetterModal.webp"
+              src="/images/newsLetterModal/newsLetter.webp"
               alt="Promoción"
               className="w-full h-full object-cover object-center md:object-cover"
             />
           </div>
 
           {/* Form side */}
-          <div className="md:w-1/2 p-6 md:p-8 flex flex-col justify-center">
-            <h2 className="text-xl md:text-2xl font-bold text-center mb-2">
+          <div className="md:w-1/2 p-6 md:p-8 flex flex-col justify-center bg-[#9C7B66]">
+            <h2 className="text-xl md:text-2xl font-bold text-center mb-2 text-white">
               10% en tu primera compra!
             </h2>
-            <p className="text-center text-gray-600 mb-4 md:mb-6 text-sm">
+            <p className="text-center mb-4 md:mb-6 text-sm text-white">
               Ingresa tus datos
             </p>
 
@@ -92,7 +92,7 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({ openModal, onClose })
                   name="name"
                   placeholder="Nombre"
                   required
-                  className="w-full px-3 py-2 md:px-4 md:py-3 border border-gray-300 text-sm focus:outline-none focus:border-black"
+                  className="w-full px-3 py-2 md:px-4 md:py-3 border-0 text-sm focus:outline-none focus:border-black bg-white"
                 />
               </div>
 
@@ -102,19 +102,15 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({ openModal, onClose })
                   name="email"
                   placeholder="Email"
                   required
-                  className="w-full px-3 py-2 md:px-4 md:py-3 border border-gray-300 text-sm focus:outline-none focus:border-black"
+                  className="w-full px-3 py-2 md:px-4 md:py-3 border-0 text-sm focus:outline-none focus:border-black bg-white"
                 />
               </div>
               <button
                 type="submit"
-                className="w-full bg-black text-white py-2.5 md:py-3 text-sm font-medium hover:bg-gray-800 transition-colors"
+                className="w-full bg-black text-white py-2.5 md:py-3 text-sm font-medium hover:bg-[#EAD0B9] transition-colors"
               >
                 Ok
               </button>
-
-              <p className="hidden md:block text-[10px] text-gray-500 text-center leading-tight">
-                By signing up, you agree to receive marketing emails. View our privacy policy and terms of service for more info.
-              </p>
             </form>
           </div>
         </div>
