@@ -16,7 +16,7 @@ const VideoSection = () => {
             playsInline
             className="w-full h-full object-cover"
           >
-            <source src={video.src} type="video/webm" />
+            <source src={video.src} type="video/mp4" />
             Tu navegador no soporta video HTML5
           </video>
         </div>
