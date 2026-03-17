@@ -62,7 +62,7 @@ const Index = () => {
       {/* Scroll Snap Container */}
       <div
         ref={scrollContainerRef}
-        className="h-screen overflow-y-scroll md:snap-y md:snap-mandatory"
+        className="h-[100svh] md:h-screen overflow-y-scroll md:snap-y md:snap-mandatory"
         id="coleccion"
       >
         {/* Section 1: Hero */}

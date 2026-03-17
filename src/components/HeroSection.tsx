@@ -5,7 +5,7 @@ import heroMobile from "/images/heroMobile.webp"
 
 const HeroSection = () => {
   return (
-    <div className="md:snap-start md:snap-always relative w-full min-h-screen h-screen overflow-hidden">
+    <div className="md:snap-start md:snap-always relative w-full h-[100svh] md:h-screen overflow-hidden">
       <Navigation position="absolute" />
       {/* Background Image */}
       <div className="absolute inset-0 w-full h-full">
@@ -19,7 +19,6 @@ const HeroSection = () => {
             alt="Luxury furniture in minimalist interior"
             className="w-full h-full object-cover object-[right_center] absolute inset-0"
             style={{ 
-              minHeight: '100vh', 
               objectPosition: 'right center',
               filter: 'blur(0px)',
               transition: 'filter 0.5s ease-out'
