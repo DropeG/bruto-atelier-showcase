@@ -77,22 +77,23 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({ openModal, onClose })
           </div>
 
           {/* Form side */}
+          {/* Form side */}
           <div className="md:w-1/2 p-6 md:p-8 flex flex-col justify-center bg-[#9C7B66]">
-            <h2 className="text-xl md:text-2xl font-bold text-center mb-2 text-white">
+            <h2 className="text-xl md:text-2xl font-bold text-center mb-1 text-white tracking-tight">
               10% en tu primera compra!
             </h2>
-            <p className="text-center mb-4 md:mb-6 text-sm text-white">
+            <p className="text-center mb-6 text-sm text-white/90 font-light">
               Ingresa tus datos
             </p>
 
-            <form onSubmit={handleSubmit} className="space-y-3 md:space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <input
                   type="text"
                   name="name"
                   placeholder="Nombre"
                   required
-                  className="w-full px-3 py-2 md:px-4 md:py-3 border-0 text-sm focus:outline-none focus:border-black bg-white"
+                  className="w-full px-4 py-3 border-0 text-sm focus:ring-1 focus:ring-white/50 bg-white/95 rounded-sm placeholder:text-gray-400"
                 />
               </div>
 
@@ -102,14 +103,15 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({ openModal, onClose })
                   name="email"
                   placeholder="Email"
                   required
-                  className="w-full px-3 py-2 md:px-4 md:py-3 border-0 text-sm focus:outline-none focus:border-black bg-white"
+                  className="w-full px-4 py-3 border-0 text-sm focus:ring-1 focus:ring-white/50 bg-white/95 rounded-sm placeholder:text-gray-400"
                 />
               </div>
+
               <button
                 type="submit"
-                className="w-full bg-black text-white py-2.5 md:py-3 text-sm font-medium hover:bg-[#EAD0B9] transition-colors"
+                className="w-full bg-[#2C1810] text-white py-3 mt-2 text-xs uppercase tracking-[0.2em] font-semibold hover:bg-[#3D261C] transition-all duration-300 shadow-md"
               >
-                Ok
+                OK
               </button>
             </form>
           </div>

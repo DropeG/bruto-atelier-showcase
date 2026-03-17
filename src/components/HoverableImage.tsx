@@ -111,7 +111,7 @@ const HoverableImage: React.FC<HoverableImageProps> = ({
         <span
           className="select-none"
           style={{
-            fontSize: "2rem",
+            fontSize: "clamp(2.4rem, 5vw, 5rem)",
             color: "#e0e0e0",
             fontWeight: 300,
             textShadow: "0 1px 8px rgba(0,0,0,0.10)",

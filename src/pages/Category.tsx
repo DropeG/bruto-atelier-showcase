@@ -90,13 +90,13 @@ const Category = () => {
         <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
           {/* Contenedor relativo que envuelve la imagen física */}
           <div 
-            className="relative bg-white shadow-2xl animate-fade-in-up" 
-            style={{ maxWidth: '85vw', maxHeight: '80vh' }}
+            className="relative bg-white shadow-2xl animate-fade-in-up max-w-[85vw] md:max-w-[min(70vw,65vh)] xl:max-w-[85vw]" 
+            style={{ maxHeight: '80vh' }}
           >
             <img
               src={item.detailImage}
               alt={item.title}
-              className="w-full h-auto block"
+              className="w-full h-auto block md:object-contain"
               style={{ 
                 maxHeight: '80vh', 
                 animation: 'fadeInUp 1s cubic-bezier(.23,1.01,.32,1)' 

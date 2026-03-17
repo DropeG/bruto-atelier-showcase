@@ -153,13 +153,13 @@ const Piezas = () => {
               }}
             >
               <div 
-                className="relative bg-white shadow-2xl" 
-                style={{ maxWidth: '85vw', maxHeight: '80vh' }}
+                className="relative bg-white shadow-2xl max-w-[85vw] md:max-w-[min(70vw,65vh)] xl:max-w-[85vw]" 
+                style={{ maxHeight: '80vh' }}
               >
                 <img
                   src={item.detailImage}
                   alt={item.title}
-                  className="w-full h-auto block"
+                  className="w-full h-auto block md:object-contain"
                   style={{ maxHeight: '80vh' }}
                   loading="eager"
                   decoding="async"

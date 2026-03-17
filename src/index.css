@@ -122,6 +122,11 @@
   .group:hover .hoverable-blur { filter: blur(2px); }
 }
 
+@media (hover: none), (pointer: coarse) {
+  .hoverable-overlay { opacity: 1; }
+  .hoverable-blur { filter: none !important; }
+}
+
 @media (max-width: 767px) {
   body.menu-open .floating-whatsapp,
   body.menu-open .floating-discount {
