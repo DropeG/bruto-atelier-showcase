@@ -1,8 +1,8 @@
 const VideoSection = () => {
   const videos = [
-    { src: "/videos/video2.webm", alt: "Video 1" },
-    { src: "/videos/video1.webm", alt: "Video 2" },
-    { src: "/videos/video3.webm", alt: "Video 3" },
+    { src: "/videos/video1.mp4", alt: "Video 1" },
+    { src: "/videos/video2.mp4", alt: "Video 2" },
+    { src: "/videos/video3.mp4", alt: "Video 3" },
   ];
 
   return (

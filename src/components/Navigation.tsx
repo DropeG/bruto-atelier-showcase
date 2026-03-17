@@ -280,15 +280,13 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                       ) : activePanel === "nosotros" ? (
                         <>
                           <div className="flex">
-                            <div className="w-[440px]">
+                            <div className="w-[330px] lg:w-[440px]">
                               <div className="text-xs tracking-wide uppercase">Nosotros</div>
                               <div className="mt-2 flex gap-4">
                                 <div className="space-y-2 text-sm leading-tight flex-1 pr-2 text-justify">
                                   <div className="text-lg font-semibold">BRUTO ATELIER</div>
                                   <p>
-                                    Nuestra marca se enfoca en la solución de encargos de diseño de un amplio
-                                    espectro. Creamos visión, resolvemos espacio y sus componentes: el habitar
-                                    completo.
+                                    Nuestra maraca resuelve diseño en un amplio espectro. Creamos visión, resolvemos espacio y sus componentes: El habitar, la presencia. 
                                   </p>
                                   <p>
                                     Creemos en lo que se diferencia en silencio y trasciende en el tiempo, lo que
@@ -296,15 +294,16 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                                     de manera local con materiales y artesanos seleccionados.
                                   </p>
                                   <p>
-                                    Nuestra visión busca entregar una experiencia al trabajar con el
-                                    Atelier, que se entiende al conocerla.
+                                    Buscamos ser nosotros, generar una experiencia brutalmente delicada que se entiende al conocernos, usarnos, vivimos
                                   </p>
                                   <p>Pruebanos.</p>
                                   <div className="pt-3 space-y-1 leading-snug text-xs">
                                     <p>Firma.</p>
-                                    <p>Mladen Marinovic´</p>
-                                    <p>Creative Director</p>
-                                    <p>BRUTO Atelier. © 2026</p>
+                                    <div className="flex items-center whitespace-nowrap text-xs leading-snug">
+                                      <span className="pr-3 lg:pr-6">Mladen Marinovic</span>
+                                      <span className="border-l border-white/40 px-3 lg:px-6">Creative Director</span>
+                                      <span className="border-l border-white/40 pl-3 lg:pl-6">BRUTO Atelier © 2026</span>
+                                    </div>
                                   </div>
 
                                 </div>
@@ -407,10 +406,14 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                             <p>Pruebanos.</p>
                             <div className="space-y-1 leading-snug text-xs">
                               <p>Firma.</p>
-                              <p>Mladen Marinovic´</p>
-                              <p>Creative Director</p>
-                              <p>Mobile +56 949569887</p>
-                              <p>BRUTO Atelier. © 2026</p>
+                              <div className="overflow-x-auto">
+                                <div className="flex items-center whitespace-nowrap text-xs leading-snug">
+                                  <span className="pr-3">Mladen Marinovic</span>
+                                  <span className="border-l border-white/40 px-3">Creative Director</span>
+                                  <span className="border-l border-white/40 px-3">Mobile +56 949569887</span>
+                                  <span className="border-l border-white/40 pl-3">BRUTO Atelier © 2026</span>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </>
