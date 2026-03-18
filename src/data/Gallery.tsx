@@ -12,7 +12,7 @@ export const galleryItems: GalleryItem[] = [
         id: 1, 
         category: "morar",
         title: "bespoke",
-        thumbnail: "/images/gallery/lampara.jpeg",
+        thumbnail: "/images/gallery/colaZorro.webp",
         detailImage: "/images/gallery/morar-01-detail.webp",
         route: "/categoria/morar/bespoke/1"
     },
