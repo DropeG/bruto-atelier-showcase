@@ -8,7 +8,6 @@ export { default as ImageRow } from "./ImageRow";
 export { default as DiscountButton } from "./DiscountButton";
 export { default as WhatsAppButton } from "./WhatsAppButton";
 export { default as HeroSection } from "./HeroSection";
-export { default as ContactSection } from "./ContactSection";
 export { default as QuoteSection } from "./QuoteSection";
 export { default as AuthModal } from "./AuthModal";
 export { default as Price } from "./Price";

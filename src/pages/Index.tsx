@@ -3,7 +3,6 @@ import {
   HeroSection,
   VideoSection,
   Footer,
-  ContactSection,
   NewsletterModal,
   WhatsAppButton,
   DiscountButton,
