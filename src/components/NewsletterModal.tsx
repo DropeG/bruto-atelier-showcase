@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
+import { set } from "date-fns";
 
 interface NewsletterModalProps {
   openModal?: boolean;
@@ -33,11 +34,58 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({ openModal, onClose })
     if (onClose) onClose();
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [emailError, setEmailError] = useState("");
+  const [alreadyRegistered, setAlreadyRegistered] = useState(false);
+
+  const validateEmail = (email: string): boolean => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setEmailError("");
+    setAlreadyRegistered(false);
+    const formElement = e.currentTarget;
     const formData = new FormData(e.currentTarget);
-    const name = formData.get("name");
-    const email = formData.get("email");
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+
+    if (!validateEmail(email)) {
+    setEmailError("Ingresa un email válido.");
+    return;
+    }
+
+    const registeredEmails = JSON.parse(localStorage.getItem("registeredEmails") || "[]");
+    if (registeredEmails.includes(email.toLowerCase())) {
+      setAlreadyRegistered(true);
+      return;
+    }
+
+    const formUrl = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSdCSWPFUb-wv-ImBUdXt-3ZlyCxQQrgNMrawXlriogwFlcWNw/formResponse"
+
+    const submitData = new URLSearchParams();
+    submitData.append("entry.1758925023", name);
+    submitData.append("entry.411074703", email);
+
+    try {
+      fetch(formUrl, {
+        method: "POST",
+        mode: "no-cors",
+        body: submitData,
+        headers: {
+          contentType: "application/x-www-form-urlencoded", 
+        }
+      });
+
+      formElement.reset();
+      registeredEmails.push(email.toLowerCase());
+      localStorage.setItem("registeredEmails", JSON.stringify(registeredEmails));
+      handleClose();
+    }
+    catch (error) {
+      console.error("Error al enviar los datos a Google Forms:", error);
+    }
     
     console.log("Newsletter signup:", { name, email });
     
