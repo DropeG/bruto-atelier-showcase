@@ -237,7 +237,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                         activePanel === "mobiliario"
                           ? "w-[200px] bg-[#9C7B66] text-white py-3 px-4 self-start"
                           : activePanel === "contacto"
-                            ? "w-fit bg-[#9C7B66] text-white p-6"
+                            ? "w-fit bg-[#9C7B66] text-white p-6 font-serif"
                             : "w-[800px] bg-[#9C7B66] text-white p-6 md:max-lg:bg-transparent md:max-lg:p-0"
                       }
                     >
@@ -278,7 +278,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                         </>
                       ) : activePanel === "nosotros" ? (
                         <>
-                          <div className="hidden md:max-lg:flex w-[470px] max-w-full flex-col bg-[#9C7B66] px-4 py-4">
+                          <div className="hidden md:max-lg:flex w-[470px] max-w-full flex-col bg-[#9C7B66] px-4 py-4 font-serif">
                             <div>
                               <div className="text-xs tracking-wide uppercase">Nosotros</div>
                               <div className="mt-2 text-lg font-semibold">BRUTO ATELIER</div>
@@ -313,7 +313,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                             </div>
                           </div>
 
-                          <div className="hidden lg:flex items-center">
+                          <div className="hidden lg:flex items-center font-serif">
                             <div className="w-[440px]">
                               <div className="text-xs tracking-wide uppercase">Nosotros</div>
                               <div className="mt-2 flex gap-4">
@@ -353,7 +353,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                       ) : (
                         <>
                           <div className="flex items-start">
-                            <div className="w-[320px] max-w-full md:max-lg:w-[250px]">
+                            <div className="w-[320px] max-w-full md:max-lg:w-[250px] font-serif">
                               <div className="text-xs tracking-wide uppercase">Contacto</div>
                               <div className="mt-4 space-y-4 text-sm leading-relaxed">
                                 <div className="text-lg font-semibold">Hablemos</div>
