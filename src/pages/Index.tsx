@@ -94,7 +94,7 @@ const Index = () => {
            <ImageRow
              leftSrc={imageHome3}
              leftAlt="Comedor"
-             leftHref="/categoria/colection/wachi/3"
+             leftHref="/categoria/coleccion/wachi/3"
              leftIpadPosition="34% center"
              leftBlurDataUrl={blurPlaceholders.imageHome3}
              rightSrc={imageHome4}
@@ -104,11 +104,11 @@ const Index = () => {
            />
          </div>
 
-         {/* ImageRow 3: Casita Arbol y Morar */}
+         {/* ImageRow 3: Casita Árbol y Morar */}
          <div id="section-row-3">
            <ImageRow
              leftSrc={imageHome5}
-             leftAlt="Casita Arbol"
+             leftAlt="Casita Árbol"
              leftHref="/categoria/cabina/bespoke/5"
              leftBlurDataUrl={blurPlaceholders.imageHome5}
              rightSrc={imageHome6}
@@ -124,12 +124,12 @@ const Index = () => {
            <ImageRow
              leftSrc={imageHome7}
              leftAlt="Banqueta"
-             leftHref="/categoria/colection/sabi/7"
+             leftHref="/categoria/coleccion/sabi/7"
              leftIpadPosition="50% center"
              leftBlurDataUrl={blurPlaceholders.imageHome7}
              rightSrc={imageHome8}
              rightAlt="Flores"
-             rightHref="/categoria/colection/formo/8"
+             rightHref="/categoria/coleccion/formo/8"
              rightBlurDataUrl={blurPlaceholders.imageHome8}
            />
          </div>

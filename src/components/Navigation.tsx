@@ -294,12 +294,12 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                                 className="float-right ml-4 mb-2 w-[190px] h-[190px] object-contain rounded-md"
                               />
                               <p>
-                                Creemos en lo que se diferencia en silencio y trasciende en el tiempo, lo que perdura con elegancia y desarrolla carácter. Diseñamos singularidad, fabricando de manera local e internacionalcon materiales y artesanos seleccionados.
+                                Creemos en lo que se diferencia en silencio y trasciende en el tiempo, lo que perdura con elegancia y desarrolla carácter. Diseñamos singularidad, fabricando de manera local e internacional con materiales y artesanos seleccionados.
                               </p>
                               <p className="mt-3">
                                 Buscamos ser nosotros, generar una experiencia brutalmente delicada que se entiende al conocernos, usarnos, vivirnos.
                               </p>
-                              <p className="mt-2">Pruebanos.</p>
+                              <p className="mt-2">Pruébanos.</p>
                             </div>
 
                             <div className="mt-4 pt-3 text-[10px] leading-snug">
@@ -330,7 +330,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                                   <p>
                                     Buscamos ser nosotros, generar una experiencia brutalmente delicada que se entiende al conocernos, usarnos, vivirnos
                                   </p>
-                                  <p>Pruebanos.</p>
+                                  <p>Pruébanos.</p>
                                   <div className="pt-3 space-y-1 leading-snug text-xs">
                                     <div className="flex items-center whitespace-nowrap text-[10px] leading-snug">
                                       <span className="pr-6">Mladen Marinovic'</span>
@@ -427,12 +427,12 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                             <p>
                               Creemos en lo que se diferencia en silencio y trasciende en el tiempo, lo que
                               perdura con elegancia y desarrolla carácter. Diseñamos singularidad, fabricando
-                              de manera local e internacionalcon materiales y artesanos seleccionados.
+                              de manera local e internacional con materiales y artesanos seleccionados.
                             </p>
                             <p>
                               Nuestra visión busca entregar una experiencia, que se entiende al conocerla.
                             </p>
-                            <p>Pruebanos.</p>
+                            <p>Pruébanos.</p>
                             <div className="space-y-1 leading-snug text-xs">
                               <div className="flex flex-col gap-1 text-[10px] leading-snug">
                                 <span>Mladen Marinovic</span>
