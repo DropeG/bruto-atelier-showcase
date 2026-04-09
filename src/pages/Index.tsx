@@ -79,12 +79,12 @@ const Index = () => {
            <ImageRow
              leftSrc={imageHome1}
              leftAlt="Cocina"
-             leftHref="/categoria/morar/bespoke/1"
+             leftHref="/interiorismo"
              leftIpadPosition="0% center"
              leftBlurDataUrl={blurPlaceholders.imageHome1}
              rightSrc={imageHome2}
              rightAlt="Mueble Azul"
-             rightHref="/categoria/series/bespoke/2"
+             rightHref="/serie"
              rightBlurDataUrl={blurPlaceholders.imageHome2}
            />
          </div>
@@ -94,7 +94,7 @@ const Index = () => {
            <ImageRow
              leftSrc={imageHome3}
              leftAlt="Comedor"
-             leftHref="/categoria/coleccion/wachi/3"
+             leftHref="/coleccion"
              leftIpadPosition="34% center"
              leftBlurDataUrl={blurPlaceholders.imageHome3}
              rightSrc={imageHome4}
@@ -109,11 +109,11 @@ const Index = () => {
            <ImageRow
              leftSrc={imageHome5}
              leftAlt="Casita Árbol"
-             leftHref="/categoria/cabina/bespoke/5"
+             leftHref="/arquitectura"
              leftBlurDataUrl={blurPlaceholders.imageHome5}
              rightSrc={imageHome6}
              rightAlt="Morar"
-             rightHref="/categoria/morar/bespoke/6"
+             rightHref="/interiorismo"
              rightIpadPosition="30% center"
              rightBlurDataUrl={blurPlaceholders.imageHome6}
            />
@@ -124,12 +124,12 @@ const Index = () => {
            <ImageRow
              leftSrc={imageHome7}
              leftAlt="Banqueta"
-             leftHref="/categoria/coleccion/sabi/7"
+             leftHref="/piezas"
              leftIpadPosition="50% center"
              leftBlurDataUrl={blurPlaceholders.imageHome7}
              rightSrc={imageHome8}
              rightAlt="Flores"
-             rightHref="/categoria/coleccion/formo/8"
+             rightHref="/piezas"
              rightBlurDataUrl={blurPlaceholders.imageHome8}
            />
          </div>
@@ -139,11 +139,11 @@ const Index = () => {
            <ImageRow
              leftSrc={imageHome9}  
              leftAlt="Mueble Rojo"
-             leftHref="/categoria/series/bespoke/9"
+             leftHref="/serie"
              leftBlurDataUrl={blurPlaceholders.imageHome9}
              rightSrc={imageHome10}
              rightAlt="Cabina"
-             rightHref="/categoria/cabina/bespoke/10"
+             rightHref="/arquitectura"
              rightBlurDataUrl={blurPlaceholders.imageHome10}
            />
          </div>
