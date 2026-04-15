@@ -79,12 +79,12 @@ const Index = () => {
            <ImageRow
              leftSrc={imageHome1}
              leftAlt="Cocina"
-             leftHref="/interiorismo"
+             leftHref="/interiorismo?start=1"
              leftIpadPosition="0% center"
              leftBlurDataUrl={blurPlaceholders.imageHome1}
              rightSrc={imageHome2}
              rightAlt="Mueble Azul"
-             rightHref="/serie"
+             rightHref="/serie?start=2"
              rightBlurDataUrl={blurPlaceholders.imageHome2}
            />
          </div>
@@ -109,11 +109,11 @@ const Index = () => {
            <ImageRow
              leftSrc={imageHome5}
              leftAlt="Casita Árbol"
-             leftHref="/arquitectura"
+             leftHref="/arquitectura?start=5"
              leftBlurDataUrl={blurPlaceholders.imageHome5}
              rightSrc={imageHome6}
              rightAlt="Morar"
-             rightHref="/interiorismo"
+             rightHref="/interiorismo?start=6"
              rightIpadPosition="30% center"
              rightBlurDataUrl={blurPlaceholders.imageHome6}
            />
@@ -124,12 +124,12 @@ const Index = () => {
            <ImageRow
              leftSrc={imageHome7}
              leftAlt="Banqueta"
-             leftHref="/piezas"
+             leftHref="/piezas?start=7"
              leftIpadPosition="50% center"
              leftBlurDataUrl={blurPlaceholders.imageHome7}
              rightSrc={imageHome8}
              rightAlt="Flores"
-             rightHref="/piezas"
+             rightHref="/piezas?start=8"
              rightBlurDataUrl={blurPlaceholders.imageHome8}
            />
          </div>
@@ -139,11 +139,11 @@ const Index = () => {
            <ImageRow
              leftSrc={imageHome9}  
              leftAlt="Mueble Rojo"
-             leftHref="/serie"
+             leftHref="/serie?start=9"
              leftBlurDataUrl={blurPlaceholders.imageHome9}
              rightSrc={imageHome10}
              rightAlt="Cabina"
-             rightHref="/arquitectura"
+             rightHref="/arquitectura?start=10"
              rightBlurDataUrl={blurPlaceholders.imageHome10}
            />
          </div>

@@ -16,7 +16,7 @@ export const galleryItems: GalleryItem[] = [
         thumbnail: "/images/gallery/colaZorro.webp",
         detailImage: "/images/gallery/morar-01-detail1.webp",
         route: "/categoria/morar/bespoke/1",
-        subtitle: "Antojo de piedra acero y madera."
+        subtitle: "Antojo de piedra, acero y madera."
     },
 
     {
@@ -26,7 +26,7 @@ export const galleryItems: GalleryItem[] = [
         thumbnail: "/images/gallery/series-01-thumb.webp",
         detailImage: "/images/gallery/series-01-detail1.webp",
         route: "/categoria/series/bespoke/2",
-        subtitle: "No hay problema alguno lo ajustamos."
+        subtitle: "No hay problema alguno, lo ajustamos."
     },
     {
         id: 3, 
@@ -62,7 +62,7 @@ export const galleryItems: GalleryItem[] = [
         thumbnail: "/images/gallery/bano.jpeg",
         detailImage: "/images/gallery/sombras1.webp",
         route: "/categoria/morar/bespoke/6",
-        subtitle: "No es casualidad que distintos materiales hablen un mismo idioma. Nos encanta la diplomacia. "
+        subtitle: "No es casualidad que distintos materiales hablen un mismo idioma. Nos encanta la diplomacia."
     },
     {
         id: 7, 
@@ -71,7 +71,7 @@ export const galleryItems: GalleryItem[] = [
         thumbnail: "/images/gallery/colection-02-thumb.webp",
         detailImage: "/images/gallery/colection-02-detail1.webp",
         route: "/categoria/coleccion/sabi/7",
-        subtitle: "Únicos, asi de simple."
+        subtitle: "Únicos, así de simple."
     },
     {
         id: 8, 
@@ -89,7 +89,7 @@ export const galleryItems: GalleryItem[] = [
         thumbnail: "/images/gallery/rojo.jpeg",
         detailImage: "/images/gallery/series-02-detail1.webp",
         route: "/categoria/series/bespoke/9",
-        subtitle: "Y tú, qué pondrás sobre la mesa?"
+        subtitle: "¿Y tú, qué pondrás sobre la mesa?"
     },
     {
         id: 10, 
@@ -98,6 +98,6 @@ export const galleryItems: GalleryItem[] = [
         thumbnail: "/images/gallery/chilote.jpeg",
         detailImage: "/images/gallery/cabina-02-detail1.webp",
         route: "/categoria/cabina/bespoke/10",
-        subtitle: "No te imaginas lo que hacemos posible en 1m2."
+        subtitle: "No te imaginas lo que hacemos posible en 1m²."
     }
 ];

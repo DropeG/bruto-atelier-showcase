@@ -58,7 +58,7 @@ const Footer = () => {
             <div>   
               <h3 className="font-bold mb-2 text-xs md:text-base">DISEÑO</h3>   
               <p className="mb-2 text-xs">Diseño sitio web: BRUTO Atelier x DROPE — Design System International</p>
-              <p className="mb-2 text-xs">Imagenes: BRUTO Atelier</p>
+              <p className="mb-2 text-xs">Imágenes: BRUTO Atelier</p>
             </div>  
           </div>
 

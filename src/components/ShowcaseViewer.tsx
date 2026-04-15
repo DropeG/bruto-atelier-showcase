@@ -185,25 +185,17 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
                 {/* Botón HABLEMOS Universal */}
                 <div className={`absolute bottom-[9%] md:bottom-[10%] left-0 w-full flex justify-center ${item.layout === "double" ? "relative bottom-0 mt-4" : ""}`}>
                   
-                  {/* Agregamos un div relative para anclar el texto al botón */}
-                  <div className="relative flex justify-center">
+                  {/* Ancla del botón + subtítulo con contexto de ancho para evitar desbordes */}
+                  <div className="relative flex w-full justify-center px-4">
                     <button
                       onClick={() => window.open("https://wa.me/56949569887", "_blank", "noopener,noreferrer")}
-                      className={`group flex items-center px-6 py-2 md:px-10 md:py-2.5 bg-transparent font-serif text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.25em] border transition-all duration-700 ease-out cursor-pointer relative overflow-hidden hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.07)] ${
-                        item.layout === "double" 
-                          ? "text-white border-white/60 hover:border-white" 
-                          : "text-[#9C7B66] border-gray-400 hover:border-gray-600"
-                      }`}
+                      className={`text-[#694634] border-[#694634] group flex items-center px-6 py-2.5 md:px-10 md:py-2.5 bg-transparent font-serif text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.25em] border transition-all duration-700 ease-out cursor-pointer relative overflow-hidden hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.07)] }`}
                     >
                       HABLEMOS
                     </button>
 
-                    {/* Texto inferior con "absolute top-full" para que no empuje al botón */}
-                    <span className={`absolute top-full mt-3 text-[12px] md:text-sm text-center font-serif tracking-wide whitespace-nowrap pointer-events-none ${
-                      item.layout === "double" 
-                        ? "text-white/70" 
-                        : "text-gray-600"
-                    }`}>
+                    {/* Subtítulo centrado y con ancho limitado para que no se salga de la foto */}
+                    <span className="absolute top-full left-1/2 mt-2 md:mb-3 w-full max-w-[280px] md:max-w-[420px] -translate-x-1/2 px-4 text-[10px] leading-tight md:text-[13px] text-center font-serif tracking-wide whitespace-normal break-words pointer-events-none text-[#694634]">
                       {item.subtitle}
                     </span>
                   </div>

@@ -128,7 +128,7 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({ openModal, onClose })
           {/* Form side */}
           <div className="md:w-1/2 p-6 md:p-8 flex flex-col justify-center bg-[#9C7B66]">
             <h2 className="text-xl md:text-2xl font-bold text-center mb-1 text-white tracking-tight">
-              10% en tu primera compra!
+              ¡10% en tu primera compra!
             </h2>
             <p className="text-center mb-6 text-sm text-white/90 font-light">
               Ingresa tus datos
