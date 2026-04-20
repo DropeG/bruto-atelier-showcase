@@ -10,7 +10,7 @@ export interface ShowcaseItem {
   thumbnail: string;
   detailImage: string;
   secondaryImage?: string;
-  layout?: "single" | "double";
+  layout?: "single" | "double" | "split";
   backgroundColor?: string; // Ideal para el color Moka de Coleccion.tsx
   subtitle?: string
 }
@@ -124,19 +124,21 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
       {items.map((item, index) => (
         <div
           key={`bg-${item.id}`}
-          className="absolute inset-0 transition-opacity duration-[1500ms] ease-in-out"
+          className="absolute inset-0 transition-all duration-[2500ms]"
           style={{ 
             opacity: index === currentIndex ? 1 : 0,
             pointerEvents: index === currentIndex ? 'auto' : 'none',
             backgroundColor: item.backgroundColor || undefined,
+            transform: index === currentIndex ? 'scale(1.12)' : 'scale(1.05)',
+            transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
           }}
         >
-          {(!item.layout || item.layout === "single") && (
+          {(!item.layout || item.layout === "single" || item.layout === "double") && (
             <>
               <img
                 src={item.thumbnail}
                 alt={item.title}
-                className="absolute inset-0 w-full h-full object-cover object-center scale-105"
+                className="absolute inset-0 w-full h-full object-cover object-center"
                 style={{ 
                   minHeight: "100vh",
                   filter: index === currentIndex && showFront ? "blur(1px)" : "blur(4px)",
@@ -159,16 +161,31 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
           {items.map((item, index) => (
             <div
               key={`detail-${item.id}`}
-              className="absolute inset-0 flex items-center justify-center transition-opacity duration-[1500ms] ease-in-out"
+              className="absolute inset-0 flex items-center justify-center transition-all duration-[2500ms]"
               style={{ 
                 opacity: index === currentIndex ? 1 : 0,
-                pointerEvents: index === currentIndex ? 'auto' : 'none'
+                pointerEvents: index === currentIndex ? 'auto' : 'none',
+                transform: index === currentIndex ? 'scale(1.03)' : 'scale(0.98)',
+                transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
               }}
             >
-              <div className="relative flex flex-col items-center gap-6 px-4">
+              <div className={`relative flex flex-col items-center gap-6 ${item.layout === "split" ? "w-full h-full" : "px-4"}`}>
                 
-                {/* Renderizado Condicional: Doble vs Simple */}
-                {item.layout === "double" ? (
+                {/* Renderizado Condicional: Doble vs Simple vs Split */}
+                {item.layout === "split" ? (
+                  <div className="flex w-full h-full animate-fade-in-up">
+                    {[item.detailImage, item.secondaryImage].filter(Boolean).map((imageSrc, imageIndex) => (
+                      <div key={`${item.id}-image-${imageIndex}`} className="w-1/2 h-full overflow-hidden">
+                        <img 
+                          src={imageSrc} 
+                          alt={`${item.title} ${imageIndex + 1}`} 
+                          className="w-full h-full object-cover" 
+                          loading="eager" 
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : item.layout === "double" ? (
                   <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 animate-fade-in-up">
                     {[item.detailImage, item.secondaryImage].filter(Boolean).map((imageSrc, imageIndex) => (
                       <div key={`${item.id}-image-${imageIndex}`} className="relative bg-white shadow-2xl" style={{ maxWidth: 'min(34vw, 360px)', maxHeight: '80vh' }}>
@@ -183,19 +200,19 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
                 )}
 
                 {/* Botón HABLEMOS Universal */}
-                <div className={`absolute bottom-[9%] md:bottom-[10%] left-0 w-full flex justify-center ${item.layout === "double" ? "relative bottom-0 mt-4" : ""}`}>
+                <div className={`${item.layout === "split" ? "absolute bottom-[10%] z-30" : "absolute bottom-[9%] md:bottom-[10%]"} left-0 w-full flex justify-center ${item.layout === "double" ? "relative bottom-0 mt-4" : ""}`}>
                   
                   {/* Ancla del botón + subtítulo con contexto de ancho para evitar desbordes */}
                   <div className="relative flex w-full justify-center px-4">
                     <button
                       onClick={() => window.open("https://wa.me/56949569887", "_blank", "noopener,noreferrer")}
-                      className={`text-[#694634] border-[#694634] group flex items-center px-6 py-2.5 md:px-10 md:py-2.5 bg-transparent font-serif text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.25em] border transition-all duration-700 ease-out cursor-pointer relative overflow-hidden hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.07)] }`}
+                      className={`text-[#694634] border-[#694634] group flex items-center px-6 py-2.5 md:px-10 md:py-2.5 bg-transparent font-serif text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.25em] border transition-all duration-700 ease-out cursor-pointer relative overflow-hidden hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.07)] ${item.layout === "split" ? "bg-white/80 backdrop-blur-sm" : ""}`}
                     >
                       HABLEMOS
                     </button>
 
                     {/* Subtítulo centrado y con ancho limitado para que no se salga de la foto */}
-                    <span className="absolute top-full left-1/2 mt-2 md:mb-3 w-full max-w-[280px] md:max-w-[420px] -translate-x-1/2 px-4 text-[10px] leading-tight md:text-[13px] text-center font-serif tracking-wide whitespace-normal break-words pointer-events-none text-[#694634]">
+                    <span className={`absolute top-full left-1/2 mt-2 md:mb-3 w-full max-w-[280px] md:max-w-[420px] -translate-x-1/2 px-4 text-[10px] leading-tight md:text-[13px] text-center font-serif tracking-wide whitespace-normal break-words pointer-events-none ${item.layout === "split" ? "text-white drop-shadow-md" : "text-[#694634]"}`}>
                       {item.subtitle}
                     </span>
                   </div>

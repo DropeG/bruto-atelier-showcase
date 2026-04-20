@@ -32,7 +32,7 @@ const HeroSection = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full section-padding">
+      <div className="relative z-10 flex flex-col items-center justify-center h-full section-padding hero-content">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -49,10 +49,9 @@ const HeroSection = () => {
 
       </div>
       <style>{`
-        body.menu-open .hero-title,
-        html.menu-open .hero-title {
-          opacity: 0 !important;
-          visibility: hidden;
+        body.menu-open .hero-content,
+        html.menu-open .hero-content {
+          display: none !important;
         }
       `}</style>
     </div>

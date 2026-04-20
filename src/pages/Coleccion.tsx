@@ -11,7 +11,7 @@ const coleccionFolderItems: ShowcaseItem[] = [
     thumbnail: "/images/colección/coleccion1.webp",
     detailImage: "/images/colección/coleccion1.webp",
     secondaryImage: "/images/colección/coleccion2.webp",
-    layout: "double",
+    layout: "split",
     backgroundColor: mokaColor,
   },
   {
@@ -20,7 +20,7 @@ const coleccionFolderItems: ShowcaseItem[] = [
     detailImage: "/images/colección/coleccion3.webp",
     thumbnail: "/images/colección/coleccion3.webp",
     secondaryImage: "/images/colección/coleccion4.webp",
-    layout: "double",
+    layout: "split",
     backgroundColor: mokaColor,
   },
 ];

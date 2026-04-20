@@ -11,7 +11,7 @@ const navLinks = [
   { label: "Mobiliario", href: "#mobiliario" },
   { label: "Iluminación", href: "#iluminacion" },
   { label: "Esenciales", href: "#esenciales" },
-  { label: "Joyeria", href: "#joyeria" },
+  { label: "Joyería", href: "#joyeria" },
   { label: "Vestuario", href: "#vestuario" },
   { label: "Accesorios", href: "#accesorios" },
   { label: "Nosotros", href: "#nosotros" },
@@ -32,7 +32,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
   const whatsappNumber = "56949569887";
-  const defaultContactMessage = "Qué tal, me resuelven una duda?";
+  const defaultContactMessage = "¿Qué tal, me resuelven una duda?";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,13 +46,14 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
   }, []);
 
   useEffect(() => {
-    document.body.classList.toggle("menu-open", isMenuOpen);
-    document.documentElement.classList.toggle("menu-open", isMenuOpen);
+    const isAnyOpen = isMenuOpen || activePanel !== null;
+    document.body.classList.toggle("menu-open", isAnyOpen);
+    document.documentElement.classList.toggle("menu-open", isAnyOpen);
     return () => {
       document.body.classList.remove("menu-open");
       document.documentElement.classList.remove("menu-open");
     };
-  }, [isMenuOpen]);
+  }, [isMenuOpen, activePanel]);
 
   useEffect(() => {
     if (!isMenuOpen) {
@@ -467,7 +468,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                                 type="submit"
                                 className="w-full rounded-md bg-white text-[#9C7B66] px-3 py-2 text-xs font-semibold uppercase tracking-wide hover:bg-white/90 transition-colors"
                               >
-                                Enviar por WhatsApp
+                                Enviar
                               </button>
                             </form>
                           </div>
