@@ -160,7 +160,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                             type="button"
                             onClick={() => {
                               setIsMenuOpen(false);
-                              navigate("/arquitectura");
+                              navigate("/showcase/arquitectura");
                             }}
                             className="block w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
                           >
@@ -171,7 +171,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                             type="button"
                             onClick={() => {
                               setIsMenuOpen(false);
-                              navigate("/interiorismo");
+                              navigate("/showcase/interiorismo");
                             }}
                             className="block w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
                           >
@@ -249,7 +249,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                               type="button"
                               onClick={() => {
                                 setIsMenuOpen(false);
-                                navigate("/coleccion");
+                                navigate("/showcase/mobiliario/coleccion");
                               }}
                               className="block w-full text-left px-2 py-1.5 -mx-2 hover:bg-[#EAD0B9] transition-colors"
                             >
@@ -259,7 +259,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                               type="button"
                               onClick={() => {
                                 setIsMenuOpen(false);
-                                navigate("/serie");
+                                navigate("/showcase/mobiliario/series");
                               }}
                               className="block w-full text-left px-2 py-1.5 -mx-2 hover:bg-[#EAD0B9] transition-colors"
                             >
@@ -269,7 +269,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                               type="button"
                               onClick={() => {
                                 setIsMenuOpen(false);
-                                navigate("/piezas");
+                                navigate("/showcase/mobiliario/piezas");
                               }}
                               className="block w-full text-left px-2 py-1.5 -mx-2 hover:bg-[#EAD0B9] transition-colors"
                             >
@@ -491,7 +491,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                             type="button"
                             onClick={() => {
                               setIsMenuOpen(false);
-                              navigate("/arquitectura");
+                              navigate("/showcase/arquitectura");
                             }}
                             className="block w-full text-left px-2 py-1 -mx-2 transition-colors focus:outline-none active:bg-transparent"
                           >
@@ -502,7 +502,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                             type="button"
                             onClick={() => {
                               setIsMenuOpen(false);
-                              navigate("/interiorismo");
+                              navigate("/showcase/interiorismo");
                             }}
                             className="block w-full text-left px-2 py-1 -mx-2 transition-colors focus:outline-none active:bg-transparent"
                           >
@@ -537,7 +537,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                                       type="button"
                                       onClick={() => {
                                         setIsMenuOpen(false);
-                                        navigate("/coleccion");
+                                        navigate("/showcase/mobiliario/coleccion");
                                       }}
                                       className="block w-full text-left px-2 py-1.5 hover:bg-[#EAD0B9] transition-colors focus:outline-none active:bg-transparent"
                                     >
@@ -547,7 +547,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                                       type="button"
                                       onClick={() => {
                                         setIsMenuOpen(false);
-                                        navigate("/serie");
+                                        navigate("/showcase/mobiliario/series");
                                       }}
                                       className="block w-full text-left px-2 py-1.5 hover:bg-[#EAD0B9] transition-colors focus:outline-none active:bg-transparent"
                                     >
@@ -557,7 +557,7 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                                       type="button"
                                       onClick={() => {
                                         setIsMenuOpen(false);
-                                        navigate("/piezas");
+                                        navigate("/showcase/mobiliario/piezas");
                                       }}
                                       className="block w-full text-left px-2 py-1.5 hover:bg-[#EAD0B9] transition-colors focus:outline-none active:bg-transparent"
                                     >

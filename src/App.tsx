@@ -7,11 +7,6 @@ import { ScrollProvider } from "@/contexts/ScrollContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Category from "./pages/Category";
-import Arquitectura from "./pages/Arquitectura";
-import Interiorismo from "./pages/Interiorismo";
-import Coleccion from "./pages/Coleccion";
-import Serie from "./pages/Serie";
-import Piezas from "./pages/Piezas";
 
 const queryClient = new QueryClient();
 
@@ -24,13 +19,22 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
-            <Route path="/arquitectura" element={<Arquitectura />} />
-            <Route path="/interiorismo" element={<Interiorismo />} />
-            <Route path="/coleccion" element={<Coleccion />} />
-            <Route path="/serie" element={<Serie />} />
-            <Route path="/piezas" element={<Piezas />} />
+            
+            {/* Semantic Showcase Routes */}
+            <Route path="/showcase/mobiliario/:type/:id" element={<Category />} />
+            <Route path="/showcase/mobiliario/:type" element={<Category />} />
+            <Route path="/showcase/:discipline/:id" element={<Category />} />
+            <Route path="/showcase/:discipline" element={<Category />} />
+            
+            {/* Legacy support and temporary landing for old menus */}
+            <Route path="/arquitectura" element={<Category />} />
+            <Route path="/interiorismo" element={<Category />} />
+            <Route path="/coleccion" element={<Category />} />
+            <Route path="/serie" element={<Category />} />
+            <Route path="/piezas" element={<Category />} />
             <Route path="/categoria/:category/:title/:id" element={<Category />} />
             
+            <Route path="/*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </ScrollProvider>

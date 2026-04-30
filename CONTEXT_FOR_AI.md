@@ -38,13 +38,17 @@ React Router v6 (NOT Next.js)
 
 ### 3. Data Flow
 ```
-User Input → Components → Context/State → Re-render
+User Input → Components → GalleryService → ShowcaseViewer → Re-render
 ```
 
 No hay fetch a API. Los datos vienen de:
-- `/src/data/Gallery.tsx` (galería principal)
-- Props pasadas entre componentes
-- Context global (Auth, Currency, Scroll)
+- `/src/data/Gallery.tsx` (galería principal - formal hierarchy)
+- `/src/lib/gallery.ts` (GalleryService - Deep Module for lookups and routing)
+
+### 4. Jerarquía de Datos (Discipline/Type)
+- **Disciplines**: arquitectura, interiorismo, mobiliario, independent.
+- **Mobiliario Types**: coleccion, series, piezas.
+- **Ruta Semántica**: `/showcase/:discipline/:type?/:id`
 
 ### 4. Imágenes
 - **Ubicación**: `/public/images/` (20+ carpetas)

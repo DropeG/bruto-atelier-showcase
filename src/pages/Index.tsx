@@ -6,10 +6,10 @@ import {
   NewsletterModal,
   WhatsAppButton,
   DiscountButton,
-  ImageRow as ImageRowComp,
 } from "@/components";
 import { useScroll } from "@/contexts/ScrollContext";
 import { blurPlaceholders } from "@/lib/blur-placeholders";
+import { GalleryService } from "@/lib/gallery";
 import imageHome1 from "/images/home/image1.webp";
 import imageHome2 from "/images/home/image2.webp";
 import imageHome3 from "/images/home/image3.webp";
@@ -27,6 +27,12 @@ const Index = () => {
   const [showDiscount, setShowDiscount] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const { getSectionId, scrollToSection } = useScroll();
+
+  // Helper to get URL for an item ID safely
+  const getUrl = (id: number) => {
+    const item = GalleryService.getItemById(id);
+    return item ? GalleryService.getItemUrl(item) : "#";
+  };
 
   // Restaurar scroll a la sección guardada al montar el componente
   useEffect(() => {
@@ -79,12 +85,12 @@ const Index = () => {
            <ImageRow
              leftSrc={imageHome1}
              leftAlt="Cocina"
-             leftHref="/interiorismo?start=1"
+             leftHref={getUrl(1)}
              leftIpadPosition="0% center"
              leftBlurDataUrl={blurPlaceholders.imageHome1}
              rightSrc={imageHome2}
              rightAlt="Mueble Azul"
-             rightHref="/serie?start=2"
+             rightHref={getUrl(2)}
              rightBlurDataUrl={blurPlaceholders.imageHome2}
            />
          </div>
@@ -94,12 +100,12 @@ const Index = () => {
            <ImageRow
              leftSrc={imageHome3}
              leftAlt="Comedor"
-             leftHref="/coleccion"
+             leftHref={getUrl(3)}
              leftIpadPosition="34% center"
              leftBlurDataUrl={blurPlaceholders.imageHome3}
              rightSrc={imageHome4}
              rightAlt="Paisaje"
-             rightHref="/categoria/morar/bespoke/4"
+             rightHref={getUrl(4)}
              rightBlurDataUrl={blurPlaceholders.imageHome4}
            />
          </div>
@@ -109,11 +115,11 @@ const Index = () => {
            <ImageRow
              leftSrc={imageHome5}
              leftAlt="Casita Árbol"
-             leftHref="/arquitectura?start=5"
+             leftHref={getUrl(5)}
              leftBlurDataUrl={blurPlaceholders.imageHome5}
              rightSrc={imageHome6}
              rightAlt="Morar"
-             rightHref="/interiorismo?start=6"
+             rightHref={getUrl(6)}
              rightIpadPosition="30% center"
              rightBlurDataUrl={blurPlaceholders.imageHome6}
            />
@@ -124,12 +130,12 @@ const Index = () => {
            <ImageRow
              leftSrc={imageHome7}
              leftAlt="Banqueta"
-             leftHref="/piezas?start=7"
+             leftHref={getUrl(7)}
              leftIpadPosition="50% center"
              leftBlurDataUrl={blurPlaceholders.imageHome7}
              rightSrc={imageHome8}
              rightAlt="Flores"
-             rightHref="/piezas?start=8"
+             rightHref={getUrl(8)}
              rightBlurDataUrl={blurPlaceholders.imageHome8}
            />
          </div>
@@ -139,11 +145,11 @@ const Index = () => {
            <ImageRow
              leftSrc={imageHome9}  
              leftAlt="Mueble Rojo"
-             leftHref="/serie?start=9"
+             leftHref={getUrl(9)}
              leftBlurDataUrl={blurPlaceholders.imageHome9}
              rightSrc={imageHome10}
              rightAlt="Cabina"
-             rightHref="/arquitectura?start=10"
+             rightHref={getUrl(10)}
              rightBlurDataUrl={blurPlaceholders.imageHome10}
            />
          </div>

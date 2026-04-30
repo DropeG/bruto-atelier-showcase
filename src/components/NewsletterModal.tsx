@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
-import { set } from "date-fns";
 
 interface NewsletterModalProps {
   openModal?: boolean;
