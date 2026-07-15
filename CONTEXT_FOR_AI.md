@@ -12,7 +12,8 @@ Este documento proporciona contexto para que cualquier IA (Claude, ChatGPT, Copi
 - **Base de datos**: Ninguna (datos estáticos en /src/data)
 
 ### Propósito
-Showcase web de catálogo/portafolio para estudio de diseño de muebles y proyectos de arquitectura/interiorismo.
+**Volumen 1 (Actual):** Showcase web y catálogo estático para estudio de diseño de muebles, arquitectura e interiorismo. Enfocado puramente en diseño premium, fluidez de UI y corrección de bugs visuales.
+**Volumen 2 (Futuro):** Integración con Shopify para e-commerce (Storefront API).
 
 ### URL en Vivo
 https://bruto-atelier-showcase.vercel.app
@@ -358,38 +359,17 @@ Cuando IA haga cambios, verificar:
 
 ---
 
-## 🤔 CUÁNDO ESCALAR
+## 🗺️ ROADMAP DEL PROYECTO
 
-### Agregar Backend
-Si necesitas:
-- Base de datos de productos real
-- Autenticación real (no fake)
-- Administración de contenido
-- Rates de moneda en tiempo real
+### Fase Actual (Volumen 1)
+- El enfoque principal es **resolver bugs visuales**, mejorar la fluidez (micro-interacciones) y asegurar que el diseño responsive (móvil/tablet) sea perfecto.
+- El cliente (arquitecto) es muy exigente con la estética. Todo el diseño y las interacciones deben sentirse premium.
+- Datos 100% estáticos en el frontend (`Gallery.tsx`).
 
-Considerar:
-- Agregar API (Node.js + Express, Python + FastAPI, etc.)
-- Usar TanStack React Query ya incluido
-- Variables de env (.env.local)
-
-### Agregar CMS
-Si necesitas:
-- Editar productos sin re-deployar
-- Cargar imágenes dinámicamente
-- Administrador visual
-
-Considerar:
-- Sanity.io, Strapi, Contentful
-- Headless CMS
-
-### Agregar SSR
-Si necesitas:
-- SEO perfecto (actualmente no está optimizado)
-- Contenido dinámico sin JavaScript
-
-Considerar:
-- Migrar a Next.js (complicado)
-- O agregar pre-rendering estático
+### Fase Futura (Volumen 2)
+- **E-commerce:** La aplicación evolucionará para conectarse con Shopify (Headless E-commerce).
+- El catálogo dejará de ser estático y los productos, precios y stock vendrán de la API de Shopify.
+- Ya no se requerirá "fake auth", el carrito y el proceso de compra (Checkout) serán manejados integrando Shopify.
 
 ---
 
