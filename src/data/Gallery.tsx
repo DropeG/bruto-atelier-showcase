@@ -43,7 +43,7 @@ export const galleryItems: GalleryItem[] = [
         title: "wachi",
         thumbnail: "/images/gallery/colection-01-thumb.webp",
         detailImage: "/images/gallery/colection-01-detail1.webp",
-        subtitle: "La Patagonia nunca estuvo tan cerca."
+        subtitle: "Nuestra colección en Lenga, la Patagonia nunca estuvo tan cerca."
     },
     // Extra Coleccion Desktop Items
     {
@@ -76,11 +76,11 @@ export const galleryItems: GalleryItem[] = [
         discipline: "mobiliario",
         type: "coleccion",
         title: "Colección Mobile 1",
-        thumbnail: "/images/colección/coleccionMobile1.webp",
-        detailImage: "/images/colección/coleccionMobile1.webp",
+        thumbnail: "/images/gallery/colection-01-thumb.webp",
+        detailImage: "/images/colección/coleccionMobile1.webp?v=3",
         layout: "single",
         backgroundColor: MOKA_COLOR,
-        subtitle: "Diseño que respira.",
+        subtitle: "Nuestra colección en Lenga, la Patagonia nunca estuvo tan cerca.",
         isMobileOnly: true
     },
     {
@@ -88,11 +88,11 @@ export const galleryItems: GalleryItem[] = [
         discipline: "mobiliario",
         type: "coleccion",
         title: "Colección Mobile 2",
-        thumbnail: "/images/colección/coleccionMobile2.webp",
-        detailImage: "/images/colección/coleccionMobile2.webp",
+        thumbnail: "/images/gallery/colection-01-thumb.webp",
+        detailImage: "/images/colección/coleccionMobile2.webp?v=3",
         layout: "single",
         backgroundColor: MOKA_COLOR,
-        subtitle: "Texturas naturales.",
+        subtitle: "Nuestra colección en Lenga, la Patagonia nunca estuvo tan cerca.",
         isMobileOnly: true
     },
     {
@@ -100,11 +100,11 @@ export const galleryItems: GalleryItem[] = [
         discipline: "mobiliario",
         type: "coleccion",
         title: "Colección Mobile 3",
-        thumbnail: "/images/colección/coleccionMobile3.webp",
-        detailImage: "/images/colección/coleccionMobile3.webp",
+        thumbnail: "/images/gallery/colection-01-thumb.webp",
+        detailImage: "/images/colección/coleccionMobile3.webp?v=3",
         layout: "single",
         backgroundColor: MOKA_COLOR,
-        subtitle: "Artesanía brutal.",
+        subtitle: "Nuestra colección en Lenga, la Patagonia nunca estuvo tan cerca.",
         isMobileOnly: true
     },
     {
