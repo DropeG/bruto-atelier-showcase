@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion, PanInfo } from "framer-motion";
 
 // FASE 1: Tipado Universal. 
 // Esta interfaz soporta tanto imágenes simples (Arquitectura, Piezas) 
@@ -58,7 +59,7 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
     }, intervalTime);
 
     return () => clearInterval(interval);
-  }, [items.length, autoPlay, intervalTime]);
+  }, [items.length, autoPlay, intervalTime, currentIndex]);
 
   // 3. Lógica de Revelado (Interacción del usuario)
   useEffect(() => {
@@ -91,8 +92,22 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
 
   const allImagesLoaded = items.every((item) => imagesLoaded[item.id]);
 
+  const handlePanEnd = (_: unknown, info: PanInfo) => {
+    if (items.length <= 1) return;
+    const swipeThreshold = 50;
+    if (info.offset.x < -swipeThreshold) {
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % items.length);
+    } else if (info.offset.x > swipeThreshold) {
+      setCurrentIndex((prevIndex) => (prevIndex === 0 ? items.length - 1 : prevIndex - 1));
+    }
+  };
+
   return (
-    <div className="relative w-full min-h-screen h-screen overflow-hidden bg-black">
+    <motion.div 
+      onPanEnd={handlePanEnd}
+      className="relative w-full min-h-screen h-screen overflow-hidden bg-black select-none touch-pan-y cursor-grab active:cursor-grabbing"
+    >
+
       {/* Botón de volver */}
       <button
         onClick={() => navigate(-1)}
@@ -138,7 +153,8 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
               <img
                 src={item.thumbnail}
                 alt={item.title}
-                className="absolute inset-0 w-full h-full object-cover object-center"
+                draggable={false}
+                className="absolute inset-0 w-full h-full object-cover object-center select-none"
                 style={{ 
                   minHeight: "100vh",
                   filter: index === currentIndex && showFront ? "blur(1px)" : "blur(4px)",
@@ -157,7 +173,7 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
 
       {/* Imágenes principales (Detalle) en el centro */}  
       {showFront && allImagesLoaded && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center z-20">
+        <div className="absolute inset-0 flex flex-col items-center justify-center z-20 pointer-events-none">
           {items.map((item, index) => (
             <div
               key={`detail-${item.id}`}
@@ -179,7 +195,8 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
                         <img 
                           src={imageSrc} 
                           alt={`${item.title} ${imageIndex + 1}`} 
-                          className="w-full h-full object-cover" 
+                          draggable={false}
+                          className="w-full h-full object-cover select-none" 
                           loading="eager" 
                         />
                       </div>
@@ -189,13 +206,13 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
                   <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 animate-fade-in-up">
                     {[item.detailImage, item.secondaryImage].filter(Boolean).map((imageSrc, imageIndex) => (
                       <div key={`${item.id}-image-${imageIndex}`} className="relative bg-white shadow-2xl" style={{ maxWidth: 'min(34vw, 360px)', maxHeight: '80vh' }}>
-                        <img src={imageSrc} alt={`${item.title} ${imageIndex + 1}`} className="w-full h-auto block md:object-contain" style={{ maxHeight: '80vh' }} loading="eager" />
+                        <img src={imageSrc} alt={`${item.title} ${imageIndex + 1}`} draggable={false} className="w-full h-auto block md:object-contain select-none" style={{ maxHeight: '80vh' }} loading="eager" />
                       </div>
                     ))}
                   </div>
                 ) : (
                   <div className="relative bg-white shadow-2xl animate-fade-in-up max-w-[85vw] md:max-w-[min(70vw,65vh)] xl:max-w-[85vw]" style={{ maxHeight: '80vh' }}>
-                    <img src={item.detailImage} alt={item.title} className="w-full h-auto block md:object-contain" style={{ maxHeight: '80vh' }} loading="eager" decoding="async" fetchPriority="high" />
+                    <img src={item.detailImage} alt={item.title} draggable={false} className="w-full h-auto block md:object-contain select-none" style={{ maxHeight: '80vh' }} loading="eager" decoding="async" fetchPriority="high" />
                   </div>
                 )}
 
@@ -206,7 +223,7 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
                   <div className="relative flex w-full justify-center px-4">
                     <button
                       onClick={() => window.open("https://wa.me/56949569887", "_blank", "noopener,noreferrer")}
-                      className={`text-[#694634] border-[#694634] group flex items-center px-6 py-2.5 md:px-10 md:py-2.5 bg-transparent font-serif text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.25em] border transition-all duration-700 ease-out cursor-pointer relative overflow-hidden hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.07)] ${item.layout === "split" ? "bg-white/80 backdrop-blur-sm" : ""}`}
+                      className={`pointer-events-auto text-[#694634] border-[#694634] group flex items-center px-6 py-2.5 md:px-10 md:py-2.5 bg-transparent font-serif text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.25em] border transition-all duration-700 ease-out cursor-pointer relative overflow-hidden hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.07)] ${item.layout === "split" ? "bg-white/80 backdrop-blur-sm" : ""}`}
                     >
                       HABLEMOS
                     </button>
@@ -235,7 +252,7 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
           animation: fadeInUp 1s cubic-bezier(.23,1.01,.32,1) forwards;
         }
       `}</style>
-    </div>
+    </motion.div>
   );
 };
 
