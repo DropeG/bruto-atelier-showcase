@@ -14,3 +14,4 @@ export { default as Price } from "./Price";
 export { default as CurrencyDropdown } from "./CurrencyDropdown";
 export { default as ProductSection } from "./ProductSection";
 export { default as Layout } from "./Layout";
+export { default as NosotrosModal } from "./NosotrosModal";

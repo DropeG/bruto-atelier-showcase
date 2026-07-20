@@ -3,7 +3,11 @@ import Navigation from "@/components/Navigation";
 import heroDesktop from "/images/hero.webp"
 import heroMobile from "/images/heroMobile.webp"
 
-const HeroSection = () => {
+interface HeroSectionProps {
+  onOpenNosotros?: () => void;
+}
+
+const HeroSection: React.FC<HeroSectionProps> = ({ onOpenNosotros }) => {
   return (
     <div className="md:snap-start md:snap-always relative w-full h-[100svh] md:h-screen overflow-hidden">
       <Navigation position="absolute" />
@@ -33,19 +37,22 @@ const HeroSection = () => {
 
       {/* Content */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full section-padding hero-content">
-        <motion.div
+        <motion.button
+          type="button"
+          onClick={onOpenNosotros}
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="text-center hero-title transition-opacity duration-200"
+          className="text-center hero-title transition-all duration-300 hover:scale-105 active:scale-95 focus:outline-none group cursor-pointer"
+          aria-label="Ver sobre Nosotros - BRUTO Atelier"
         >
-          <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl text-primary-foreground font-medium tracking-wide mb-4">
+          <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl text-primary-foreground font-medium tracking-wide mb-4 group-hover:text-white transition-colors">
             BRUTO
           </h2>
-          <p className="font-serif text-2xl md:text-3xl lg:text-4xl text-primary-foreground/90 italic font-normal">
+          <p className="font-serif text-2xl md:text-3xl lg:text-4xl text-primary-foreground/90 italic font-normal group-hover:text-white transition-colors">
             Atelier
           </p>
-        </motion.div>
+        </motion.button>
 
       </div>
       <style>{`

@@ -4,6 +4,7 @@ import {
   VideoSection,
   Footer,
   NewsletterModal,
+  NosotrosModal,
   WhatsAppButton,
   DiscountButton,
 } from "@/components";
@@ -24,6 +25,7 @@ import ImageRow from "@/components/ImageRow";
  
 const Index = () => {
   const [openModal, setOpenModal] = useState(false);
+  const [openNosotros, setOpenNosotros] = useState(false);
   const [showDiscount, setShowDiscount] = useState(true);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const { getSectionId, scrollToSection } = useScroll();
@@ -61,6 +63,7 @@ const Index = () => {
   return (
     <div className="relative">
       <NewsletterModal openModal={openModal} onClose={() => setOpenModal(false)} />
+      <NosotrosModal isOpen={openNosotros} onClose={() => setOpenNosotros(false)} />
       <WhatsAppButton />
       <DiscountButton onClick={() => setOpenModal(true)} isVisible={showDiscount} />
 
@@ -72,7 +75,7 @@ const Index = () => {
       >
         {/* Section 1: Hero */}
         <div id="section-hero">
-          <HeroSection />
+          <HeroSection onOpenNosotros={() => setOpenNosotros(true)} />
         </div>
 
         {/* Section 2: Videos */}
