@@ -603,7 +603,9 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
         )}
       </AnimatePresence>
 
-      <NewsletterModal openModal={openModal} onClose={() => setOpenModal(false)} />
+      {openModal && (
+        <NewsletterModal openModal={openModal} onClose={() => setOpenModal(false)} />
+      )}
     </>
   );
 };
