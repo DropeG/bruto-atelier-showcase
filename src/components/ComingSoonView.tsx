@@ -14,6 +14,14 @@ const ComingSoonView: React.FC<ComingSoonViewProps> = ({ category }) => {
   const images = category.images && category.images.length > 0 ? category.images : [category.bgImage];
   const [selectedIndex, setSelectedIndex] = useState(0);
 
+  // Preload all gallery images in browser memory on mount for instant switching
+  React.useEffect(() => {
+    images.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, [images]);
+
   const handleNext = () => {
     setSelectedIndex((prev) => (prev + 1) % images.length);
   };
@@ -38,10 +46,12 @@ const ComingSoonView: React.FC<ComingSoonViewProps> = ({ category }) => {
                 key={images[selectedIndex]}
                 src={images[selectedIndex]}
                 alt={`${category.title} - ${selectedIndex + 1}`}
+                loading="eager"
+                decoding="async"
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 1.02 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
                 className="w-full h-full object-cover object-center"
               />
             </AnimatePresence>
