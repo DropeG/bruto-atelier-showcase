@@ -1,7 +1,9 @@
 import { useParams, useLocation } from "react-router-dom";
 import { GalleryService } from "@/lib/gallery";
 import ShowcaseViewer from "@/components/ShowcaseViewer";
+import ComingSoonView from "@/components/ComingSoonView";
 import { Discipline, MobiliarioType } from "@/data/Gallery";
+import { comingSoonCategories } from "@/data/ComingSoon";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const Category = () => {
@@ -10,17 +12,28 @@ const Category = () => {
   const isMobile = useIsMobile();
   
   // 1. Resolve current context from parameters or URL path
-  let currentDiscipline = discipline as Discipline | undefined;
+  let currentDiscipline = discipline as string | undefined;
   let currentType = type as MobiliarioType | undefined;
   
+  // Extract path identifier
+  const pathSegment = location.pathname.split("/").pop()?.toLowerCase() || "";
+  
+  // Check if it's an inactive "Coming Soon" category
+  const activeComingSoonKey = Object.keys(comingSoonCategories).find(
+    (key) => key === currentDiscipline || key === pathSegment
+  );
+
+  if (activeComingSoonKey) {
+    return <ComingSoonView category={comingSoonCategories[activeComingSoonKey]} />;
+  }
+
   // If no params, try to infer from legacy paths (e.g. /arquitectura)
   if (!currentDiscipline && !currentType) {
-    const path = location.pathname.split("/").pop();
-    if (path === "arquitectura") currentDiscipline = "arquitectura";
-    if (path === "interiorismo") currentDiscipline = "interiorismo";
-    if (path === "coleccion") { currentDiscipline = "mobiliario"; currentType = "coleccion"; }
-    if (path === "serie") { currentDiscipline = "mobiliario"; currentType = "series"; }
-    if (path === "piezas") { currentDiscipline = "mobiliario"; currentType = "piezas"; }
+    if (pathSegment === "arquitectura") currentDiscipline = "arquitectura";
+    if (pathSegment === "interiorismo") currentDiscipline = "interiorismo";
+    if (pathSegment === "coleccion") { currentDiscipline = "mobiliario"; currentType = "coleccion"; }
+    if (pathSegment === "serie") { currentDiscipline = "mobiliario"; currentType = "series"; }
+    if (pathSegment === "piezas") { currentDiscipline = "mobiliario"; currentType = "piezas"; }
   }
 
   // Handle /showcase/mobiliario/:type where discipline is missing in params

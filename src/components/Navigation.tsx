@@ -6,23 +6,24 @@ import CurrencyDropdown from "./CurrencyDropdown";
 import NewsletterModal from "./NewsletterModal";
 
 const navLinks = [
-  { label: "Arquitectura", href: "#arquitectura" },
-  { label: "Interiorismo", href: "#interiorismo" },
+  { label: "Arquitectura", href: "/showcase/arquitectura" },
+  { label: "Interiorismo", href: "/showcase/interiorismo" },
   { label: "Mobiliario", href: "#mobiliario" },
-  { label: "Iluminación", href: "#iluminacion" },
-  { label: "Esenciales", href: "#esenciales" },
-  { label: "Joyería", href: "#joyeria" },
-  { label: "Vestuario", href: "#vestuario" },
-  { label: "Accesorios", href: "#accesorios" },
+  { label: "Iluminación", href: "/showcase/iluminacion" },
+  { label: "Esenciales", href: "/showcase/esenciales" },
+  { label: "Joyería", href: "/showcase/joyeria" },
+  { label: "Vestuario", href: "/showcase/vestuario" },
+  { label: "Accesorios", href: "/showcase/accesorios" },
   { label: "Nosotros", href: "#nosotros" },
   { label: "Contacto", href: "#contacto" }
 ];
 
 type NavigationProps = {
   position?: "fixed" | "absolute";
+  hideIcons?: boolean;
 };
 
-const Navigation = ({ position = "fixed" }: NavigationProps) => {
+const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -75,52 +76,58 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
           {/* Left side - Hamburger */}
           <div className="flex items-center gap-4 order-1">
             {/* Hamburger always left */}
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="relative z-50 p-2"
-              aria-label="Toggle menu"
-            >
-              {isMenuOpen ? (
-                <X className="w-6 h-6 text-foreground" />
-              ) : (
-                <Menu className="w-6 h-6 text-foreground" />
-              )}
-            </button>
+            {!hideIcons && (
+              <button
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="relative z-50 p-2"
+                aria-label="Toggle menu"
+              >
+                {isMenuOpen ? (
+                  <X className="w-6 h-6 text-foreground" />
+                ) : (
+                  <Menu className="w-6 h-6 text-foreground" />
+                )}
+              </button>
+            )}
           </div>
 
           {/* Desktop Navigation - Right side elements like Studio Jadad */}
-          <div className="hidden md:flex items-center gap-2 order-2 ml-auto">
-            {/* Currency selector */}
-            {/* <CurrencyDropdown /> */}
+          {!hideIcons && (
+            <div className="hidden md:flex items-center gap-2 order-2 ml-auto">
+              {/* Currency selector */}
+              {/* <CurrencyDropdown /> */}
 
-            {/* User/Login icon */}
-            <button
-              onClick={() => setOpenModal(true)}
-              className="p-2 hover:opacity-60 transition-opacity"
-              aria-label="User account"
-            >
-              <User className="w-5 h-5 text-foreground" />
-            </button>
+              {/* User/Login icon */}
+              <button
+                onClick={() => setOpenModal(true)}
+                className="p-2 hover:opacity-60 transition-opacity"
+                aria-label="User account"
+              >
+                <User className="w-5 h-5 text-foreground" />
+              </button>
 
-            {/* Shopping cart icon */}
-            <button
-              className="p-2 hover:opacity-60 transition-opacity"
-              aria-label="Shopping cart"
-            >
-              <img src="/bag.svg" alt="Carrito" className="w-12 h-12" />
-            </button>
-          </div>
+              {/* Shopping cart icon */}
+              <button
+                className="p-2 hover:opacity-60 transition-opacity"
+                aria-label="Shopping cart"
+              >
+                <img src="/bag.svg" alt="Carrito" className="w-12 h-12" />
+              </button>
+            </div>
+          )}
 
           {/* Right side icons - mobile only */}
-          <div className="flex md:hidden items-center gap-4 order-3">
-            {/* Shopping bag - mobile */}
-            <button
-              className="relative z-50 p-2"
-              aria-label="Shopping cart"
-            >
-              <img src="/bag.svg" alt="Carrito" className="w-14 h-14" />
-            </button>
-          </div>
+          {!hideIcons && (
+            <div className="flex md:hidden items-center gap-4 order-3">
+              {/* Shopping bag - mobile */}
+              <button
+                className="relative z-50 p-2"
+                aria-label="Shopping cart"
+              >
+                <img src="/bag.svg" alt="Carrito" className="w-14 h-14" />
+              </button>
+            </div>
+          )}
 
           {/* Spacer removed - ml-auto handles alignment */}
         </nav>
@@ -214,13 +221,16 @@ const Navigation = ({ position = "fixed" }: NavigationProps) => {
                             {link.label}
                           </button>
                         ) : (
-                          <a
-                            href={link.href}
-                            onClick={() => setIsMenuOpen(false)}
-                            className="block px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setIsMenuOpen(false);
+                              navigate(link.href);
+                            }}
+                            className="block w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
                           >
                             {link.label}
-                          </a>
+                          </button>
                         )}
                       </motion.li>
                     ))}
