@@ -84,6 +84,12 @@
     scroll-behavior: smooth;
   }
 
+  @media (min-width: 768px) {
+    html {
+      scroll-snap-type: y mandatory;
+    }
+  }
+
   body {
     @apply bg-background text-foreground font-sans antialiased;
   }

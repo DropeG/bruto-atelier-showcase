@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   HeroSection,
   VideoSection,
@@ -8,6 +8,7 @@ import {
   WhatsAppButton,
   DiscountButton,
 } from "@/components";
+import { SingleVideoBanner } from "@/components/VideoSection";
 import { useScroll } from "@/contexts/ScrollContext";
 import { blurPlaceholders } from "@/lib/blur-placeholders";
 import { GalleryService } from "@/lib/gallery";
@@ -27,7 +28,6 @@ const Index = () => {
   const [openModal, setOpenModal] = useState(false);
   const [openNosotros, setOpenNosotros] = useState(false);
   const [showDiscount, setShowDiscount] = useState(true);
-  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const { getSectionId, scrollToSection } = useScroll();
 
   // Helper to get URL for an item ID safely
@@ -40,122 +40,124 @@ const Index = () => {
   useEffect(() => {
     console.log("[Index] Componente montado, intentando restaurar sección");
     const sectionId = getSectionId();
-    if (sectionId && scrollContainerRef.current) {
-      scrollToSection(sectionId, scrollContainerRef.current);
+    if (sectionId) {
+      scrollToSection(sectionId);
     }
   }, [getSectionId, scrollToSection]);
 
   useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) {
-      return;
-    }
-
     const handleScroll = () => {
-      setShowDiscount(container.scrollTop < 50);
+      setShowDiscount(window.scrollY < 50);
     };
 
     handleScroll();
-    container.addEventListener("scroll", handleScroll, { passive: true });
-    return () => container.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const isDemoMode = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("demoMode") === "true";
 
   return (
     <div className="relative">
-      <NewsletterModal openModal={openModal} onClose={() => setOpenModal(false)} />
-      <NosotrosModal isOpen={openNosotros} onClose={() => setOpenNosotros(false)} />
-      <WhatsAppButton />
-      <DiscountButton onClick={() => setOpenModal(true)} isVisible={showDiscount} />
+      {!isDemoMode && <NewsletterModal openModal={openModal} onClose={() => setOpenModal(false)} />}
+      {!isDemoMode && <NosotrosModal isOpen={openNosotros} onClose={() => setOpenNosotros(false)} />}
+      {!isDemoMode && <WhatsAppButton />}
+      {!isDemoMode && <DiscountButton onClick={() => setOpenModal(true)} isVisible={showDiscount} />}
 
-      {/* Scroll Snap Container */}
-      <div
-        ref={scrollContainerRef}
-        className="h-[100svh] md:h-screen overflow-y-scroll md:snap-y md:snap-mandatory"
-        id="coleccion"
-      >
+      {/* Main Collection Container */}
+      <div id="coleccion" className="w-full relative">
         {/* Section 1: Hero */}
         <div id="section-hero">
           <HeroSection onOpenNosotros={() => setOpenNosotros(true)} />
         </div>
 
-        {/* Section 2: Videos */}
+        {/* Section 2: Desktop Video Block */}
         <div id="section-video">
           <VideoSection />
         </div>
 
-         {/* ImageRow 1: Cocina y Mueble Azul */}
-         <div id="section-row-1">
-           <ImageRow
-             leftSrc={imageHome1}
-             leftAlt="Cocina"
-             leftHref={getUrl(1)}
-             leftIpadPosition="0% center"
-             leftBlurDataUrl={blurPlaceholders.imageHome1}
-             rightSrc={imageHome2}
-             rightAlt="Mueble Azul"
-             rightHref={getUrl(2)}
-             rightBlurDataUrl={blurPlaceholders.imageHome2}
-           />
-         </div>
+        {/* ImageRow 1: Cocina y Mueble Azul */}
+        <div id="section-row-1">
+          <ImageRow
+            leftSrc={imageHome1}
+            leftAlt="Cocina"
+            leftHref={getUrl(1)}
+            leftIpadPosition="0% center"
+            leftBlurDataUrl={blurPlaceholders.imageHome1}
+            rightSrc={imageHome2}
+            rightAlt="Mueble Azul"
+            rightHref={getUrl(2)}
+            rightBlurDataUrl={blurPlaceholders.imageHome2}
+          />
+        </div>
 
-         {/* ImageRow 2: Comedor y Paisaje */}
-         <div id="section-row-2">
-           <ImageRow
-             leftSrc={imageHome3}
-             leftAlt="Comedor"
-             leftHref={getUrl(3)}
-             leftIpadPosition="34% center"
-             leftBlurDataUrl={blurPlaceholders.imageHome3}
-             rightSrc={imageHome4}
-             rightAlt="Paisaje"
-             rightHref={getUrl(4)}
-             rightBlurDataUrl={blurPlaceholders.imageHome4}
-           />
-         </div>
+        {/* Intercalated Mobile Video 1 */}
+        <SingleVideoBanner src="/videos/video1.mp4" label="ATELIER • 01" />
 
-         {/* ImageRow 3: Casita Árbol y Morar */}
-         <div id="section-row-3">
-           <ImageRow
-             leftSrc={imageHome5}
-             leftAlt="Casita Árbol"
-             leftHref={getUrl(5)}
-             leftBlurDataUrl={blurPlaceholders.imageHome5}
-             rightSrc={imageHome6}
-             rightAlt="Morar"
-             rightHref={getUrl(6)}
-             rightIpadPosition="30% center"
-             rightBlurDataUrl={blurPlaceholders.imageHome6}
-           />
-         </div>
+        {/* ImageRow 2: Comedor y Paisaje */}
+        <div id="section-row-2">
+          <ImageRow
+            leftSrc={imageHome3}
+            leftAlt="Comedor"
+            leftHref={getUrl(3)}
+            leftIpadPosition="34% center"
+            leftBlurDataUrl={blurPlaceholders.imageHome3}
+            rightSrc={imageHome4}
+            rightAlt="Paisaje"
+            rightHref={getUrl(4)}
+            rightBlurDataUrl={blurPlaceholders.imageHome4}
+          />
+        </div>
 
-         {/* ImageRow 4: Banqueta y Flores */}
-         <div id="section-row-4">
-           <ImageRow
-             leftSrc={imageHome7}
-             leftAlt="Banqueta"
-             leftHref={getUrl(7)}
-             leftIpadPosition="50% center"
-             leftBlurDataUrl={blurPlaceholders.imageHome7}
-             rightSrc={imageHome8}
-             rightAlt="Flores"
-             rightHref={getUrl(8)}
-             rightBlurDataUrl={blurPlaceholders.imageHome8}
-           />
-         </div>
+        {/* ImageRow 3: Casita Árbol y Morar */}
+        <div id="section-row-3">
+          <ImageRow
+            leftSrc={imageHome5}
+            leftAlt="Casita Árbol"
+            leftHref={getUrl(5)}
+            leftBlurDataUrl={blurPlaceholders.imageHome5}
+            rightSrc={imageHome6}
+            rightAlt="Morar"
+            rightHref={getUrl(6)}
+            rightIpadPosition="30% center"
+            rightBlurDataUrl={blurPlaceholders.imageHome6}
+          />
+        </div>
 
-         {/* ImageRow 5: Mueble Rojo y Cabina */}
-         <div id="section-row-5">
-           <ImageRow
-             leftSrc={imageHome9}  
-             leftAlt="Mueble Rojo"
-             leftHref={getUrl(9)}
-             leftBlurDataUrl={blurPlaceholders.imageHome9}
-             rightSrc={imageHome10}
-             rightAlt="Cabina"
-             rightHref={getUrl(10)}
-             rightBlurDataUrl={blurPlaceholders.imageHome10}
-           />
-         </div>
+        {/* Intercalated Mobile Video 2 */}
+        <SingleVideoBanner src="/videos/video2.mp4" label="PROCESO • 02" />
+
+        {/* ImageRow 4: Banqueta y Flores */}
+        <div id="section-row-4">
+          <ImageRow
+            leftSrc={imageHome7}
+            leftAlt="Banqueta"
+            leftHref={getUrl(7)}
+            leftIpadPosition="50% center"
+            leftBlurDataUrl={blurPlaceholders.imageHome7}
+            rightSrc={imageHome8}
+            rightAlt="Flores"
+            rightHref={getUrl(8)}
+            rightBlurDataUrl={blurPlaceholders.imageHome8}
+          />
+        </div>
+
+        {/* Intercalated Mobile Video 3 */}
+        <SingleVideoBanner src="/videos/video3.mp4" label="ARQUITECTURA • 03" />
+
+        {/* ImageRow 5: Mueble Rojo y Cabina */}
+        <div id="section-row-5">
+          <ImageRow
+            leftSrc={imageHome9}  
+            leftAlt="Mueble Rojo"
+            leftHref={getUrl(9)}
+            leftBlurDataUrl={blurPlaceholders.imageHome9}
+            rightSrc={imageHome10}
+            rightAlt="Cabina"
+            rightHref={getUrl(10)}
+            rightBlurDataUrl={blurPlaceholders.imageHome10}
+          />
+        </div>
 
         {/* Footer */}
         <Footer />

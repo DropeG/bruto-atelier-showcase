@@ -3,7 +3,7 @@ import React, { createContext, useContext, useCallback } from "react";
 type ScrollContextType = {
   saveSectionId: (sectionId: string) => void;
   getSectionId: () => string | null;
-  scrollToSection: (sectionId: string, container: HTMLDivElement | null) => void;
+  scrollToSection: (sectionId: string, container?: HTMLElement | null) => void;
 };
 
 const ScrollContext = createContext<ScrollContextType | undefined>(undefined);
@@ -23,14 +23,11 @@ export const ScrollProvider: React.FC<{ children: React.ReactNode }> = ({
   }, []);
 
   const scrollToSection = useCallback(
-    (sectionId: string, container: HTMLDivElement | null) => {
-      if (!container) {
-        console.warn("[ScrollContext] Container no disponible");
-        return;
-      }
+    (sectionId: string, container?: HTMLElement | null) => {
+      const element = container
+        ? container.querySelector(`#${sectionId}`)
+        : document.getElementById(sectionId);
 
-      // Buscar el elemento con el ID dentro del contenedor
-      const element = container.querySelector(`#${sectionId}`);
       if (!element) {
         console.warn(`[ScrollContext] Sección con ID "${sectionId}" no encontrada`);
         return;

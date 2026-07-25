@@ -15,6 +15,9 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({ openModal, onClose })
 
   // Core modal logic using native HTMLDialogElement
   useEffect(() => {
+    const isDemoMode = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("demoMode") === "true";
+    if (isDemoMode) return;
+
     const dialog = dialogRef.current;
     if (!dialog) return;
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 interface LazyImageProps {
   src: string;
@@ -18,26 +18,22 @@ const LazyImage: React.FC<LazyImageProps> = ({
   fetchPriority = "low",
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [imageSrc, setImageSrc] = useState(blurDataUrl || "");
 
-  useEffect(() => {
-    const img = new Image();
-    img.onload = () => {
-      setImageSrc(src);
-      setIsLoaded(true);
-      onLoad?.();
-    };
-    img.onerror = () => {
-      setImageSrc(src); // Fallback al original si falla
-      setIsLoaded(true);
-    };
-    img.src = src;
-  }, [src, onLoad]);
+  const handleImageLoad = () => {
+    setIsLoaded(true);
+    onLoad?.();
+  };
+
+  const handleImageError = () => {
+    setIsLoaded(true);
+  };
 
   return (
     <img
-      src={imageSrc}
+      src={src}
       alt={alt}
+      onLoad={handleImageLoad}
+      onError={handleImageError}
       className={`transition-opacity duration-500 ${
         isLoaded ? "opacity-100" : "opacity-75"
       } ${className}`}
@@ -45,6 +41,8 @@ const LazyImage: React.FC<LazyImageProps> = ({
       decoding="async"
       fetchPriority={fetchPriority}
       style={{
+        backgroundImage: blurDataUrl && !isLoaded ? `url(${blurDataUrl})` : undefined,
+        backgroundSize: "cover",
         filter: isLoaded ? "blur(0px)" : "blur(10px)",
         transitionProperty: "filter, opacity",
       }}
