@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   HeroSection,
   VideoSection,
@@ -36,23 +36,34 @@ const Index = () => {
     return item ? GalleryService.getItemUrl(item) : "#";
   };
 
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+
   // Restaurar scroll a la sección guardada al montar el componente
   useEffect(() => {
     console.log("[Index] Componente montado, intentando restaurar sección");
     const sectionId = getSectionId();
     if (sectionId) {
-      scrollToSection(sectionId);
+      scrollToSection(sectionId, scrollContainerRef.current);
     }
   }, [getSectionId, scrollToSection]);
 
   useEffect(() => {
     const handleScroll = () => {
-      setShowDiscount(window.scrollY < 50);
+      const container = scrollContainerRef.current;
+      const scrollPos = container ? container.scrollTop : window.scrollY;
+      setShowDiscount(scrollPos < 50);
     };
 
     handleScroll();
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener("scroll", handleScroll, { passive: true });
+    }
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      if (container) container.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   const isDemoMode = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("demoMode") === "true";
@@ -65,7 +76,11 @@ const Index = () => {
       {!isDemoMode && <DiscountButton onClick={() => setOpenModal(true)} isVisible={showDiscount} />}
 
       {/* Main Collection Container */}
-      <div id="coleccion" className="w-full relative">
+      <div
+        ref={scrollContainerRef}
+        className="h-[100svh] md:h-screen overflow-y-scroll md:snap-y md:snap-mandatory w-full relative"
+        id="coleccion"
+      >
         {/* Section 1: Hero */}
         <div id="section-hero">
           <HeroSection onOpenNosotros={() => setOpenNosotros(true)} />
