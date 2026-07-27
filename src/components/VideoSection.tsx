@@ -2,9 +2,13 @@ import { useEffect, useRef } from "react";
 
 export const SingleVideoBanner = ({
   src,
+  mobileSrc,
+  poster,
   label,
 }: {
   src: string;
+  mobileSrc?: string;
+  poster?: string;
   label?: string;
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -53,12 +57,13 @@ export const SingleVideoBanner = ({
         loop
         muted
         playsInline
+        poster={poster}
         // @ts-expect-error - Atributo legacy requerido para iOS Safari auto-play sin botón de play
         webkit-playsinline="true"
         preload="auto"
         className="w-full h-full object-cover block"
       >
-        <source src={src} type="video/mp4" />
+        <source src={mobileSrc || src} type="video/mp4" />
         Tu navegador no soporta video HTML5
       </video>
 

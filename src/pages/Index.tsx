@@ -45,6 +45,9 @@ const Index = () => {
     if (sectionId) {
       scrollToSection(sectionId, scrollContainerRef.current);
     }
+    // Precargar el poster del primer video en móviles para 0ms latency
+    const posterImg = new Image();
+    posterImg.src = "/videos/video1-poster.webp";
   }, [getSectionId, scrollToSection]);
 
   useEffect(() => {
@@ -107,7 +110,12 @@ const Index = () => {
         </div>
 
         {/* Intercalated Mobile Video 1 */}
-        <SingleVideoBanner src="/videos/video1.mp4" label="ATELIER • 01" />
+        <SingleVideoBanner
+          src="/videos/video1.mp4"
+          mobileSrc="/videos/video1-mobile.mp4"
+          poster="/videos/video1-poster.webp"
+          label="ATELIER • 01"
+        />
 
         {/* ImageRow 2: Comedor y Paisaje */}
         <div id="section-row-2">
@@ -140,7 +148,12 @@ const Index = () => {
         </div>
 
         {/* Intercalated Mobile Video 2 */}
-        <SingleVideoBanner src="/videos/video2.mp4" label="PROCESO • 02" />
+        <SingleVideoBanner
+          src="/videos/video2.mp4"
+          mobileSrc="/videos/video2-mobile.mp4"
+          poster="/videos/video2-poster.webp"
+          label="PROCESO • 02"
+        />
 
         {/* ImageRow 4: Banqueta y Flores */}
         <div id="section-row-4">
@@ -158,7 +171,12 @@ const Index = () => {
         </div>
 
         {/* Intercalated Mobile Video 3 */}
-        <SingleVideoBanner src="/videos/video3.mp4" label="ARQUITECTURA • 03" />
+        <SingleVideoBanner
+          src="/videos/video3.mp4"
+          mobileSrc="/videos/video3-mobile.mp4"
+          poster="/videos/video3-poster.webp"
+          label="ARQUITECTURA • 03"
+        />
 
         {/* ImageRow 5: Mueble Rojo y Cabina */}
         <div id="section-row-5">
