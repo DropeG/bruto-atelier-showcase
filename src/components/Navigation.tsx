@@ -28,7 +28,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
-  const [activePanel, setActivePanel] = useState<"mobiliario" | "nosotros" | "contacto" | null>(null);
+  const [activePanel, setActivePanel] = useState<"mobiliario" | "nosotros" | "contacto" | "vestuario" | null>(null);
   const [contactMessage, setContactMessage] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
@@ -220,6 +220,21 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                           >
                             {link.label}
                           </button>
+                        ) : link.label === "Vestuario" ? (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setActivePanel((prev) =>
+                                prev === "vestuario" ? null : "vestuario"
+                              )
+                            }
+                            className="w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors flex items-center justify-between"
+                          >
+                            <span>{link.label}</span>
+                            <span className="text-[9px] uppercase tracking-wider text-white/80 bg-white/20 px-1.5 py-0.5 rounded font-sans">
+                              Coming Soon
+                            </span>
+                          </button>
                         ) : (
                           <button
                             type="button"
@@ -249,7 +264,9 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                           ? "w-[200px] bg-[#9C7B66] text-white py-3 px-4 self-start"
                           : activePanel === "contacto"
                             ? "w-fit bg-[#9C7B66] text-white p-6 font-serif"
-                            : "w-[800px] bg-[#9C7B66] text-white p-6 md:max-lg:bg-transparent md:max-lg:p-0"
+                            : activePanel === "vestuario"
+                              ? "w-[320px] bg-[#9C7B66] text-white p-6 font-serif"
+                              : "w-[800px] bg-[#9C7B66] text-white p-6 md:max-lg:bg-transparent md:max-lg:p-0"
                       }
                     >
                       {activePanel === "mobiliario" ? (
@@ -361,7 +378,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                             </div>
                           </div>
                         </>
-                      ) : (
+                      ) : activePanel === "contacto" ? (
                         <>
                           <div className="flex items-start">
                             <div className="w-[320px] max-w-full md:max-lg:w-[250px] font-serif">
@@ -403,14 +420,35 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                             </div>
                           </div>
                         </>
-                      )}
+                      ) : activePanel === "vestuario" ? (
+                        <>
+                          <div className="w-[280px] max-w-full font-serif space-y-3">
+                            <div className="text-[10px] tracking-[0.25em] uppercase text-white/70 font-sans font-medium">
+                              COMING SOON • BRUTO ATELIER
+                            </div>
+                            <div className="text-xl font-semibold tracking-wide">
+                              VESTUARIO
+                            </div>
+                            <div className="relative aspect-[4/5] w-full max-w-[220px] rounded-md overflow-hidden border border-white/20 shadow-md my-2">
+                              <img
+                                src="/images/vestuario/vestuario2.webp"
+                                alt="Vestuario Preview"
+                                className="w-full h-full object-cover object-center"
+                              />
+                            </div>
+                            <div className="pt-1 text-[10px] font-sans tracking-widest text-white/60 uppercase">
+                              Disponible Próximamente · 2026
+                            </div>
+                          </div>
+                        </>
+                      ) : null}
                     </motion.div>
                   )}
                 </AnimatePresence>
               </div>
 
               <div className="md:hidden w-[300px] bg-[#9C7B66] text-white p-6 font-serif">
-                {activePanel === "nosotros" || activePanel === "contacto" ? (
+                {activePanel === "nosotros" || activePanel === "contacto" || activePanel === "vestuario" ? (
                   <div>
                     <div className="relative flex items-center justify-center">
                       <button
@@ -422,7 +460,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                         <ArrowLeft className="w-4 h-4" />
                       </button>
                       <div className="text-xs tracking-wide uppercase">
-                        {activePanel === "nosotros" ? "Nosotros" : "Contacto"}
+                        {activePanel === "nosotros" ? "Nosotros" : activePanel === "contacto" ? "Contacto" : "Coming Soon"}
                       </div>
                     </div>
                     <div className="mt-5">
@@ -453,7 +491,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                             </div>
                           </div>
                         </>
-                      ) : (
+                      ) : activePanel === "contacto" ? (
                         <>
                           <div className="space-y-4 text-sm leading-relaxed">
                             <div className="text-lg font-semibold">Hablemos</div>
@@ -481,6 +519,25 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                 Enviar
                               </button>
                             </form>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div className="space-y-3 text-sm leading-relaxed font-serif">
+                            <div className="text-[9px] tracking-[0.25em] uppercase text-white/70 font-sans">
+                              COMING SOON • BRUTO ATELIER
+                            </div>
+                            <div className="text-lg font-semibold">VESTUARIO</div>
+                            <div className="relative aspect-[4/5] w-[180px] rounded-md overflow-hidden border border-white/20 shadow-md my-2 mx-auto">
+                              <img
+                                src="/images/vestuario/vestuario2.webp"
+                                alt="Vestuario Mobile Preview"
+                                className="w-full h-full object-cover object-center"
+                              />
+                            </div>
+                            <div className="text-[10px] font-sans tracking-widest text-white/60 uppercase text-center pt-1">
+                              Disponible Próximamente · 2026
+                            </div>
                           </div>
                         </>
                       )}
@@ -593,6 +650,17 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                             className="block w-full text-left px-2 py-1 -mx-2 transition-colors focus:outline-none active:bg-transparent"
                           >
                             {link.label}
+                          </button>
+                        ) : link.label === "Vestuario" ? (
+                          <button
+                            type="button"
+                            onClick={() => setActivePanel("vestuario")}
+                            className="w-full text-left px-2 py-1 -mx-2 transition-colors focus:outline-none active:bg-transparent flex items-center justify-between"
+                          >
+                            <span>{link.label}</span>
+                            <span className="text-[9px] uppercase tracking-wider text-white/80 bg-white/20 px-1.5 py-0.5 rounded font-sans">
+                              Coming Soon
+                            </span>
                           </button>
                         ) : (
                           <a

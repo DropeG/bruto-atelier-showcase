@@ -36,6 +36,11 @@ const App = () => (
               <Route path="/coleccion" element={<Category />} />
               <Route path="/serie" element={<Category />} />
               <Route path="/piezas" element={<Category />} />
+              <Route path="/vestuario" element={<Category />} />
+              <Route path="/iluminacion" element={<Category />} />
+              <Route path="/esenciales" element={<Category />} />
+              <Route path="/joyeria" element={<Category />} />
+              <Route path="/accesorios" element={<Category />} />
               <Route path="/categoria/:category/:title/:id" element={<Category />} />
               
               <Route path="/*" element={<NotFound />} />

@@ -39,12 +39,6 @@ export const comingSoonCategories: Record<string, ComingSoonCategory> = {
     subtitle: "Textiles & arquitectura corporal",
     description: "Diseños de vestuario atemporal en lino y fibras naturales de confección delicada. Próximamente.",
     bgImage: "/images/vestuario/vestuario2.webp",
-    images: [
-      "/images/vestuario/vestuario2.webp",
-      "/images/vestuario/vestuario1.webp",
-      "/images/vestuario/vestuario4.webp",
-      "/images/vestuario/vestuario3.webp",
-    ],
   },
   accesorios: {
     id: "accesorios",
