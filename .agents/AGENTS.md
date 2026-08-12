@@ -57,13 +57,6 @@ El diseño y comportamiento visual del proyecto se inspiran en las siguientes pl
 
 ---
 
-## 🔧 Control de Versiones (Jujutsu - `jj`)
-*   **Herramienta:** El usuario prefiere usar **Jujutsu (`jj`)** para el control de versiones local (compatible con Git).
-*   **Enfoque de Aprendizaje:** El agente debe asistir al usuario guiándolo en el uso de `jj`. En lugar de asumir o proponer comandos Git clásicos, el agente explicará las equivalencias en `jj` (ej. `jj status`, `jj log`, `jj diff`, `jj new`) y reforzará conceptos clave de Jujutsu (como el commit de trabajo implícito y el historial libre de conflictos antes de sincronizar).
-*   **Restricción de automatización:** Ningún comando de control de versiones (`git` o `jj`) se ejecutará o sugerirá en un flujo automático sin aprobación explícita y directa, respetando la regla global del usuario.
-
----
-
 ## 🛍️ Conexión e Infraestructura de Shopify Headless (Semana 1 Completada)
 
 1.  **Tienda Activa:**
