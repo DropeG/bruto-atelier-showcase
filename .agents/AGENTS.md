@@ -62,3 +62,26 @@ El diseño y comportamiento visual del proyecto se inspiran en las siguientes pl
 *   **Enfoque de Aprendizaje:** El agente debe asistir al usuario guiándolo en el uso de `jj`. En lugar de asumir o proponer comandos Git clásicos, el agente explicará las equivalencias en `jj` (ej. `jj status`, `jj log`, `jj diff`, `jj new`) y reforzará conceptos clave de Jujutsu (como el commit de trabajo implícito y el historial libre de conflictos antes de sincronizar).
 *   **Restricción de automatización:** Ningún comando de control de versiones (`git` o `jj`) se ejecutará o sugerirá en un flujo automático sin aprobación explícita y directa, respetando la regla global del usuario.
 
+---
+
+## 🛍️ Conexión e Infraestructura de Shopify Headless (Semana 1 Completada)
+
+1.  **Tienda Activa:**
+    *   **Dominio de Desarrollo:** `bruto-atelier-spzrd2zq.myshopify.com`
+    *   **Moneda Base:** CLP (Peso Chileno).
+2.  **Método de Integración (Importante para evitar redirecciones al Dev Dashboard):**
+    *   Se utiliza una **App Personalizada Heredada (Legacy Custom App)** creada directamente dentro del Admin de la Tienda (`Configuración > Aplicaciones y canales de venta > Desarrollar aplicaciones > Permitir desarrollo de apps personalizadas heredadas`).
+    *   *Nota:* No usar el botón "Desarrollar apps en Dev Dashboard" para evitar redirigir a la interfaz de Partners de distribución pública.
+3.  **Variables de Entorno ([.env.local](file:///Users/pedro/Documents/Pegas/bruto-atelier-showcase/.env.local)):**
+    *   `VITE_SHOPIFY_STORE_DOMAIN=bruto-atelier-spzrd2zq.myshopify.com`
+    *   `VITE_SHOPIFY_STOREFRONT_TOKEN`: Token de acceso a la Storefront API configurado.
+    *   `VITE_SHOPIFY_API_VERSION=2024-07`
+4.  **Permisos de la Storefront API Activados:**
+    *   *Productos:* `unauthenticated_read_product_listings`, `unauthenticated_read_product_inventory`, `unauthenticated_read_product_pickup_locations`, `unauthenticated_read_product_tags`.
+    *   *Checkout/Pagos:* `unauthenticated_write_checkouts`, `unauthenticated_read_checkouts`.
+5.  **Verificación y Resiliencia en Código:**
+    *   El cliente (`src/lib/shopify/client.ts`) realiza fetch directo a la Storefront GraphQL API.
+    *   Si faltan credenciales o falla la red, el sistema activa automáticamente un **Fallback/Mock Mode** elegante (`src/lib/shopify/mockData.ts`) para que el sitio nunca se rompa.
+    *   Indicador de estado visual disponible en la app a través del widget [`ShopifyStatusIndicator.tsx`](file:///Users/pedro/Documents/Pegas/bruto-atelier-showcase/src/components/ShopifyStatusIndicator.tsx) (muestra `Shopify: Live API` en verde en el entorno dev).
+
+
