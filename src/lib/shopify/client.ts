@@ -3,11 +3,16 @@ import {
   ShopInfo,
   ShopifyProduct,
   ShopifyConnectionStatus,
+  ShopifyCart,
 } from '@/types/shopify';
 import {
   GET_SHOP_INFO_QUERY,
   GET_PRODUCTS_QUERY,
   GET_PRODUCT_BY_HANDLE_QUERY,
+  CART_CREATE_MUTATION,
+  CART_LINES_ADD_MUTATION,
+  CART_LINES_UPDATE_MUTATION,
+  CART_LINES_REMOVE_MUTATION,
 } from './queries';
 import { MOCK_SHOP_INFO, MOCK_PRODUCTS } from './mockData';
 
@@ -143,5 +148,68 @@ export async function getShopifyProductByHandle(
   } catch {
     const found = MOCK_PRODUCTS.find((p) => p.handle === handle) || null;
     return { product: found, isLive: false };
+  }
+}
+
+// --- Cart API Methods ---
+
+export async function createCart(): Promise<ShopifyCart | null> {
+  if (!isShopifyConfigured()) return null;
+  try {
+    const data = await shopifyFetch<{ cartCreate: { cart: ShopifyCart } }>({
+      query: CART_CREATE_MUTATION,
+      variables: { input: {} },
+    });
+    return data.cartCreate?.cart || null;
+  } catch {
+    return null;
+  }
+}
+
+export async function addLinesToCart(
+  cartId: string,
+  lines: Array<{ merchandiseId: string; quantity: number }>
+): Promise<ShopifyCart | null> {
+  if (!isShopifyConfigured()) return null;
+  try {
+    const data = await shopifyFetch<{ cartLinesAdd: { cart: ShopifyCart } }>({
+      query: CART_LINES_ADD_MUTATION,
+      variables: { cartId, lines },
+    });
+    return data.cartLinesAdd?.cart || null;
+  } catch {
+    return null;
+  }
+}
+
+export async function updateCartLines(
+  cartId: string,
+  lines: Array<{ id: string; quantity: number }>
+): Promise<ShopifyCart | null> {
+  if (!isShopifyConfigured()) return null;
+  try {
+    const data = await shopifyFetch<{ cartLinesUpdate: { cart: ShopifyCart } }>({
+      query: CART_LINES_UPDATE_MUTATION,
+      variables: { cartId, lines },
+    });
+    return data.cartLinesUpdate?.cart || null;
+  } catch {
+    return null;
+  }
+}
+
+export async function removeCartLines(
+  cartId: string,
+  lineIds: string[]
+): Promise<ShopifyCart | null> {
+  if (!isShopifyConfigured()) return null;
+  try {
+    const data = await shopifyFetch<{ cartLinesRemove: { cart: ShopifyCart } }>({
+      query: CART_LINES_REMOVE_MUTATION,
+      variables: { cartId, lineIds },
+    });
+    return data.cartLinesRemove?.cart || null;
+  } catch {
+    return null;
   }
 }

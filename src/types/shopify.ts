@@ -93,3 +93,31 @@ export interface ShopifyConnectionStatus {
   shopInfo?: ShopInfo | null;
   error?: string | null;
 }
+
+export interface ShopifyCartLine {
+  id: string;
+  quantity: number;
+  merchandise: {
+    id: string;
+    title: string;
+    price: ShopifyMoney;
+    product: {
+      title: string;
+      handle: string;
+    };
+    image?: ShopifyImage | null;
+  };
+}
+
+export interface ShopifyCart {
+  id: string;
+  checkoutUrl: string;
+  totalQuantity: number;
+  cost: {
+    totalAmount: ShopifyMoney;
+    subtotalAmount: ShopifyMoney;
+  };
+  lines: {
+    edges: Array<{ node: ShopifyCartLine }>;
+  };
+}
