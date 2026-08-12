@@ -28,10 +28,6 @@ export const comingSoonCategories: Record<string, ComingSoonCategory> = {
     subtitle: "Esculturas portables & piedras orgánicas",
     description: "Piezas de autor elaboradas con ámbar, hueso y metales nobles de confección artesanal. Próximamente.",
     bgImage: "/images/joyeria/joyeria4.webp",
-    images: [
-      "/images/joyeria/joyeria4.webp",
-      "/images/joyeria/joyeria1.webp",
-    ],
   },
   vestuario: {
     id: "vestuario",
