@@ -222,12 +222,25 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                             {link.label}
                           </button>
                         ) : (link.href.split("/").pop()?.toLowerCase() && comingSoonCategories[link.href.split("/").pop()!.toLowerCase()]) ? (
-                          <div className="w-full text-left px-2 py-1 -mx-2 opacity-80 flex items-center justify-between cursor-default select-none">
-                            <span>{link.label}</span>
-                            <span className="text-[9px] uppercase tracking-wider text-white/80 bg-white/20 px-1.5 py-0.5 rounded font-sans">
-                              Coming Soon
-                            </span>
-                          </div>
+                          (() => {
+                            const csKey = link.href.split("/").pop()!.toLowerCase();
+                            return (
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setActivePanel((prev) =>
+                                    prev === csKey ? null : csKey
+                                  )
+                                }
+                                className="w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors flex items-center justify-between"
+                              >
+                                <span>{link.label}</span>
+                                <span className="text-[9px] uppercase tracking-wider text-white/80 bg-white/20 px-1.5 py-0.5 rounded font-sans">
+                                  Next Season
+                                </span>
+                              </button>
+                            );
+                          })()
                         ) : (
                           <button
                             type="button"
@@ -257,7 +270,9 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                           ? "w-[200px] bg-[#9C7B66] text-white py-3 px-4 self-start"
                           : activePanel === "contacto"
                             ? "w-fit bg-[#9C7B66] text-white p-6 font-serif"
-                            : "w-[800px] bg-[#9C7B66] text-white p-6 md:max-lg:bg-transparent md:max-lg:p-0"
+                            : activePanel && comingSoonCategories[activePanel]
+                              ? "w-[320px] bg-[#9C7B66] text-white p-6 font-serif"
+                              : "w-[800px] bg-[#9C7B66] text-white p-6 md:max-lg:bg-transparent md:max-lg:p-0"
                       }
                     >
                       {activePanel === "mobiliario" ? (
@@ -411,6 +426,30 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                             </div>
                           </div>
                         </>
+                      ) : activePanel && comingSoonCategories[activePanel] ? (
+                        (() => {
+                          const cat = comingSoonCategories[activePanel];
+                          return (
+                            <div className="w-[280px] max-w-full font-serif space-y-3">
+                              <div className="text-[10px] tracking-[0.25em] uppercase text-white/70 font-sans font-medium">
+                                NEXT SEASON • BRUTO ATELIER
+                              </div>
+                              <div className="text-xl font-semibold tracking-wide">
+                                {cat.title}
+                              </div>
+                              <div className="relative aspect-[4/5] w-full max-w-[220px] rounded-md overflow-hidden border border-white/20 shadow-md my-2">
+                                <img
+                                  src={cat.bgImage}
+                                  alt={cat.title}
+                                  className="w-full h-full object-cover object-center"
+                                />
+                              </div>
+                              <div className="pt-1 text-[10px] font-sans tracking-widest text-white/60 uppercase">
+                                Disponible Próximamente · 2026
+                              </div>
+                            </div>
+                          );
+                        })()
                       ) : null}
                     </motion.div>
                   )}
@@ -418,19 +457,19 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
               </div>
 
               <div className="md:hidden w-[300px] bg-[#9C7B66] text-white p-6 font-serif">
-                {activePanel === "nosotros" || activePanel === "contacto" ? (
+                {activePanel === "nosotros" || activePanel === "contacto" || (activePanel && comingSoonCategories[activePanel]) ? (
                   <div>
                     <div className="relative flex items-center justify-center">
                       <button
                         type="button"
                         onClick={() => setActivePanel(null)}
                         aria-label="Volver"
-                        className="absolute left-0 inline-flex items-center"
+                        className="absolute left-0 inline-flex items-center p-1.5 -ml-1.5 hover:opacity-80 transition-opacity"
                       >
-                        <ArrowLeft className="w-4 h-4" />
+                        <ArrowLeft className="w-5 h-5" />
                       </button>
-                      <div className="text-xs tracking-wide uppercase">
-                        {activePanel === "nosotros" ? "Nosotros" : activePanel === "contacto" ? "Contacto" : "Coming Soon"}
+                      <div className="text-sm font-medium tracking-[0.15em] uppercase text-white/90">
+                        {activePanel === "nosotros" ? "Nosotros" : activePanel === "contacto" ? "Contacto" : "Next Season"}
                       </div>
                     </div>
                     <div className="mt-5">
@@ -491,6 +530,28 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                             </form>
                           </div>
                         </>
+                      ) : activePanel && comingSoonCategories[activePanel] ? (
+                        (() => {
+                          const cat = comingSoonCategories[activePanel];
+                          return (
+                            <div className="space-y-3 text-sm leading-relaxed font-serif">
+                              <div className="text-[11px] tracking-[0.25em] uppercase text-white/75 font-sans font-medium">
+                                BRUTO ATELIER
+                              </div>
+                              <div className="text-2xl font-serif font-medium tracking-wide">{cat.title}</div>
+                              <div className="relative aspect-[4/5] w-[210px] max-w-full rounded-md overflow-hidden border border-white/20 shadow-md my-2">
+                                <img
+                                  src={cat.bgImage}
+                                  alt={cat.title}
+                                  className="w-full h-full object-cover object-center"
+                                />
+                              </div>
+                              <div className="text-[11px] font-sans tracking-[0.15em] text-white/70 uppercase text-left pt-1">
+                                Disponible Próximamente · 2026
+                              </div>
+                            </div>
+                          );
+                        })()
                       ) : null}
                     </div>
                   </div>
@@ -603,12 +664,21 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                             {link.label}
                           </button>
                         ) : (link.href.split("/").pop()?.toLowerCase() && comingSoonCategories[link.href.split("/").pop()!.toLowerCase()]) ? (
-                          <div className="w-full text-left px-2 py-1 -mx-2 opacity-80 flex items-center justify-between cursor-default select-none">
-                            <span>{link.label}</span>
-                            <span className="text-[9px] uppercase tracking-wider text-white/80 bg-white/20 px-1.5 py-0.5 rounded font-sans">
-                              Coming Soon
-                            </span>
-                          </div>
+                          (() => {
+                            const csKey = link.href.split("/").pop()!.toLowerCase();
+                            return (
+                              <button
+                                type="button"
+                                onClick={() => setActivePanel(csKey)}
+                                className="w-full text-left px-2 py-1 -mx-2 transition-colors focus:outline-none active:bg-transparent flex items-center justify-between"
+                              >
+                                <span>{link.label}</span>
+                                <span className="text-[9px] uppercase tracking-wider text-white/80 bg-white/20 px-1.5 py-0.5 rounded font-sans">
+                                  Next Season
+                                </span>
+                              </button>
+                            );
+                          })()
                         ) : (
                           <a
                             href={link.href}
