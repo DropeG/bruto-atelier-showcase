@@ -81,7 +81,7 @@ const Index = () => {
       {/* Main Collection Container */}
       <div
         ref={scrollContainerRef}
-        className="h-[100svh] md:h-screen overflow-y-scroll md:snap-y md:snap-mandatory w-full relative"
+        className="h-[100svh] lg:landscape:h-screen overflow-y-scroll lg:landscape:snap-y lg:landscape:snap-mandatory w-full relative"
         id="coleccion"
       >
         {/* Section 1: Hero */}

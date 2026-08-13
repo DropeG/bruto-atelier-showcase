@@ -50,7 +50,7 @@ export const SingleVideoBanner = ({
   }, []);
 
   return (
-    <div className="md:hidden relative w-full h-screen h-[100dvh] min-h-[100dvh] bg-black flex items-center justify-center overflow-hidden my-0">
+    <div className="lg:landscape:hidden relative w-full h-screen h-[100dvh] min-h-[100dvh] bg-black flex items-center justify-center overflow-hidden my-0">
       <video
         ref={videoRef}
         autoPlay
@@ -88,7 +88,7 @@ const VideoSection = () => {
   ];
 
   return (
-    <div className="hidden md:flex h-screen w-full bg-black md:snap-center overflow-hidden">
+    <div className="hidden lg:landscape:flex h-screen w-full bg-black lg:landscape:snap-center overflow-hidden">
       {/* Desktop View: 3 columns side by side */}
       {videos.map((video, index) => (
         <div key={index} className="h-full w-1/3 flex items-center justify-center border-r border-white/10 last:border-r-0">

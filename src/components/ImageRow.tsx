@@ -27,7 +27,7 @@ const ImageRow: React.FC<ImageRowProps> = ({
   rightIpadPosition,
   rightBlurDataUrl,
 }) => (
-  <div className="md:snap-start md:snap-always h-64 md:h-screen w-full flex">
+  <div className="lg:landscape:snap-start lg:landscape:snap-always h-64 md:h-[50vh] lg:landscape:h-screen w-full flex">
     <div className="w-1/2 h-full">
       <HoverableImage 
         src={leftSrc} 
