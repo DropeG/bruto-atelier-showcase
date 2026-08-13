@@ -155,7 +155,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
             >
               <div className="hidden md:flex items-start gap-4 font-serif">
                 <div className="w-[260px] md:w-[300px] bg-[#9C7B66] text-white p-6">
-                  <motion.ul className="flex flex-col gap-3 text-sm tracking-wide">
+                  <motion.ul className="flex flex-col gap-1 text-sm tracking-wide overflow-y-auto max-h-[75vh] pr-1">
                     {navLinks.map((link, index) => (
                       <motion.li
                         key={link.label}
@@ -170,7 +170,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               setIsMenuOpen(false);
                               navigate("/showcase/arquitectura");
                             }}
-                            className="block w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
+                            className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm"
                           >
                             {link.label}
                           </button>
@@ -181,7 +181,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               setIsMenuOpen(false);
                               navigate("/showcase/interiorismo");
                             }}
-                            className="block w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
+                            className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm"
                           >
                             {link.label}
                           </button>
@@ -193,7 +193,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                 prev === "mobiliario" ? null : "mobiliario"
                               )
                             }
-                            className="block w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
+                            className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm"
                           >
                             {link.label}
                           </button>
@@ -205,7 +205,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                 prev === "nosotros" ? null : "nosotros"
                               )
                             }
-                            className="block w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
+                            className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm"
                           >
                             {link.label}
                           </button>
@@ -217,7 +217,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                 prev === "contacto" ? null : "contacto"
                               )
                             }
-                            className="block w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
+                            className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm"
                           >
                             {link.label}
                           </button>
@@ -232,7 +232,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                     prev === csKey ? null : csKey
                                   )
                                 }
-                                className="w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors flex items-center justify-between"
+                                className="w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center justify-between hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm"
                               >
                                 <span>{link.label}</span>
                                 <span className="text-[9px] uppercase tracking-wider text-white/80 bg-white/20 px-1.5 py-0.5 rounded font-sans">
@@ -248,7 +248,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               setIsMenuOpen(false);
                               navigate(link.href);
                             }}
-                            className="block w-full text-left px-2 py-1 -mx-2 hover:opacity-100 hover:bg-[#EAD0B9] transition-colors"
+                            className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm"
                           >
                             {link.label}
                           </button>
@@ -284,7 +284,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                 setIsMenuOpen(false);
                                 navigate("/showcase/mobiliario/coleccion");
                               }}
-                              className="block w-full text-left px-2 py-1.5 -mx-2 hover:bg-[#EAD0B9] transition-colors"
+                              className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center hover:bg-[#EAD0B9] transition-colors rounded-sm"
                             >
                               Colección
                             </button>
@@ -294,7 +294,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                 setIsMenuOpen(false);
                                 navigate("/showcase/mobiliario/series");
                               }}
-                              className="block w-full text-left px-2 py-1.5 -mx-2 hover:bg-[#EAD0B9] transition-colors"
+                              className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center hover:bg-[#EAD0B9] transition-colors rounded-sm"
                             >
                               Serie
                             </button>
@@ -304,7 +304,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                 setIsMenuOpen(false);
                                 navigate("/showcase/mobiliario/piezas");
                               }}
-                              className="block w-full text-left px-2 py-1.5 -mx-2 hover:bg-[#EAD0B9] transition-colors"
+                              className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center hover:bg-[#EAD0B9] transition-colors rounded-sm"
                             >
                               Piezas
                             </button>
@@ -456,7 +456,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                 </AnimatePresence>
               </div>
 
-              <div className="md:hidden w-[300px] bg-[#9C7B66] text-white p-6 font-serif">
+              <div className="md:hidden w-[300px] bg-[#9C7B66] text-white p-6 font-serif max-h-[85vh] overflow-y-auto">
                 {activePanel === "nosotros" || activePanel === "contacto" || (activePanel && comingSoonCategories[activePanel]) ? (
                   <div>
                     <div className="relative flex items-center justify-center">
@@ -464,7 +464,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                         type="button"
                         onClick={() => setActivePanel(null)}
                         aria-label="Volver"
-                        className="absolute left-0 inline-flex items-center p-1.5 -ml-1.5 hover:opacity-80 transition-opacity"
+                        className="absolute left-0 inline-flex items-center p-1.5 -ml-1.5 hover:opacity-80 transition-opacity min-w-[44px] min-h-[44px] justify-center"
                       >
                         <ArrowLeft className="w-5 h-5" />
                       </button>
@@ -556,7 +556,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                     </div>
                   </div>
                 ) : (
-                  <motion.ul className="flex flex-col gap-3 text-sm tracking-wide overflow-visible">
+                  <motion.ul className="flex flex-col gap-1 text-sm tracking-wide overflow-visible">
                     {navLinks.map((link, index) => (
                       <motion.li
                         key={link.label}
@@ -572,7 +572,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               setIsMenuOpen(false);
                               navigate("/showcase/arquitectura");
                             }}
-                            className="block w-full text-left px-2 py-1 -mx-2 transition-colors focus:outline-none active:bg-transparent"
+                            className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center transition-colors focus:outline-none active:bg-white/10 rounded-sm"
                           >
                             {link.label}
                           </button>
@@ -583,7 +583,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               setIsMenuOpen(false);
                               navigate("/showcase/interiorismo");
                             }}
-                            className="block w-full text-left px-2 py-1 -mx-2 transition-colors focus:outline-none active:bg-transparent"
+                            className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center transition-colors focus:outline-none active:bg-white/10 rounded-sm"
                           >
                             {link.label}
                           </button>
@@ -596,7 +596,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                   prev === "mobiliario" ? null : "mobiliario"
                                 )
                               }
-                              className="block w-full text-left px-2 py-1 -mx-2 transition-colors focus:outline-none active:bg-transparent"
+                              className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center transition-colors focus:outline-none active:bg-white/10 rounded-sm"
                             >
                               {link.label}
                             </button>
@@ -618,7 +618,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                         setIsMenuOpen(false);
                                         navigate("/showcase/mobiliario/coleccion");
                                       }}
-                                      className="block w-full text-left px-2 py-1.5 hover:bg-[#EAD0B9] transition-colors focus:outline-none active:bg-transparent"
+                                      className="block w-full text-left px-3 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] transition-colors focus:outline-none rounded-sm"
                                     >
                                       Colección
                                     </button>
@@ -628,7 +628,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                         setIsMenuOpen(false);
                                         navigate("/showcase/mobiliario/series");
                                       }}
-                                      className="block w-full text-left px-2 py-1.5 hover:bg-[#EAD0B9] transition-colors focus:outline-none active:bg-transparent"
+                                      className="block w-full text-left px-3 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] transition-colors focus:outline-none rounded-sm"
                                     >
                                       Serie
                                     </button>
@@ -638,7 +638,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                         setIsMenuOpen(false);
                                         navigate("/showcase/mobiliario/piezas");
                                       }}
-                                      className="block w-full text-left px-2 py-1.5 hover:bg-[#EAD0B9] transition-colors focus:outline-none active:bg-transparent"
+                                      className="block w-full text-left px-3 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] transition-colors focus:outline-none rounded-sm"
                                     >
                                       Piezas
                                     </button>
@@ -651,7 +651,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                           <button
                             type="button"
                             onClick={() => setActivePanel("nosotros")}
-                            className="block w-full text-left px-2 py-1 -mx-2 transition-colors focus:outline-none active:bg-transparent"
+                            className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center transition-colors focus:outline-none active:bg-white/10 rounded-sm"
                           >
                             {link.label}
                           </button>
@@ -659,7 +659,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                           <button
                             type="button"
                             onClick={() => setActivePanel("contacto")}
-                            className="block w-full text-left px-2 py-1 -mx-2 transition-colors focus:outline-none active:bg-transparent"
+                            className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center transition-colors focus:outline-none active:bg-white/10 rounded-sm"
                           >
                             {link.label}
                           </button>
@@ -670,7 +670,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               <button
                                 type="button"
                                 onClick={() => setActivePanel(csKey)}
-                                className="w-full text-left px-2 py-1 -mx-2 transition-colors focus:outline-none active:bg-transparent flex items-center justify-between"
+                                className="w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center justify-between transition-colors focus:outline-none active:bg-white/10 rounded-sm"
                               >
                                 <span>{link.label}</span>
                                 <span className="text-[9px] uppercase tracking-wider text-white/80 bg-white/20 px-1.5 py-0.5 rounded font-sans">
@@ -683,7 +683,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                           <a
                             href={link.href}
                             onClick={() => setIsMenuOpen(false)}
-                            className="block px-2 py-1 -mx-2 transition-colors"
+                            className="block px-3 py-2.5 -mx-3 min-h-[44px] flex items-center transition-colors rounded-sm"
                           >
                             {link.label}
                           </a>

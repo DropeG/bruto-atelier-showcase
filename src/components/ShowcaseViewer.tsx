@@ -111,7 +111,8 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
       {/* Botón de volver */}
       <button
         onClick={() => navigate(-1)}
-        className="absolute top-8 left-8 z-40 text-white/70 hover:text-white transition-all duration-300 group"
+        className="absolute left-8 z-40 text-white/70 hover:text-white transition-all duration-300 group min-w-[44px] min-h-[44px] flex items-center justify-center -ml-2 -mt-2"
+        style={{ top: "max(2rem, calc(1rem + env(safe-area-inset-top, 0px)))" }}
         aria-label="Volver"
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 transform group-hover:-translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -121,16 +122,23 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
 
       {/* Indicador de carrusel (Solo se muestra si hay más de 1 imagen) */}
       {items.length > 1 && (
-        <div className="absolute top-8 right-8 z-40 flex gap-2">
+        <div
+          className="absolute right-8 z-40 flex items-center gap-1 -mr-2 -mt-2"
+          style={{ top: "max(2rem, calc(1rem + env(safe-area-inset-top, 0px)))" }}
+        >
           {items.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`h-2 rounded-full transition-all duration-700 ease-out ${
-                index === currentIndex ? 'bg-white w-6' : 'bg-white/50 hover:bg-white/70 w-2'
-              }`}
+              className="min-w-[32px] min-h-[44px] flex items-center justify-center p-1.5 focus:outline-none group"
               aria-label={`Ir a imagen ${index + 1}`}
-            />
+            >
+              <span
+                className={`h-2 rounded-full transition-all duration-700 ease-out block ${
+                  index === currentIndex ? 'bg-white w-6' : 'bg-white/50 group-hover:bg-white/70 w-2'
+                }`}
+              />
+            </button>
           ))}
         </div>
       )}
