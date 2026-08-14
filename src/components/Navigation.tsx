@@ -596,53 +596,52 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                   prev === "mobiliario" ? null : "mobiliario"
                                 )
                               }
-                              className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center transition-colors focus:outline-none active:bg-white/10 rounded-sm"
+                              className="w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center justify-between transition-colors focus:outline-none active:bg-white/10 rounded-sm"
                             >
-                              {link.label}
+                              <span>{link.label}</span>
+                              <span className={`text-xs transition-transform duration-200 ${activePanel === "mobiliario" ? "rotate-90" : ""}`}>
+                                ‹
+                              </span>
                             </button>
                             <AnimatePresence>
                               {activePanel === "mobiliario" && (
                                 <motion.div
-                                  initial={{ opacity: 0, x: -8 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  exit={{ opacity: 0, x: -8 }}
-                                  transition={{ duration: 0.2, ease: "easeOut" }}
-                                  className="absolute left-[120px] -top-2 w-[150px] text-white z-50"
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: "auto", opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  transition={{ duration: 0.25, ease: "easeInOut" }}
+                                  className="overflow-hidden pl-3 border-l border-white/25 ml-1 my-1 space-y-0.5 text-sm"
                                 >
-                                  <div className="absolute -left-10 top-6 w-8 h-px bg-white/50" />
-
-                                  <div className="space-y-1 text-sm leading-relaxed pl-2">
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        setIsMenuOpen(false);
-                                        navigate("/showcase/mobiliario/coleccion");
-                                      }}
-                                      className="block w-full text-left px-3 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] transition-colors focus:outline-none rounded-sm"
-                                    >
-                                      Colección
-                                    </button>
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        setIsMenuOpen(false);
-                                        navigate("/showcase/mobiliario/series");
-                                      }}
-                                      className="block w-full text-left px-3 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] transition-colors focus:outline-none rounded-sm"
-                                    >
-                                      Serie
-                                    </button>
-                                    <button
-                                      type="button"
-                                      onClick={() => {
-                                        setIsMenuOpen(false);
-                                        navigate("/showcase/mobiliario/piezas");
-                                      }}
-                                      className="block w-full text-left px-3 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] transition-colors focus:outline-none rounded-sm"
-                                    >
-                                      Piezas
-                                    </button>
-                                  </div>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setIsMenuOpen(false);
+                                      navigate("/showcase/mobiliario/coleccion");
+                                    }}
+                                    className="block w-full text-left px-3 py-2.5 min-h-[44px] flex items-center hover:bg-white/10 active:bg-white/20 transition-colors focus:outline-none rounded-sm"
+                                  >
+                                    Colección
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setIsMenuOpen(false);
+                                      navigate("/showcase/mobiliario/series");
+                                    }}
+                                    className="block w-full text-left px-3 py-2.5 min-h-[44px] flex items-center hover:bg-white/10 active:bg-white/20 transition-colors focus:outline-none rounded-sm"
+                                  >
+                                    Serie
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setIsMenuOpen(false);
+                                      navigate("/showcase/mobiliario/piezas");
+                                    }}
+                                    className="block w-full text-left px-3 py-2.5 min-h-[44px] flex items-center hover:bg-white/10 active:bg-white/20 transition-colors focus:outline-none rounded-sm"
+                                  >
+                                    Piezas
+                                  </button>
                                 </motion.div>
                               )}
                             </AnimatePresence>
