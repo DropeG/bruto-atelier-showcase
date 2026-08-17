@@ -4,6 +4,7 @@ import { ArrowLeft, Menu, X, Search, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import CurrencyDropdown from "./CurrencyDropdown";
 import NewsletterModal from "./NewsletterModal";
+import NosotrosModal from "./NosotrosModal";
 import { comingSoonCategories } from "@/data/ComingSoon";
 
 const navLinks = [
@@ -29,7 +30,8 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
-  const [activePanel, setActivePanel] = useState<"mobiliario" | "nosotros" | "contacto" | "vestuario" | null>(null);
+  const [activePanel, setActivePanel] = useState<"mobiliario" | "contacto" | "vestuario" | string | null>(null);
+  const [isNosotrosOpen, setIsNosotrosOpen] = useState(false);
   const [contactMessage, setContactMessage] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
@@ -200,11 +202,11 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                         ) : link.label === "Nosotros" ? (
                           <button
                             type="button"
-                            onClick={() =>
-                              setActivePanel((prev) =>
-                                prev === "nosotros" ? null : "nosotros"
-                              )
-                            }
+                            onClick={() => {
+                              setIsMenuOpen(false);
+                              setActivePanel(null);
+                              setIsNosotrosOpen(true);
+                            }}
                             className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm"
                           >
                             {link.label}
@@ -310,80 +312,6 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                             </button>
                           </div>
                         </>
-                      ) : activePanel === "nosotros" ? (
-                        <>
-                          <div className="hidden md:max-lg:flex w-[470px] max-w-full flex-col bg-[#9C7B66] px-4 py-4 font-serif">
-                            <div>
-                              <div className="text-xs tracking-wide uppercase">Nosotros</div>
-                              <div className="mt-2 text-lg font-semibold">BRUTO ATELIER</div>
-                              <p className="mt-2 text-sm leading-tight text-justify">
-                                Nuestra marca resuelve diseño en un amplio espectro. Creamos visión, resolvemos espacio y sus componentes: El habitar, la presencia.
-                              </p>
-                            </div>
-
-                            <div className="mt-4 text-sm leading-tight text-justify">
-                              <img
-                                src="/images/nosotros/nosotros.webp"
-                                alt="Foto Nosotros"
-                                className="float-right ml-4 mb-2 w-[190px] h-[190px] object-contain rounded-md"
-                              />
-                              <p>
-                                Creemos en lo que se diferencia en silencio y trasciende en el tiempo, lo que perdura con elegancia y desarrolla carácter. Diseñamos singularidad, fabricando de manera local e internacional con materiales y artesanos seleccionados.
-                              </p>
-                              <p className="mt-3">
-                                Buscamos ser nosotros, generar una experiencia brutalmente delicada que se entiende al conocernos, usarnos, vivirnos.
-                              </p>
-                              <p className="mt-2">Pruébanos.</p>
-                            </div>
-
-                            <div className="mt-4 pt-3 text-[10px] leading-snug">
-                              <div className="overflow-x-auto">
-                                <div className="flex items-center whitespace-nowrap">
-                                  <span className="pr-6">Mladen Marinovic'</span>
-                                  <span className="border-l border-white/40 px-6">Creative Director</span>
-                                  <span className="border-l border-white/40 pl-6">BRUTO Atelier © 2026</span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="hidden lg:flex items-center font-serif">
-                            <div className="w-[440px]">
-                              <div className="text-xs tracking-wide uppercase">Nosotros</div>
-                              <div className="mt-2 flex gap-4">
-                                <div className="space-y-2 text-sm leading-tight flex-1 pr-2 text-justify">
-                                  <div className="text-lg font-semibold">BRUTO ATELIER</div>
-                                  <p>
-                                    Nuestra marca resuelve diseño en un amplio espectro. Creamos visión, resolvemos espacio y sus componentes: El habitar, la presencia.
-                                  </p>
-                                  <p>
-                                    Creemos en lo que se diferencia en silencio y trasciende en el tiempo, lo que
-                                    perdura con elegancia y desarrolla carácter. Diseñamos singularidad, fabricando
-                                    de manera local e internacional con materiales y artesanos seleccionados.
-                                  </p>
-                                  <p>
-                                    Buscamos ser nosotros, generar una experiencia brutalmente delicada que se entiende al conocernos, usarnos, vivirnos
-                                  </p>
-                                  <p>Pruébanos.</p>
-                                  <div className="pt-3 space-y-1 leading-snug text-xs">
-                                    <div className="flex items-center whitespace-nowrap text-[10px] leading-snug">
-                                      <span className="pr-6">Mladen Marinovic'</span>
-                                      <span className="border-l border-white/40 px-6">Creative Director</span>
-                                      <span className="border-l border-white/40 pl-6">BRUTO Atelier © 2026</span>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="ml-6 flex items-center justify-center">
-                              <img
-                                src="/images/nosotros/nosotros.webp"
-                                alt="Foto Nosotros"
-                                className="w-[280px] h-[280px] object-contain rounded-md"
-                              />
-                            </div>
-                          </div>
-                        </>
                       ) : activePanel === "contacto" ? (
                         <>
                           <div className="flex items-start">
@@ -457,7 +385,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
               </div>
 
               <div className="md:hidden w-[300px] bg-[#9C7B66] text-white p-6 font-serif max-h-[85vh] overflow-y-auto">
-                {activePanel === "nosotros" || activePanel === "contacto" || (activePanel && comingSoonCategories[activePanel]) ? (
+                {activePanel === "contacto" || (activePanel && comingSoonCategories[activePanel]) ? (
                   <div>
                     <div className="relative flex items-center justify-center">
                       <button
@@ -469,38 +397,11 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                         <ArrowLeft className="w-5 h-5" />
                       </button>
                       <div className="text-sm font-medium tracking-[0.15em] uppercase text-white/90">
-                        {activePanel === "nosotros" ? "Nosotros" : activePanel === "contacto" ? "Contacto" : "Next Season"}
+                        {activePanel === "contacto" ? "Contacto" : "Next Season"}
                       </div>
                     </div>
                     <div className="mt-5">
-                      {activePanel === "nosotros" ? (
-                        <>
-                          <div className="space-y-5 text-sm leading-relaxed max-h-[65vh] overflow-y-auto pr-2">
-                            <div className="text-lg font-semibold">BRUTO ATELIER</div>
-                            <p>
-                              Nuestra marca se enfoca en la solución de encargos de diseño de un amplio
-                              espectro. Creamos visión, resolvemos espacio y sus componentes: el habitar
-                              completo.
-                            </p>
-                            <p>
-                              Creemos en lo que se diferencia en silencio y trasciende en el tiempo, lo que
-                              perdura con elegancia y desarrolla carácter. Diseñamos singularidad, fabricando
-                              de manera local e internacional con materiales y artesanos seleccionados.
-                            </p>
-                            <p>
-                              Nuestra visión busca entregar una experiencia, que se entiende al conocerla.
-                            </p>
-                            <p>Pruébanos.</p>
-                            <div className="space-y-1 leading-snug text-xs">
-                              <div className="flex flex-col gap-1 text-[10px] leading-snug">
-                                <span>Mladen Marinovic</span>
-                                <span>Creative Director</span>
-                                <span>BRUTO Atelier © 2026</span>
-                              </div>
-                            </div>
-                          </div>
-                        </>
-                      ) : activePanel === "contacto" ? (
+                      {activePanel === "contacto" ? (
                         <>
                           <div className="space-y-4 text-sm leading-relaxed">
                             <div className="text-lg font-semibold">Hablemos</div>
@@ -649,7 +550,11 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                         ) : link.label === "Nosotros" ? (
                           <button
                             type="button"
-                            onClick={() => setActivePanel("nosotros")}
+                            onClick={() => {
+                              setIsMenuOpen(false);
+                              setActivePanel(null);
+                              setIsNosotrosOpen(true);
+                            }}
                             className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center transition-colors focus:outline-none active:bg-white/10 rounded-sm"
                           >
                             {link.label}
@@ -696,6 +601,8 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
           </motion.div>
         )}
       </AnimatePresence>
+
+      <NosotrosModal isOpen={isNosotrosOpen} onClose={() => setIsNosotrosOpen(false)} />
 
       {openModal && (
         <NewsletterModal openModal={openModal} onClose={() => setOpenModal(false)} />
