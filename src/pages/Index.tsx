@@ -3,12 +3,10 @@ import {
   HeroSection,
   VideoSection,
   Footer,
-  NewsletterModal,
   NosotrosModal,
   WhatsAppButton,
   DiscountButton,
 } from "@/components";
-import CatalogGrid from "@/components/CatalogGrid";
 import { SingleVideoBanner } from "@/components/VideoSection";
 import { useScroll } from "@/contexts/ScrollContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -27,8 +25,7 @@ import imageHome10 from "/images/home/image10.webp";
 import ImageRow from "@/components/ImageRow";
  
 const Index = () => {
-  const { user } = useAuth();
-  const [openModal, setOpenModal] = useState(false);
+  const { user, openAuthModal } = useAuth();
   const [openNosotros, setOpenNosotros] = useState(false);
   const [showDiscount, setShowDiscount] = useState(true);
   const { getSectionId, scrollToSection } = useScroll();
@@ -76,10 +73,9 @@ const Index = () => {
 
   return (
     <div className="relative">
-      {!isDemoMode && <NewsletterModal openModal={openModal} onClose={() => setOpenModal(false)} />}
       {!isDemoMode && <NosotrosModal isOpen={openNosotros} onClose={() => setOpenNosotros(false)} />}
       {!isDemoMode && <WhatsAppButton />}
-      {!isDemoMode && !user && <DiscountButton onClick={() => setOpenModal(true)} isVisible={showDiscount} />}
+      {!isDemoMode && !user && <DiscountButton onClick={openAuthModal} isVisible={showDiscount} />}
 
       {/* Main Collection Container */}
       <div
@@ -90,11 +86,6 @@ const Index = () => {
         {/* Section 1: Hero */}
         <div id="section-hero">
           <HeroSection onOpenNosotros={() => setOpenNosotros(true)} />
-        </div>
-
-        {/* Section 1.5: Catalog Grid */}
-        <div id="section-catalog">
-          <CatalogGrid />
         </div>
 
         {/* Section 2: Desktop Video Block */}
@@ -122,7 +113,6 @@ const Index = () => {
           src="/videos/video1.mp4"
           mobileSrc="/videos/video1-mobile.mp4"
           poster="/videos/video1-poster.webp"
-          label="ATELIER • 01"
         />
 
         {/* ImageRow 2: Comedor y Paisaje */}
@@ -160,7 +150,6 @@ const Index = () => {
           src="/videos/video2.mp4"
           mobileSrc="/videos/video2-mobile.mp4"
           poster="/videos/video2-poster.webp"
-          label="PROCESO • 02"
         />
 
         {/* ImageRow 4: Banqueta y Flores */}
@@ -183,7 +172,6 @@ const Index = () => {
           src="/videos/video3.mp4"
           mobileSrc="/videos/video3-mobile.mp4"
           poster="/videos/video3-poster.webp"
-          label="ARQUITECTURA • 03"
         />
 
         {/* ImageRow 5: Mueble Rojo y Cabina */}
