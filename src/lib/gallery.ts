@@ -23,19 +23,13 @@ export const GalleryService = {
   /**
    * Returns all items belonging to a specific discipline.
    * If it's Mobiliario, a type must also be provided.
-   * Supports device-specific filtering.
    */
-  getItemsByDiscipline(discipline: Discipline, type?: MobiliarioType, isMobile: boolean = false): GalleryItem[] {
+  getItemsByDiscipline(discipline: Discipline, type?: MobiliarioType, _isMobile?: boolean): GalleryItem[] {
     return galleryItems.filter((item) => {
       if (item.discipline !== discipline) return false;
       if (discipline === "mobiliario" && type) {
         if (item.type !== type) return false;
       }
-      
-      // Device-specific filtering
-      if (isMobile && item.isDesktopOnly) return false;
-      if (!isMobile && item.isMobileOnly) return false;
-      
       return true;
     });
   },

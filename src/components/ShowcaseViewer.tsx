@@ -11,9 +11,9 @@ export interface ShowcaseItem {
   thumbnail: string;
   detailImage: string;
   secondaryImage?: string;
-  layout?: "single" | "double" | "split";
-  backgroundColor?: string; // Ideal para el color Moka de Coleccion.tsx
-  subtitle?: string
+  layout?: "single" | "double";
+  backgroundColor?: string;
+  subtitle?: string;
 }
 
 interface ShowcaseViewerProps {
@@ -24,11 +24,11 @@ interface ShowcaseViewerProps {
 
 const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: ShowcaseViewerProps) => {
   const navigate = useNavigate();
-  const [showFront, setShowFront] = useState(false);
+  const [showFront, setShowFront] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [imagesLoaded, setImagesLoaded] = useState<Record<string | number, boolean>>({});
 
-  // 1. Lógica de Precarga Optimizada (tomada de Piezas.tsx)
+  // 1. Lógica de Precarga Optimizada y Resiliente
   useEffect(() => {
     if (!items || items.length === 0) return;
 
@@ -38,14 +38,20 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
 
       imageSources.forEach(source => {
         const img = new Image();
-        img.src = source;
-        img.onload = () => {
+        const handleDone = () => {
           loadedCount += 1;
-          // Solo marcamos como cargado cuando TODAS las imágenes del ítem (si es doble) están listas
           if (loadedCount === imageSources.length) {
             setImagesLoaded(prev => ({ ...prev, [item.id]: true }));
           }
         };
+
+        img.onload = handleDone;
+        img.onerror = handleDone; // Fallback ante errores de red o caché
+        img.src = source;
+
+        if (img.complete) {
+          handleDone();
+        }
       });
     });
   }, [items]);
@@ -151,36 +157,30 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
           style={{ 
             opacity: index === currentIndex ? 1 : 0,
             pointerEvents: index === currentIndex ? 'auto' : 'none',
-            backgroundColor: item.backgroundColor || undefined,
             transform: index === currentIndex ? 'scale(1.12)' : 'scale(1.05)',
             transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
           }}
         >
-          {(!item.layout || item.layout === "single" || item.layout === "double") && (
-            <>
-              <img
-                src={item.thumbnail}
-                alt={item.title}
-                draggable={false}
-                className="absolute inset-0 w-full h-full object-cover object-center select-none"
-                style={{ 
-                  minHeight: "100vh",
-                  filter: index === currentIndex && showFront ? "blur(1px)" : "blur(4px)",
-                  transition: "filter 0.6s ease-out"
-                }}
-                loading="lazy"
-                decoding="async"
-                // Optimización de carga basada en el índice actual
-                fetchPriority={index === currentIndex ? "high" : "low"} 
-              />
-              <div className="absolute inset-0 bg-black/20" />
-            </>
-          )}
+          <img
+            src={item.thumbnail}
+            alt={item.title}
+            draggable={false}
+            className="absolute inset-0 w-full h-full object-cover object-center select-none"
+            style={{ 
+              minHeight: "100vh",
+              filter: index === currentIndex && showFront ? "blur(1px)" : "blur(4px)",
+              transition: "filter 0.6s ease-out"
+            }}
+            loading="lazy"
+            decoding="async"
+            fetchPriority={index === currentIndex ? "high" : "low"} 
+          />
+          <div className="absolute inset-0 bg-black/20" />
         </div>
       ))}
 
       {/* Imágenes principales (Detalle) en el centro */}  
-      {showFront && allImagesLoaded && (
+      {showFront && (
         <div className="absolute inset-0 flex flex-col items-center justify-center z-20 pointer-events-none">
           {items.map((item, index) => (
             <div
@@ -193,24 +193,10 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
                 transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
               }}
             >
-              <div className={`relative flex flex-col items-center gap-6 ${item.layout === "split" ? "w-full h-full" : "px-4"}`}>
+              <div className="relative flex flex-col items-center gap-6 px-4">
                 
-                {/* Renderizado Condicional: Doble vs Simple vs Split */}
-                {item.layout === "split" ? (
-                  <div className="flex w-full h-full animate-fade-in-up">
-                    {[item.detailImage, item.secondaryImage].filter(Boolean).map((imageSrc, imageIndex) => (
-                      <div key={`${item.id}-image-${imageIndex}`} className="w-1/2 h-full overflow-hidden">
-                        <img 
-                          src={imageSrc} 
-                          alt={`${item.title} ${imageIndex + 1}`} 
-                          draggable={false}
-                          className="w-full h-full object-cover select-none" 
-                          loading="eager" 
-                        />
-                      </div>
-                    ))}
-                  </div>
-                ) : item.layout === "double" ? (
+                {/* Renderizado: Doble vs Simple */}
+                {item.layout === "double" ? (
                   <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 animate-fade-in-up">
                     {[item.detailImage, item.secondaryImage].filter(Boolean).map((imageSrc, imageIndex) => (
                       <div key={`${item.id}-image-${imageIndex}`} className="relative bg-white shadow-2xl" style={{ maxWidth: 'min(34vw, 360px)', maxHeight: '80vh' }}>
@@ -225,21 +211,23 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
                 )}
 
                 {/* Botón HABLEMOS Universal */}
-                <div className={`${item.layout === "split" ? "absolute bottom-[10%] z-30" : "absolute bottom-[9%] md:bottom-[10%]"} left-0 w-full flex justify-center ${item.layout === "double" ? "relative bottom-0 mt-4" : ""}`}>
+                <div className={`absolute bottom-[9%] md:bottom-[10%] left-0 w-full flex justify-center ${item.layout === "double" ? "relative bottom-0 mt-4" : ""}`}>
                   
                   {/* Ancla del botón + subtítulo con contexto de ancho para evitar desbordes */}
                   <div className="relative flex w-full justify-center px-4">
                     <button
                       onClick={() => window.open("https://wa.me/56949569887", "_blank", "noopener,noreferrer")}
-                      className={`pointer-events-auto text-[#694634] border-[#694634] group flex items-center px-6 py-2.5 md:px-10 md:py-2.5 bg-transparent font-serif text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.25em] border transition-all duration-700 ease-out cursor-pointer relative overflow-hidden hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.07)] ${item.layout === "split" ? "bg-white/80 backdrop-blur-sm" : ""}`}
+                      className="pointer-events-auto text-[#694634] border-[#694634] group flex items-center px-6 py-2.5 md:px-10 md:py-2.5 bg-transparent font-serif text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.25em] border transition-all duration-700 ease-out cursor-pointer relative overflow-hidden hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.07)]"
                     >
                       HABLEMOS
                     </button>
 
                     {/* Subtítulo centrado y con ancho limitado para que no se salga de la foto */}
-                    <span className={`absolute top-full left-1/2 mt-2 md:mb-3 w-full max-w-[280px] md:max-w-[420px] -translate-x-1/2 px-4 text-[10px] leading-tight md:text-[13px] text-center font-serif tracking-wide whitespace-normal break-words pointer-events-none ${item.layout === "split" ? "text-white drop-shadow-md" : "text-[#694634]"}`}>
-                      {item.subtitle}
-                    </span>
+                    {item.subtitle && (
+                      <span className="absolute top-full left-1/2 mt-2 md:mb-3 w-full max-w-[280px] md:max-w-[420px] -translate-x-1/2 px-4 text-[10px] leading-tight md:text-[13px] text-center font-serif tracking-wide whitespace-normal break-words pointer-events-none text-[#694634]">
+                        {item.subtitle}
+                      </span>
+                    )}
                   </div>
 
                 </div>

@@ -9,14 +9,9 @@ export interface GalleryItem {
     thumbnail: string;
     detailImage: string;
     secondaryImage?: string;
-    layout?: "single" | "double" | "split";
-    backgroundColor?: string;
+    layout?: "single" | "double";
     subtitle?: string;
-    isMobileOnly?: boolean;
-    isDesktopOnly?: boolean;
 }
-
-const MOKA_COLOR = "#9C7B66";
 
 export const galleryItems: GalleryItem[] = [
     {
@@ -44,68 +39,6 @@ export const galleryItems: GalleryItem[] = [
         thumbnail: "/images/gallery/colection-01-thumb.webp",
         detailImage: "/images/gallery/colection-01-detail1.webp",
         subtitle: "Nuestra colección en Lenga, la Patagonia nunca estuvo tan cerca."
-    },
-    // Extra Coleccion Desktop Items
-    {
-        id: "coleccion-extra-1",
-        discipline: "mobiliario",
-        type: "coleccion",
-        title: "Colección 1",
-        thumbnail: "/images/colección/coleccion1.webp",
-        detailImage: "/images/colección/coleccion1.webp",
-        secondaryImage: "/images/colección/coleccion2.webp",
-        layout: "split",
-        backgroundColor: MOKA_COLOR,
-        isDesktopOnly: true
-    },
-    {
-        id: "coleccion-extra-2",
-        discipline: "mobiliario",
-        type: "coleccion",
-        title: "Colección 2",
-        thumbnail: "/images/colección/coleccion3.webp",
-        detailImage: "/images/colección/coleccion3.webp",
-        secondaryImage: "/images/colección/coleccion4.webp",
-        layout: "split",
-        backgroundColor: MOKA_COLOR,
-        isDesktopOnly: true
-    },
-    // Extra Coleccion Mobile Items
-    {
-        id: "coleccion-mobile-1",
-        discipline: "mobiliario",
-        type: "coleccion",
-        title: "Colección Mobile 1",
-        thumbnail: "/images/gallery/colection-01-thumb.webp",
-        detailImage: "/images/colección/coleccionMobile1.webp?v=3",
-        layout: "single",
-        backgroundColor: MOKA_COLOR,
-        subtitle: "Nuestra colección en Lenga, la Patagonia nunca estuvo tan cerca.",
-        isMobileOnly: true
-    },
-    {
-        id: "coleccion-mobile-2",
-        discipline: "mobiliario",
-        type: "coleccion",
-        title: "Colección Mobile 2",
-        thumbnail: "/images/gallery/colection-01-thumb.webp",
-        detailImage: "/images/colección/coleccionMobile2.webp?v=3",
-        layout: "single",
-        backgroundColor: MOKA_COLOR,
-        subtitle: "Nuestra colección en Lenga, la Patagonia nunca estuvo tan cerca.",
-        isMobileOnly: true
-    },
-    {
-        id: "coleccion-mobile-3",
-        discipline: "mobiliario",
-        type: "coleccion",
-        title: "Colección Mobile 3",
-        thumbnail: "/images/gallery/colection-01-thumb.webp",
-        detailImage: "/images/colección/coleccionMobile3.webp?v=3",
-        layout: "single",
-        backgroundColor: MOKA_COLOR,
-        subtitle: "Nuestra colección en Lenga, la Patagonia nunca estuvo tan cerca.",
-        isMobileOnly: true
     },
     {
         id: 4, 
