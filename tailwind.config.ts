@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 export default {
   darkMode: ["class"],
@@ -53,6 +54,18 @@ export default {
         },
         "quote-bg": "hsl(var(--quote-bg))",
         overlay: "hsl(var(--overlay))",
+        warm: {
+          50: "#FAF9F6",
+          100: "#F5F3EF",
+          200: "#EBE7DF",
+          300: "#DDD7CB",
+          400: "#C4BCAB",
+          500: "#9C927F",
+          600: "#7A705E",
+          700: "#5E5647",
+          800: "#443E33",
+          900: "#2B2720",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -85,5 +98,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindcssAnimate],
 } satisfies Config;

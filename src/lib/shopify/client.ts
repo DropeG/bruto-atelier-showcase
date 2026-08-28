@@ -4,6 +4,9 @@ import {
   ShopifyProduct,
   ShopifyConnectionStatus,
   ShopifyCart,
+  ShopifyCustomer,
+  ShopifyCustomerCreatePayload,
+  ShopifyCustomerAccessTokenCreatePayload,
 } from '@/types/shopify';
 import {
   GET_SHOP_INFO_QUERY,
@@ -220,28 +223,36 @@ export async function removeCartLines(
 
 // --- Customer API Methods ---
 
-export async function createCustomer(input: any): Promise<any | null> {
+export async function createCustomer(input: {
+  email: string;
+  password: string;
+  firstName?: string;
+  lastName?: string;
+}): Promise<ShopifyCustomerCreatePayload | null> {
   if (!isShopifyConfigured()) {
     throw new Error('Shopify no está configurado con credenciales válidas en .env.local');
   }
   try {
-    const data = await shopifyFetch<{ customerCreate: any }>({
+    const data = await shopifyFetch<{ customerCreate: ShopifyCustomerCreatePayload }>({
       query: CUSTOMER_CREATE_MUTATION,
       variables: { input },
     });
     return data.customerCreate || null;
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Error en createCustomer:', err);
     throw err;
   }
 }
 
-export async function createCustomerAccessToken(input: any): Promise<{ token: string | null; errors?: Array<{ field?: string[]; message: string }> }> {
+export async function createCustomerAccessToken(input: {
+  email: string;
+  password: string;
+}): Promise<{ token: string | null; errors?: Array<{ field?: string[]; message: string }> }> {
   if (!isShopifyConfigured()) {
     throw new Error('Shopify no está configurado');
   }
   try {
-    const data = await shopifyFetch<{ customerAccessTokenCreate: any }>({
+    const data = await shopifyFetch<{ customerAccessTokenCreate: ShopifyCustomerAccessTokenCreatePayload }>({
       query: CUSTOMER_ACCESS_TOKEN_CREATE_MUTATION,
       variables: { input },
     });
@@ -250,21 +261,21 @@ export async function createCustomerAccessToken(input: any): Promise<{ token: st
       token: result?.customerAccessToken?.accessToken || null,
       errors: result?.customerUserErrors || [],
     };
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Error en createCustomerAccessToken:', err);
     throw err;
   }
 }
 
-export async function getCustomer(customerAccessToken: string): Promise<any | null> {
+export async function getCustomer(customerAccessToken: string): Promise<ShopifyCustomer | null> {
   if (!isShopifyConfigured()) return null;
   try {
-    const data = await shopifyFetch<{ customer: any }>({
+    const data = await shopifyFetch<{ customer: ShopifyCustomer }>({
       query: GET_CUSTOMER_QUERY,
       variables: { customerAccessToken },
     });
     return data.customer || null;
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Error en getCustomer:', err);
     return null;
   }

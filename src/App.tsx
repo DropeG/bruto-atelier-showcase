@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ScrollProvider } from "@/contexts/ScrollContext";
 import { ShopifyProvider } from "@/contexts/ShopifyContext";
-import { ShopifyStatusIndicator } from "@/components/ShopifyStatusIndicator";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Category from "./pages/Category";
@@ -19,7 +18,6 @@ const App = () => (
         <ScrollProvider>
           <Toaster />
           <Sonner />
-          <ShopifyStatusIndicator />
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />

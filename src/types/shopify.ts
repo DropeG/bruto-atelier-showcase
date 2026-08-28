@@ -121,3 +121,29 @@ export interface ShopifyCart {
     edges: Array<{ node: ShopifyCartLine }>;
   };
 }
+
+export interface ShopifyCustomer {
+  id: string;
+  email: string;
+  firstName?: string | null;
+  lastName?: string | null;
+}
+
+export interface ShopifyCustomerUserError {
+  code?: string;
+  field?: string[];
+  message: string;
+}
+
+export interface ShopifyCustomerCreatePayload {
+  customer?: ShopifyCustomer | null;
+  customerUserErrors: ShopifyCustomerUserError[];
+}
+
+export interface ShopifyCustomerAccessTokenCreatePayload {
+  customerAccessToken?: {
+    accessToken: string;
+    expiresAt: string;
+  } | null;
+  customerUserErrors: ShopifyCustomerUserError[];
+}

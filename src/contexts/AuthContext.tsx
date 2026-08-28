@@ -86,8 +86,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setError(errorMsg);
         throw new Error(errorMsg);
       }
-    } catch (err: any) {
-      const message = err.message || "Error al iniciar sesión.";
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Error al iniciar sesión.";
       setError(message);
       throw err;
     } finally {
@@ -113,8 +113,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setError(message);
         throw new Error(message);
       }
-    } catch (err: any) {
-      const message = err.message || "Error al registrarse.";
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Error al registrarse.";
       setError(message);
       throw err;
     } finally {
