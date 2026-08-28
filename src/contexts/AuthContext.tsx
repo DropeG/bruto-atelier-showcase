@@ -1,14 +1,14 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from "react";
 import { createCustomerAccessToken, getCustomer, createCustomer } from "@/lib/shopify/client";
 
-interface User {
+export interface User {
   id: string;
   email: string;
   firstName: string;
   lastName: string;
 }
 
-interface AuthContextType {
+export interface AuthContextType {
   user: User | null;
   isAuthModalOpen: boolean;
   isLoading: boolean;
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           } else {
             localStorage.removeItem("customerAccessToken");
           }
-        } catch (err) {
+        } catch {
           localStorage.removeItem("customerAccessToken");
         }
       }
@@ -53,12 +53,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     initAuth();
   }, []);
 
-  const openAuthModal = () => setIsAuthModalOpen(true);
+  const openAuthModal = useCallback(() => {
+    setError(null);
+    setIsAuthModalOpen(true);
+  }, []);
   
-  const closeAuthModal = () => {
+  const closeAuthModal = useCallback(() => {
     setIsAuthModalOpen(false);
     setError(null);
-  };
+  }, []);
 
   const login = async (email: string, password: string) => {
     setError(null);
@@ -95,10 +98,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const logout = () => {
+  const logout = useCallback(() => {
     localStorage.removeItem("customerAccessToken");
     setUser(null);
-  };
+  }, []);
 
   const signup = async (firstName: string, lastName: string, email: string, password: string) => {
     setError(null);

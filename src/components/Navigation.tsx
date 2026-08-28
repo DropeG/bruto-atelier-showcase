@@ -27,7 +27,7 @@ type NavigationProps = {
 };
 
 const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) => {
-  const { user, logout } = useAuth();
+  const { user, logout, openAuthModal } = useAuth();
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -35,7 +35,6 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
   const [activePanel, setActivePanel] = useState<"mobiliario" | "contacto" | "vestuario" | string | null>(null);
   const [isNosotrosOpen, setIsNosotrosOpen] = useState(false);
   const [contactMessage, setContactMessage] = useState("");
-  const [openModal, setOpenModal] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
@@ -175,7 +174,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                 </div>
               ) : (
                 <button
-                  onClick={() => setOpenModal(true)}
+                  onClick={openAuthModal}
                   className="p-2 hover:opacity-60 transition-opacity"
                   aria-label="Iniciar sesión"
                 >
@@ -695,7 +694,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                           type="button"
                           onClick={() => {
                             setIsMenuOpen(false);
-                            setOpenModal(true);
+                            openAuthModal();
                           }}
                           className="w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center justify-between hover:bg-[#EAD0B9] transition-colors rounded-sm text-white font-medium"
                         >
@@ -716,9 +715,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
 
       <NosotrosModal isOpen={isNosotrosOpen} onClose={() => setIsNosotrosOpen(false)} />
 
-      {openModal && (
-        <NewsletterModal openModal={openModal} onClose={() => setOpenModal(false)} />
-      )}
+      <NewsletterModal />
     </>
   );
 };
