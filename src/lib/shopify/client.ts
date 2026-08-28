@@ -13,6 +13,10 @@ import {
   CART_LINES_ADD_MUTATION,
   CART_LINES_UPDATE_MUTATION,
   CART_LINES_REMOVE_MUTATION,
+  CUSTOMER_CREATE_MUTATION,
+  CUSTOMER_ACCESS_TOKEN_CREATE_MUTATION,
+  GET_CUSTOMER_QUERY,
+  CART_DISCOUNT_CODES_UPDATE_MUTATION,
 } from './queries';
 import { MOCK_SHOP_INFO, MOCK_PRODUCTS } from './mockData';
 
@@ -209,6 +213,74 @@ export async function removeCartLines(
       variables: { cartId, lineIds },
     });
     return data.cartLinesRemove?.cart || null;
+  } catch {
+    return null;
+  }
+}
+
+// --- Customer API Methods ---
+
+export async function createCustomer(input: any): Promise<any | null> {
+  if (!isShopifyConfigured()) {
+    throw new Error('Shopify no está configurado con credenciales válidas en .env.local');
+  }
+  try {
+    const data = await shopifyFetch<{ customerCreate: any }>({
+      query: CUSTOMER_CREATE_MUTATION,
+      variables: { input },
+    });
+    return data.customerCreate || null;
+  } catch (err: any) {
+    console.error('Error en createCustomer:', err);
+    throw err;
+  }
+}
+
+export async function createCustomerAccessToken(input: any): Promise<{ token: string | null; errors?: Array<{ field?: string[]; message: string }> }> {
+  if (!isShopifyConfigured()) {
+    throw new Error('Shopify no está configurado');
+  }
+  try {
+    const data = await shopifyFetch<{ customerAccessTokenCreate: any }>({
+      query: CUSTOMER_ACCESS_TOKEN_CREATE_MUTATION,
+      variables: { input },
+    });
+    const result = data.customerAccessTokenCreate;
+    return {
+      token: result?.customerAccessToken?.accessToken || null,
+      errors: result?.customerUserErrors || [],
+    };
+  } catch (err: any) {
+    console.error('Error en createCustomerAccessToken:', err);
+    throw err;
+  }
+}
+
+export async function getCustomer(customerAccessToken: string): Promise<any | null> {
+  if (!isShopifyConfigured()) return null;
+  try {
+    const data = await shopifyFetch<{ customer: any }>({
+      query: GET_CUSTOMER_QUERY,
+      variables: { customerAccessToken },
+    });
+    return data.customer || null;
+  } catch (err: any) {
+    console.error('Error en getCustomer:', err);
+    return null;
+  }
+}
+
+export async function applyCartDiscountCode(
+  cartId: string,
+  discountCodes: string[]
+): Promise<ShopifyCart | null> {
+  if (!isShopifyConfigured()) return null;
+  try {
+    const data = await shopifyFetch<{ cartDiscountCodesUpdate: { cart: ShopifyCart } }>({
+      query: CART_DISCOUNT_CODES_UPDATE_MUTATION,
+      variables: { cartId, discountCodes },
+    });
+    return data.cartDiscountCodesUpdate?.cart || null;
   } catch {
     return null;
   }

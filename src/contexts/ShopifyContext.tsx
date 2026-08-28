@@ -6,8 +6,11 @@ import {
   createCart,
   addLinesToCart,
   updateCartLines,
-  removeCartLines
+  removeCartLines,
+  applyCartDiscountCode
 } from '@/lib/shopify/client';
+import { useAuth } from '@/contexts/AuthContext';
+
 interface ShopifyContextType {
   status: ShopifyConnectionStatus;
   products: ShopifyProduct[];
@@ -44,6 +47,7 @@ const ShopifyContext = createContext<ShopifyContextType>({
 });
 
 export const ShopifyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { user } = useAuth();
   const [status, setStatus] = useState<ShopifyConnectionStatus>(defaultStatus);
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [cart, setCart] = useState<ShopifyCart | null>(null);
@@ -109,6 +113,15 @@ export const ShopifyProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   }, [status.isLive, cartId, initCart]);
 
+  // Apply discount when user logs in and already has a cart
+  useEffect(() => {
+    if (user && cartId) {
+      applyCartDiscountCode(cartId, ['BRUTO_SOCIO_10']).then(updatedCart => {
+        if (updatedCart) setCart(updatedCart);
+      });
+    }
+  }, [user, cartId]);
+
   const addToCart = async (merchandiseId: string, quantity: number) => {
     setIsCartLoading(true);
     try {
@@ -123,7 +136,11 @@ export const ShopifyProvider: React.FC<{ children: React.ReactNode }> = ({ child
       }
 
       if (currentCartId) {
-        const updatedCart = await addLinesToCart(currentCartId, [{ merchandiseId, quantity }]);
+        let updatedCart = await addLinesToCart(currentCartId, [{ merchandiseId, quantity }]);
+        if (updatedCart && user) {
+          const discountedCart = await applyCartDiscountCode(currentCartId, ['BRUTO_SOCIO_10']);
+          if (discountedCart) updatedCart = discountedCart;
+        }
         if (updatedCart) setCart(updatedCart);
       }
     } finally {

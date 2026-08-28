@@ -378,3 +378,79 @@ export const CART_LINES_REMOVE_MUTATION = `
   }
 `;
 
+// -- CUSTOMER MUTATIONS & QUERIES --
+
+export const CUSTOMER_CREATE_MUTATION = `
+  mutation customerCreate($input: CustomerCreateInput!) {
+    customerCreate(input: $input) {
+      customer {
+        id
+        email
+        firstName
+        lastName
+      }
+      customerUserErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const CUSTOMER_ACCESS_TOKEN_CREATE_MUTATION = `
+  mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
+    customerAccessTokenCreate(input: $input) {
+      customerAccessToken {
+        accessToken
+        expiresAt
+      }
+      customerUserErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
+
+export const GET_CUSTOMER_QUERY = `
+  query getCustomer($customerAccessToken: String!) {
+    customer(customerAccessToken: $customerAccessToken) {
+      id
+      email
+      firstName
+      lastName
+    }
+  }
+`;
+
+// -- DISCOUNT CODES --
+
+export const CART_DISCOUNT_CODES_UPDATE_MUTATION = `
+  mutation cartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!]!) {
+    cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
+      cart {
+        id
+        cost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+          subtotalAmount {
+            amount
+            currencyCode
+          }
+        }
+        discountCodes {
+          applicable
+          code
+        }
+      }
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+`;
