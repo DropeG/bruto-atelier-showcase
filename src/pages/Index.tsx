@@ -8,8 +8,10 @@ import {
   WhatsAppButton,
   DiscountButton,
 } from "@/components";
+import CatalogGrid from "@/components/CatalogGrid";
 import { SingleVideoBanner } from "@/components/VideoSection";
 import { useScroll } from "@/contexts/ScrollContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { blurPlaceholders } from "@/lib/blur-placeholders";
 import { GalleryService } from "@/lib/gallery";
 import imageHome1 from "/images/home/image1.webp";
@@ -25,6 +27,7 @@ import imageHome10 from "/images/home/image10.webp";
 import ImageRow from "@/components/ImageRow";
  
 const Index = () => {
+  const { user } = useAuth();
   const [openModal, setOpenModal] = useState(false);
   const [openNosotros, setOpenNosotros] = useState(false);
   const [showDiscount, setShowDiscount] = useState(true);
@@ -76,7 +79,7 @@ const Index = () => {
       {!isDemoMode && <NewsletterModal openModal={openModal} onClose={() => setOpenModal(false)} />}
       {!isDemoMode && <NosotrosModal isOpen={openNosotros} onClose={() => setOpenNosotros(false)} />}
       {!isDemoMode && <WhatsAppButton />}
-      {!isDemoMode && <DiscountButton onClick={() => setOpenModal(true)} isVisible={showDiscount} />}
+      {!isDemoMode && !user && <DiscountButton onClick={() => setOpenModal(true)} isVisible={showDiscount} />}
 
       {/* Main Collection Container */}
       <div
@@ -87,6 +90,11 @@ const Index = () => {
         {/* Section 1: Hero */}
         <div id="section-hero">
           <HeroSection onOpenNosotros={() => setOpenNosotros(true)} />
+        </div>
+
+        {/* Section 1.5: Catalog Grid */}
+        <div id="section-catalog">
+          <CatalogGrid />
         </div>
 
         {/* Section 2: Desktop Video Block */}

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, Menu, X, Search, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,7 @@ import CurrencyDropdown from "./CurrencyDropdown";
 import NewsletterModal from "./NewsletterModal";
 import NosotrosModal from "./NosotrosModal";
 import { comingSoonCategories } from "@/data/ComingSoon";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navLinks = [
   { label: "Arquitectura", href: "/showcase/arquitectura" },
@@ -26,6 +27,7 @@ type NavigationProps = {
 };
 
 const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) => {
+  const { user, logout } = useAuth();
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -34,9 +36,27 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
   const [isNosotrosOpen, setIsNosotrosOpen] = useState(false);
   const [contactMessage, setContactMessage] = useState("");
   const [openModal, setOpenModal] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const whatsappNumber = "56949569887";
   const defaultContactMessage = "¿Qué tal, me resuelven una duda?";
+
+  // Close user dropdown menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
+      }
+    };
+
+    if (isUserMenuOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isUserMenuOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -100,15 +120,6 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
               {/* Currency selector */}
               {/* <CurrencyDropdown /> */}
 
-              {/* User/Login icon */}
-              <button
-                onClick={() => setOpenModal(true)}
-                className="p-2 hover:opacity-60 transition-opacity"
-                aria-label="User account"
-              >
-                <User className="w-5 h-5 text-foreground" />
-              </button>
-
               {/* Shopping cart icon */}
               <button
                 className="p-2 hover:opacity-60 transition-opacity"
@@ -116,6 +127,61 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
               >
                 <img src="/bag.svg" alt="Carrito" className="w-12 h-12" />
               </button>
+
+              {/* User/Login icon (to the right of the cart) */}
+              {user ? (
+                <div ref={userMenuRef} className="relative flex items-center">
+                  <button
+                    type="button"
+                    onClick={() => setIsUserMenuOpen((prev) => !prev)}
+                    className="flex items-center gap-2 text-xs uppercase tracking-wider px-2.5 py-1.5 rounded-sm hover:bg-foreground/10 active:scale-95 transition-all font-sans text-foreground cursor-pointer"
+                    aria-label="Perfil de socio"
+                    aria-expanded={isUserMenuOpen}
+                  >
+                    <User className="w-4 h-4 text-foreground" />
+                    <span className="font-medium truncate max-w-[100px]">{user.firstName || "Socio"}</span>
+                  </button>
+                  
+                  {/* Dropdown Menu on Click */}
+                  <AnimatePresence>
+                    {isUserMenuOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 8, scale: 0.98 }}
+                        transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                        className="absolute right-0 top-full mt-2 w-52 bg-[#9C7B66] text-[#F7F5F0] p-4 shadow-2xl rounded-sm text-xs font-serif z-50 border border-white/10"
+                      >
+                        <p className="font-sans text-[9px] text-[#F7F5F0]/70 uppercase tracking-widest mb-1">Socio Bruto</p>
+                        <p className="truncate font-medium mb-1 text-sm">{user.firstName} {user.lastName}</p>
+                        <p className="truncate text-[11px] text-[#F7F5F0]/70 mb-3 font-sans">{user.email}</p>
+                        <div className="text-[10px] text-[#F7F5F0] bg-white/15 px-2.5 py-1.5 rounded-sm mb-3 font-sans flex items-center gap-1.5">
+                          <span>✓ 10% Descuento activo</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            logout();
+                            setIsUserMenuOpen(false);
+                          }}
+                          className="w-full text-left py-2 text-xs text-[#F7F5F0]/90 hover:text-white border-t border-[#F7F5F0]/20 transition-colors cursor-pointer font-sans uppercase tracking-wider font-medium flex items-center justify-between"
+                        >
+                          <span>Cerrar sesión</span>
+                          <span>→</span>
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setOpenModal(true)}
+                  className="p-2 hover:opacity-60 transition-opacity"
+                  aria-label="Iniciar sesión"
+                >
+                  <User className="w-5 h-5 text-foreground" />
+                </button>
+              )}
             </div>
           )}
 
@@ -594,6 +660,52 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                         )}
                       </motion.li>
                     ))}
+
+                    {/* Mobile User Account / 10% Off item */}
+                    {user ? (
+                      <motion.li
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="pt-4 mt-2 border-t border-white/20"
+                      >
+                        <div className="px-1 text-xs text-white/90 font-medium">
+                          Hola, {user.firstName || "Socio"}
+                        </div>
+                        <div className="text-[10px] text-white/70 tracking-wider font-sans uppercase mb-2">
+                          ✓ 10% Descuento activo
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            logout();
+                            setIsMenuOpen(false);
+                          }}
+                          className="block text-left py-1 text-xs text-white/75 hover:text-white underline underline-offset-2 transition-colors cursor-pointer"
+                        >
+                          Cerrar sesión
+                        </button>
+                      </motion.li>
+                    ) : (
+                      <motion.li
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="pt-4 mt-2 border-t border-white/20"
+                      >
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsMenuOpen(false);
+                            setOpenModal(true);
+                          }}
+                          className="w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center justify-between hover:bg-[#EAD0B9] transition-colors rounded-sm text-white font-medium"
+                        >
+                          <span>Iniciar Sesión / Registro</span>
+                          <span className="text-[9px] uppercase tracking-wider text-white/90 bg-white/20 px-1.5 py-0.5 rounded font-sans">
+                            10% OFF
+                          </span>
+                        </button>
+                      </motion.li>
+                    )}
                   </motion.ul>
                 )}
               </div>

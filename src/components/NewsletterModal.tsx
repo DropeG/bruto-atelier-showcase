@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { X, Check } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface NewsletterModalProps {
   openModal?: boolean;
@@ -8,10 +9,14 @@ interface NewsletterModalProps {
 
 const NewsletterModal: React.FC<NewsletterModalProps> = ({ openModal, onClose }) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const [emailError, setEmailError] = useState("");
-  const [alreadyRegistered, setAlreadyRegistered] = useState(false);
+  const { user, login, signup, isLoading, error: authError } = useAuth();
+  
+  const [isLoginMode, setIsLoginMode] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [formError, setFormError] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Core modal logic using native HTMLDialogElement
   useEffect(() => {
@@ -24,19 +29,19 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({ openModal, onClose })
     if (openModal) {
       if (!dialog.open) dialog.showModal();
     } else {
-      // Check if modal has been shown before in localStorage
+      // Check if modal has been shown before in localStorage and user is not logged in
       const hasShown = localStorage.getItem("newsletterModalShown");
-      if (!hasShown) {
+      if (!hasShown && !user) {
         const timer = setTimeout(() => {
-          if (!dialog.open) {
+          if (!dialog.open && !user) {
             dialog.showModal();
             localStorage.setItem("newsletterModalShown", "true");
           }
-        }, 2000);
+        }, 2500);
         return () => clearTimeout(timer);
       }
     }
-  }, [openModal]);
+  }, [openModal, user]);
 
   const handleClose = () => {
     const dialog = dialogRef.current;
@@ -50,9 +55,10 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({ openModal, onClose })
       dialog.classList.remove("is-closing");
       // Reset states
       setIsSuccess(false);
-      setEmailError("");
-      setAlreadyRegistered(false);
-      setIsSubmitting(false);
+      setFormError("");
+      setName("");
+      setEmail("");
+      setPassword("");
       if (onClose) onClose();
     }, 400); // Wait for the ease-out-quart animation
   };
@@ -64,64 +70,47 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({ openModal, onClose })
     }
   };
 
-  const validateEmail = (email: string): boolean => {
+  const validateEmail = (emailStr: string): boolean => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
+    return regex.test(emailStr);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setEmailError("");
-    setAlreadyRegistered(false);
-    setIsSubmitting(true);
-    
-    const formData = new FormData(e.currentTarget);
-    const name = formData.get("name") as string;
-    const email = formData.get("email") as string;
+    setFormError("");
 
     if (!validateEmail(email)) {
-      setEmailError("Ingresa un correo electrónico válido.");
-      setIsSubmitting(false);
+      setFormError("Ingresa un correo electrónico válido.");
       return;
     }
 
-    const registeredEmails = JSON.parse(localStorage.getItem("registeredEmails") || "[]");
-    if (registeredEmails.includes(email.toLowerCase())) {
-      setAlreadyRegistered(true);
-      setIsSubmitting(false);
+    if (password.length < 6) {
+      setFormError("La contraseña debe tener al menos 6 caracteres.");
       return;
     }
-
-    const formUrl = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSdCSWPFUb-wv-ImBUdXt-3ZlyCxQQrgNMrawXlriogwFlcWNw/formResponse";
-
-    const submitData = new URLSearchParams();
-    submitData.append("entry.1758925023", name);
-    submitData.append("entry.411074703", email);
 
     try {
-      fetch(formUrl, {
-        method: "POST",
-        mode: "no-cors",
-        body: submitData,
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded", 
-        }
-      });
-
-      registeredEmails.push(email.toLowerCase());
-      localStorage.setItem("registeredEmails", JSON.stringify(registeredEmails));
+      if (isLoginMode) {
+        await login(email, password);
+      } else {
+        const nameParts = name.trim().split(" ");
+        const firstName = nameParts[0] || "Socio";
+        const lastName = nameParts.slice(1).join(" ") || "Bruto";
+        await signup(firstName, lastName, email, password);
+      }
       
+      // If auth did not throw, show success
       setIsSuccess(true);
-      
       setTimeout(() => {
         handleClose();
-      }, 2500);
-      
-    } catch (error) {
-      console.error("Error al enviar los datos:", error);
-      setIsSubmitting(false);
+      }, 1800);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Error al procesar la solicitud.";
+      setFormError(message);
     }
   };
+
+  const displayedError = formError || authError;
 
   return (
     <>
@@ -159,9 +148,20 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({ openModal, onClose })
         .text-balance {
           text-wrap: balance;
         }
+
+        /* Autofill luxury styling fix for Chrome / Safari */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+          -webkit-box-shadow: 0 0 0 40px #9C7B66 inset !important;
+          -webkit-text-fill-color: #F7F5F0 !important;
+          caret-color: #F7F5F0 !important;
+          transition: background-color 5000s ease-in-out 0s;
+        }
       `}</style>
 
-      {/* Native HTML5 Dialog automatically escapes stacking contexts (z-index bugs) */}
+      {/* Native HTML5 Dialog automatically escapes stacking contexts */}
       <dialog 
         ref={dialogRef}
         onClick={handleBackdropClick}
@@ -182,77 +182,127 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({ openModal, onClose })
           </button>
 
           {/* Image side */}
-          <div className="w-full aspect-[4/3] md:w-1/2 md:aspect-auto md:min-h-[500px] relative overflow-hidden bg-[#8B6B58]">
+          <div className="w-full aspect-[4/3] md:w-1/2 md:aspect-auto md:min-h-[520px] relative overflow-hidden bg-[#8B6B58]">
             <img
               src="/images/newsLetterModal/newsLetter.webp"
-              alt="Promoción Bruto Atelier"
+              alt="Bruto Atelier Club"
               className="absolute inset-0 w-full h-full object-cover object-center opacity-90"
             />
           </div>
 
           {/* Form side - Committed Color Strategy (#9C7B66) */}
-          <div className="w-full md:w-1/2 p-8 md:p-14 flex flex-col justify-center relative overflow-hidden">
+          <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center relative overflow-hidden">
             
             {/* Success State */}
             <div className={`absolute inset-0 bg-[#9C7B66] flex flex-col items-center justify-center transition-all duration-700 z-10 p-8 ${isSuccess ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
-              <Check className="w-10 h-10 mb-6 text-[#F7F5F0]/90" strokeWidth={1} />
-              <h2 className="text-3xl font-light text-center mb-3 tracking-[-0.02em] text-balance">
-                ¡Gracias por suscribirte!
+              <Check className="w-12 h-12 mb-6 text-[#F7F5F0]" strokeWidth={1.5} />
+              <h2 className="text-2xl md:text-3xl font-light text-center mb-3 tracking-[-0.02em] text-balance">
+                {isLoginMode ? "¡Sesión iniciada!" : "¡Bienvenido a Bruto Atelier!"}
               </h2>
-              <p className="text-center text-sm font-light text-[#F7F5F0]/70 leading-relaxed max-w-[280px]">
-                Revisa tu bandeja de entrada para disfrutar tu beneficio exclusivo.
+              <p className="text-center text-sm font-light text-[#F7F5F0]/80 leading-relaxed max-w-[280px]">
+                Tu beneficio del 10% de descuento ha sido activado automáticamente en tu carrito.
               </p>
             </div>
 
             {/* Form State */}
             <div className={`transition-all duration-700 flex flex-col justify-center ${isSuccess ? 'opacity-0 scale-[0.98] pointer-events-none' : 'opacity-100 scale-100'}`}>
-              <h2 className="text-3xl md:text-4xl font-light mb-3 tracking-[-0.02em] text-balance">
-                ¡10% en tu primera compra!
+              <div className="mb-2">
+                <span className="text-[10px] uppercase tracking-[0.25em] text-[#F7F5F0]/70 font-sans font-medium">
+                  BRUTO ATELIER • SOCIO PRIVADO
+                </span>
+              </div>
+
+              <h2 className="text-2xl md:text-3xl font-light mb-2 tracking-[-0.02em] text-balance font-serif">
+                {isLoginMode ? "Acceso de Socios" : "10% en tu primera compra"}
               </h2>
-              <p className="mb-10 text-sm font-light text-[#F7F5F0]/80 tracking-wide">
-                Únete a nuestra comunidad.
+              <p className="mb-6 text-xs md:text-sm font-light text-[#F7F5F0]/80 tracking-wide">
+                {isLoginMode 
+                  ? "Inicia sesión para disfrutar tu tarifa preferencial." 
+                  : "Crea tu cuenta y accede a descuentos exclusivos en mobiliario."}
               </p>
 
-              <form onSubmit={handleSubmit} className="space-y-8">
-                <div className="relative">
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="Tu nombre"
-                    required
-                    disabled={isSubmitting}
-                    className="w-full bg-transparent border-b border-[#F7F5F0]/30 py-3 text-sm font-light text-[#F7F5F0] placeholder:text-[#F7F5F0]/40 focus:outline-none focus:border-[#F7F5F0]/80 transition-colors disabled:opacity-50"
-                  />
-                </div>
+              <form onSubmit={handleSubmit} className="space-y-5">
+                {!isLoginMode && (
+                  <div className="relative">
+                    <input
+                      type="text"
+                      name="name"
+                      autoComplete="name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="Tu nombre completo"
+                      required={!isLoginMode}
+                      disabled={isLoading}
+                      className="w-full bg-transparent border-b border-[#F7F5F0]/30 py-2.5 text-sm font-light text-[#F7F5F0] placeholder:text-[#F7F5F0]/40 focus:outline-none focus:border-[#F7F5F0]/80 transition-colors disabled:opacity-50"
+                    />
+                  </div>
+                )}
 
                 <div className="relative">
                   <input
                     type="email"
                     name="email"
-                    placeholder="Tu correo electrónico"
+                    autoComplete="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Correo electrónico (ej: usuario@gmail.com)"
                     required
-                    disabled={isSubmitting}
-                    className={`w-full bg-transparent border-b py-3 text-sm font-light text-[#F7F5F0] placeholder:text-[#F7F5F0]/40 focus:outline-none transition-colors disabled:opacity-50 ${
-                      emailError || alreadyRegistered 
-                        ? 'border-red-400/60 focus:border-red-400' 
-                        : 'border-[#F7F5F0]/30 focus:border-[#F7F5F0]/80'
-                    }`}
+                    disabled={isLoading}
+                    className="w-full bg-transparent border-b border-[#F7F5F0]/30 py-2.5 text-sm font-light text-[#F7F5F0] placeholder:text-[#F7F5F0]/40 focus:outline-none focus:border-[#F7F5F0]/80 transition-colors disabled:opacity-50"
                   />
-                  <div className={`overflow-hidden transition-all duration-400 ease-out ${emailError || alreadyRegistered ? 'max-h-12 opacity-100 mt-2' : 'max-h-0 opacity-0 mt-0'}`}>
-                    <p className="text-xs text-red-300/90 font-light tracking-wide">
-                      {emailError || (alreadyRegistered && "Este correo ya se encuentra registrado.")}
+                </div>
+
+                <div className="relative">
+                  <input
+                    type="password"
+                    name="password"
+                    autoComplete={isLoginMode ? "current-password" : "new-password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Contraseña (mínimo 6 caracteres)"
+                    required
+                    disabled={isLoading}
+                    className="w-full bg-transparent border-b border-[#F7F5F0]/30 py-2.5 text-sm font-light text-[#F7F5F0] placeholder:text-[#F7F5F0]/40 focus:outline-none focus:border-[#F7F5F0]/80 transition-colors disabled:opacity-50"
+                  />
+                </div>
+
+                {displayedError && (
+                  <div className="py-1">
+                    <p className="text-xs text-red-200 font-light tracking-wide bg-red-900/30 px-3 py-1.5 rounded">
+                      {displayedError}
                     </p>
                   </div>
-                </div>
+                )}
 
                 <button
                   type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-[#F7F5F0] text-[#3D261C] py-4 mt-4 text-xs uppercase tracking-[0.25em] font-medium hover:bg-white transition-colors duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+                  disabled={isLoading}
+                  className="w-full bg-[#F7F5F0] text-[#3D261C] py-3.5 mt-2 text-xs uppercase tracking-[0.2em] font-medium hover:bg-white transition-colors duration-300 disabled:opacity-70 disabled:cursor-not-allowed active:scale-[0.99]"
                 >
-                  {isSubmitting ? "Enviando..." : "Suscribirme"}
+                  {isLoading 
+                    ? "Conectando..." 
+                    : isLoginMode 
+                      ? "Iniciar Sesión" 
+                      : "Obtener 10% y Registrarme"}
                 </button>
               </form>
+
+              {/* Mode switch toggle */}
+              <div className="mt-6 pt-4 border-t border-[#F7F5F0]/15 flex items-center justify-between text-xs text-[#F7F5F0]/70">
+                <span>
+                  {isLoginMode ? "¿No tienes cuenta?" : "¿Ya eres miembro?"}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsLoginMode(!isLoginMode);
+                    setFormError("");
+                  }}
+                  className="text-[#F7F5F0] underline underline-offset-4 hover:text-white transition-colors font-medium ml-2"
+                >
+                  {isLoginMode ? "Crear cuenta (10% OFF)" : "Iniciar Sesión"}
+                </button>
+              </div>
             </div>
           </div>
         </div>
