@@ -7,6 +7,7 @@ import NewsletterModal from "./NewsletterModal";
 import NosotrosModal from "./NosotrosModal";
 import { comingSoonCategories } from "@/data/ComingSoon";
 import { useAuth } from "@/contexts/AuthContext";
+import { useShopify } from "@/contexts/ShopifyContext";
 
 const navLinks = [
   { label: "Arquitectura", href: "/showcase/arquitectura" },
@@ -28,6 +29,7 @@ type NavigationProps = {
 
 const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) => {
   const { user, logout, openAuthModal } = useAuth();
+  const { cart, openCart } = useShopify();
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -121,10 +123,19 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
 
               {/* Shopping cart icon */}
               <button
+                type="button"
+                onClick={openCart}
                 className="p-2 hover:opacity-60 transition-opacity"
-                aria-label="Shopping cart"
+                aria-label={cart?.totalQuantity ? 'Abrir bolsa, ' + cart.totalQuantity + ' objetos' : "Abrir bolsa"}
               >
-                <img src="/bag.svg" alt="Carrito" className="w-12 h-12" />
+                <span className="relative block">
+                  <img src="/bag.svg" alt="" className="w-12 h-12" />
+                  {cart?.totalQuantity ? (
+                    <span className="absolute -right-1 -top-1 grid min-h-5 min-w-5 place-items-center bg-[#9C7B66] px-1 font-sans text-[11px] font-medium text-[#141412]">
+                      {cart.totalQuantity}
+                    </span>
+                  ) : null}
+                </span>
               </button>
 
               {/* User/Login icon (to the right of the cart) */}
@@ -189,10 +200,19 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
             <div className="flex md:hidden items-center gap-4 order-3">
               {/* Shopping bag - mobile */}
               <button
+                type="button"
+                onClick={openCart}
                 className="relative z-50 p-2"
-                aria-label="Shopping cart"
+                aria-label={cart?.totalQuantity ? 'Abrir bolsa, ' + cart.totalQuantity + ' objetos' : "Abrir bolsa"}
               >
-                <img src="/bag.svg" alt="Carrito" className="w-14 h-14" />
+                <span className="relative block">
+                  <img src="/bag.svg" alt="" className="w-14 h-14" />
+                  {cart?.totalQuantity ? (
+                    <span className="absolute -right-1 -top-1 grid min-h-5 min-w-5 place-items-center bg-[#9C7B66] px-1 font-sans text-[11px] font-medium text-[#141412]">
+                      {cart.totalQuantity}
+                    </span>
+                  ) : null}
+                </span>
               </button>
             </div>
           )}
@@ -665,13 +685,15 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                       <motion.li
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="pt-4 mt-2 border-t border-white/20"
+                        className="pt-5 mt-3 border-t border-white/20 pb-4 space-y-3"
                       >
-                        <div className="px-1 text-xs text-white/90 font-medium">
-                          Hola, {user.firstName || "Socio"}
-                        </div>
-                        <div className="text-[10px] text-white/70 tracking-wider font-sans uppercase mb-2">
-                          ✓ 10% Descuento activo
+                        <div className="px-1">
+                          <div className="text-sm text-white/90 font-serif tracking-wide">
+                            Hola, {user.firstName || "Socio"}
+                          </div>
+                          <div className="text-[10px] text-[#EAD0B9] tracking-wider font-sans uppercase mt-1">
+                            Beneficio Atelier: 10% Off
+                          </div>
                         </div>
                         <button
                           type="button"
@@ -679,7 +701,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                             logout();
                             setIsMenuOpen(false);
                           }}
-                          className="block text-left py-1 text-xs text-white/75 hover:text-white underline underline-offset-2 transition-colors cursor-pointer"
+                          className="block w-full text-left px-3 py-3 -mx-3 min-h-[44px] text-xs font-sans uppercase tracking-widest text-white/70 hover:text-white hover:bg-white/10 transition-colors cursor-pointer rounded-sm"
                         >
                           Cerrar sesión
                         </button>

@@ -1,27 +1,45 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
-import { ShopifyConnectionStatus, ShopifyProduct, ShopifyCart } from '@/types/shopify';
-import { 
-  testShopifyConnection, 
-  getShopifyProducts,
-  createCart,
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  CartActionResult,
+  CartState,
+  CommerceError,
+  ShopifyCart,
+  ShopifyConnectionStatus,
+  ShopifyDataSource,
+  ShopifyProduct,
+} from '@/types/shopify';
+import {
   addLinesToCart,
-  updateCartLines,
+  applyCartDiscountCode,
+  createCart,
+  getCart,
+  getShopifyProducts,
   removeCartLines,
-  applyCartDiscountCode
+  testShopifyConnection,
+  updateCartLines,
 } from '@/lib/shopify/client';
 import { useAuth } from '@/contexts/AuthContext';
 
+const CART_STORAGE_KEY = 'shopify_cart_id';
+
 interface ShopifyContextType {
   status: ShopifyConnectionStatus;
+  source: ShopifyDataSource;
   products: ShopifyProduct[];
   cart: ShopifyCart | null;
+  cartState: CartState;
+  cartError: CommerceError | null;
   isLoading: boolean;
   isCartLoading: boolean;
+  isCartOpen: boolean;
+  openCart: () => void;
+  closeCart: () => void;
   refetchStatus: () => Promise<void>;
   refetchProducts: () => Promise<void>;
-  addToCart: (merchandiseId: string, quantity: number) => Promise<void>;
-  updateCartItem: (lineId: string, quantity: number) => Promise<void>;
-  removeFromCart: (lineId: string) => Promise<void>;
+  refreshCart: () => Promise<CartActionResult>;
+  addToCart: (merchandiseId: string, quantity?: number) => Promise<CartActionResult>;
+  updateCartItem: (lineId: string, quantity: number) => Promise<CartActionResult>;
+  removeFromCart: (lineId: string) => Promise<CartActionResult>;
 }
 
 const defaultStatus: ShopifyConnectionStatus = {
@@ -33,167 +51,184 @@ const defaultStatus: ShopifyConnectionStatus = {
   error: null,
 };
 
-const ShopifyContext = createContext<ShopifyContextType>({
-  status: defaultStatus,
-  products: [],
-  cart: null,
-  isLoading: true,
-  isCartLoading: false,
-  refetchStatus: async () => {},
-  refetchProducts: async () => {},
-  addToCart: async () => {},
-  updateCartItem: async () => {},
-  removeFromCart: async () => {},
+const emptyAction = (action: CartActionResult['action'], message: string): CartActionResult => ({
+  ok: false,
+  data: null,
+  errors: [{ code: 'INVALID_INPUT', message }],
+  warnings: [],
+  action,
 });
+
+const ShopifyContext = createContext<ShopifyContextType | null>(null);
+
+function storedCartId(): string | null {
+  if (typeof window === 'undefined') return null;
+  return window.localStorage.getItem(CART_STORAGE_KEY);
+}
 
 export const ShopifyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
   const [status, setStatus] = useState<ShopifyConnectionStatus>(defaultStatus);
+  const [source, setSource] = useState<ShopifyDataSource>('unavailable');
   const [products, setProducts] = useState<ShopifyProduct[]>([]);
   const [cart, setCart] = useState<ShopifyCart | null>(null);
-  const [cartId, setCartId] = useState<string | null>(() => localStorage.getItem('shopify_cart_id'));
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [isCartLoading, setIsCartLoading] = useState<boolean>(false);
+  const [cartId, setCartId] = useState<string | null>(storedCartId);
+  const [cartState, setCartState] = useState<CartState>('idle');
+  const [cartError, setCartError] = useState<CommerceError | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const mutationQueue = useRef(Promise.resolve());
+  const discountedCartId = useRef<string | null>(null);
+
+  const persistCart = useCallback((nextCart: ShopifyCart | null) => {
+    setCart(nextCart);
+    setCartId(nextCart?.id || null);
+    if (typeof window === 'undefined') return;
+    if (nextCart?.id) window.localStorage.setItem(CART_STORAGE_KEY, nextCart.id);
+    else window.localStorage.removeItem(CART_STORAGE_KEY);
+  }, []);
 
   const loadShopifyData = useCallback(async () => {
     setIsLoading(true);
-    try {
-      const [connStatus, productsRes] = await Promise.all([
-        testShopifyConnection(),
-        getShopifyProducts(20),
-      ]);
-      setStatus(connStatus);
-      setProducts(productsRes.products);
-    } catch {
-      setStatus((prev) => ({
-        ...prev,
-        isConnected: false,
-        error: 'Error al inicializar Shopify Context',
-      }));
-    } finally {
-      setIsLoading(false);
-    }
+    const [connection, productResult] = await Promise.all([testShopifyConnection(), getShopifyProducts(20)]);
+    setStatus(connection);
+    setProducts(productResult.products);
+    setSource(connection.isLive && productResult.isLive ? 'shopify' : connection.isLive ? 'unavailable' : 'demo');
+    setIsLoading(false);
   }, []);
 
   useEffect(() => {
-    loadShopifyData();
+    void loadShopifyData();
   }, [loadShopifyData]);
 
-  const refetchStatus = async () => {
-    const connStatus = await testShopifyConnection();
-    setStatus(connStatus);
-  };
+  const refetchStatus = useCallback(async () => {
+    const connection = await testShopifyConnection();
+    setStatus(connection);
+  }, []);
 
-  const refetchProducts = async () => {
-    const productsRes = await getShopifyProducts(20);
-    setProducts(productsRes.products);
-  };
+  const refetchProducts = useCallback(async () => {
+    const productResult = await getShopifyProducts(20);
+    setProducts(productResult.products);
+    setSource(status.isLive && productResult.isLive ? 'shopify' : status.isLive ? 'unavailable' : 'demo');
+  }, [status.isLive]);
 
-  // --- Cart Methods ---
-  
-  const initCart = useCallback(async () => {
-    if (!cartId) {
-      const newCart = await createCart();
-      if (newCart) {
-        setCart(newCart);
-        setCartId(newCart.id);
-        localStorage.setItem('shopify_cart_id', newCart.id);
-      }
+  const saveResult = useCallback((result: CartActionResult) => {
+    if (result.ok && result.data) {
+      persistCart(result.data);
+      setCartState('ready');
+      setCartError(null);
+    } else {
+      setCartState('error');
+      setCartError(result.errors[0] || { code: 'UNKNOWN', message: 'No fue posible actualizar el carrito.' });
     }
-    // Note: If we had a fetchCart method, we would call it here if cartId exists. 
-    // For now, if cartId exists, we assume operations will use it or it will be populated on first action.
-  }, [cartId]);
+    return result;
+  }, [persistCart]);
+
+  const refreshCart = useCallback(async (): Promise<CartActionResult> => {
+    if (!cartId) return emptyAction('restore', 'No hay productos en la bolsa todavía.');
+    setCartState('restoring');
+    const result = await getCart(cartId);
+    if (result.ok) return saveResult(result);
+
+    if (result.errors.some((error) => error.code === 'CART_EXPIRED')) {
+      persistCart(null);
+      setCartState('ready');
+      setCartError(null);
+    } else {
+      saveResult(result);
+    }
+    return result;
+  }, [cartId, persistCart, saveResult]);
 
   useEffect(() => {
-    // We only initialize a cart if there isn't one already.
-    // In a real app, you might only initialize when they add the first item, 
-    // but initializing early gives us the checkoutUrl.
-    if (status.isLive && !cartId) {
-       initCart();
-    }
-  }, [status.isLive, cartId, initCart]);
+    if (status.isLive && cartId) void refreshCart();
+  }, [status.isLive, cartId, refreshCart]);
 
-  // Apply discount when user logs in and already has a cart
+  const runMutation = useCallback(async (work: () => Promise<CartActionResult>) => {
+    const next = mutationQueue.current.then(work, work);
+    mutationQueue.current = next.then(() => undefined, () => undefined);
+    return next;
+  }, []);
+
+  const addToCart = useCallback(async (merchandiseId: string, quantity = 1): Promise<CartActionResult> => {
+    if (!merchandiseId || quantity < 1) return emptyAction('add', 'Selecciona una variante disponible para continuar.');
+    return runMutation(async () => {
+      setCartState('mutating');
+      setCartError(null);
+      const line = { merchandiseId, quantity };
+      let result = cartId ? await addLinesToCart(cartId, [line]) : await createCart([line]);
+
+      // A stale cart can be recovered once, without making the user repeat the action.
+      if (!result.ok && result.errors.some((error) => error.code === 'CART_EXPIRED')) {
+        persistCart(null);
+        result = await createCart([line]);
+      }
+
+      const saved = saveResult(result);
+      if (saved.ok) setIsCartOpen(true);
+      return saved;
+    });
+  }, [cartId, persistCart, runMutation, saveResult]);
+
+  const updateCartItem = useCallback(async (lineId: string, quantity: number): Promise<CartActionResult> => {
+    if (!cartId) return emptyAction('update', 'No encontramos una bolsa activa.');
+    if (quantity < 1) return emptyAction('update', 'La cantidad debe ser al menos uno.');
+    return runMutation(async () => {
+      setCartState('mutating');
+      setCartError(null);
+      return saveResult(await updateCartLines(cartId, [{ id: lineId, quantity }]));
+    });
+  }, [cartId, runMutation, saveResult]);
+
+  const removeFromCart = useCallback(async (lineId: string): Promise<CartActionResult> => {
+    if (!cartId) return emptyAction('remove', 'No encontramos una bolsa activa.');
+    return runMutation(async () => {
+      setCartState('mutating');
+      setCartError(null);
+      return saveResult(await removeCartLines(cartId, [lineId]));
+    });
+  }, [cartId, runMutation, saveResult]);
+
+  // Keep the existing member benefit behaviour while preserving a complete cart payload.
   useEffect(() => {
-    if (user && cartId) {
-      applyCartDiscountCode(cartId, ['BRUTO_SOCIO_10']).then(updatedCart => {
-        if (updatedCart) setCart(updatedCart);
-      });
-    }
-  }, [user, cartId]);
+    if (!user || !cartId || !cart) return;
+    if (discountedCartId.current === cartId) return;
+    discountedCartId.current = cartId;
+    void runMutation(async () => {
+      const result = await applyCartDiscountCode(cartId, ['BRUTO_SOCIO_10']);
+      return result.ok ? saveResult(result) : result;
+    });
+  }, [user, cartId, cart, runMutation, saveResult]);
 
-  const addToCart = async (merchandiseId: string, quantity: number) => {
-    setIsCartLoading(true);
-    try {
-      let currentCartId = cartId;
-      if (!currentCartId) {
-        const newCart = await createCart();
-        if (newCart) {
-          setCartId(newCart.id);
-          localStorage.setItem('shopify_cart_id', newCart.id);
-          currentCartId = newCart.id;
-        }
-      }
+  const value = useMemo<ShopifyContextType>(() => ({
+    status,
+    source,
+    products,
+    cart,
+    cartState,
+    cartError,
+    isLoading,
+    isCartLoading: cartState === 'restoring' || cartState === 'mutating',
+    isCartOpen,
+    openCart: () => setIsCartOpen(true),
+    closeCart: () => setIsCartOpen(false),
+    refetchStatus,
+    refetchProducts,
+    refreshCart,
+    addToCart,
+    updateCartItem,
+    removeFromCart,
+  }), [
+    addToCart, cart, cartError, cartState, isCartOpen, isLoading,
+    refreshCart, refetchProducts, refetchStatus, removeFromCart, source, status,
+    updateCartItem, products,
+  ]);
 
-      if (currentCartId) {
-        let updatedCart = await addLinesToCart(currentCartId, [{ merchandiseId, quantity }]);
-        if (updatedCart && user) {
-          const discountedCart = await applyCartDiscountCode(currentCartId, ['BRUTO_SOCIO_10']);
-          if (discountedCart) updatedCart = discountedCart;
-        }
-        if (updatedCart) setCart(updatedCart);
-      }
-    } finally {
-      setIsCartLoading(false);
-    }
-  };
-
-  const updateCartItem = async (lineId: string, quantity: number) => {
-    if (!cartId) return;
-    setIsCartLoading(true);
-    try {
-      const updatedCart = await updateCartLines(cartId, [{ id: lineId, quantity }]);
-      if (updatedCart) setCart(updatedCart);
-    } finally {
-      setIsCartLoading(false);
-    }
-  };
-
-  const removeFromCart = async (lineId: string) => {
-    if (!cartId) return;
-    setIsCartLoading(true);
-    try {
-      const updatedCart = await removeCartLines(cartId, [lineId]);
-      if (updatedCart) setCart(updatedCart);
-    } finally {
-      setIsCartLoading(false);
-    }
-  };
-
-  return (
-    <ShopifyContext.Provider
-      value={{
-        status,
-        products,
-        cart,
-        isLoading,
-        isCartLoading,
-        refetchStatus,
-        refetchProducts,
-        addToCart,
-        updateCartItem,
-        removeFromCart,
-      }}
-    >
-      {children}
-    </ShopifyContext.Provider>
-  );
+  return <ShopifyContext.Provider value={value}>{children}</ShopifyContext.Provider>;
 };
 
 export function useShopify(): ShopifyContextType {
   const context = useContext(ShopifyContext);
-  if (!context) {
-    throw new Error('useShopify must be used within a ShopifyProvider');
-  }
+  if (!context) throw new Error('useShopify must be used within a ShopifyProvider');
   return context;
 }

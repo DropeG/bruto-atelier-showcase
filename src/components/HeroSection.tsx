@@ -29,7 +29,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onOpenNosotros }) => {
             }}
             loading="eager"
             decoding="async"
-            fetchPriority="high"
           />
         </picture>
         <div className="absolute inset-0 bg-foreground/20" />

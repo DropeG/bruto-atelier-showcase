@@ -70,7 +70,6 @@ export const SingleVideoBanner = ({
         muted
         playsInline
         poster={poster}
-        // @ts-expect-error - Atributo legacy requerido para iOS Safari auto-play sin botón de play
         webkit-playsinline="true"
         preload="auto"
         className="w-full h-full object-cover block"
@@ -100,7 +99,6 @@ const VideoSection = () => {
             loop
             muted
             playsInline
-            // @ts-expect-error - Atributo legacy requerido para iOS Safari auto-play
             webkit-playsinline="true"
             preload="auto"
             className="w-full h-full object-cover"

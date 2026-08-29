@@ -10,9 +10,11 @@ const Category = () => {
   const { discipline, type, id, category, title } = useParams();
   const location = useLocation();
   const isMobile = useIsMobile();
+  const isDiscipline = (value: string | undefined): value is Discipline =>
+    value === "arquitectura" || value === "interiorismo" || value === "mobiliario" || value === "independent";
   
   // 1. Resolve current context from parameters or URL path
-  let currentDiscipline = discipline as string | undefined;
+  let currentDiscipline = isDiscipline(discipline) ? discipline : undefined;
   let currentType = type as MobiliarioType | undefined;
   
   // Extract path identifier

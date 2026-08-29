@@ -6,6 +6,7 @@ import {
   NosotrosModal,
   WhatsAppButton,
   DiscountButton,
+  ShoppableGallery,
 } from "@/components";
 import { SingleVideoBanner } from "@/components/VideoSection";
 import { useScroll } from "@/contexts/ScrollContext";
@@ -87,6 +88,9 @@ const Index = () => {
         <div id="section-hero">
           <HeroSection onOpenNosotros={() => setOpenNosotros(true)} />
         </div>
+
+        {/* Editorial commerce: products remain part of the gallery rhythm */}
+        <ShoppableGallery />
 
         {/* Section 2: Desktop Video Block */}
         <div id="section-video">

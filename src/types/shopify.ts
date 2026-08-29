@@ -62,6 +62,9 @@ export interface ShopifyCollection {
   title: string;
   description: string;
   image?: ShopifyImage | null;
+  products?: {
+    edges: Array<{ node: ShopifyProduct }>;
+  };
 }
 
 export interface ShopInfo {
@@ -83,6 +86,38 @@ export interface ShopifyGraphQLResponse<T> {
     locations?: Array<{ line: number; column: number }>;
     path?: string[];
   }>;
+}
+
+export type CommerceErrorCode =
+  | 'CONFIGURATION'
+  | 'DEMO_MODE'
+  | 'NETWORK'
+  | 'HTTP'
+  | 'GRAPHQL'
+  | 'USER_ERROR'
+  | 'CART_EXPIRED'
+  | 'NOT_FOUND'
+  | 'INVALID_INPUT'
+  | 'UNKNOWN';
+
+export interface CommerceError {
+  code: CommerceErrorCode;
+  message: string;
+  field?: string[];
+}
+
+export interface CommerceWarning {
+  code?: string;
+  message: string;
+  target?: string;
+}
+
+/** A non-throwing result for catalog and cart operations. */
+export interface CommerceResult<T> {
+  ok: boolean;
+  data: T | null;
+  errors: CommerceError[];
+  warnings: CommerceWarning[];
 }
 
 export interface ShopifyConnectionStatus {
@@ -117,9 +152,20 @@ export interface ShopifyCart {
     totalAmount: ShopifyMoney;
     subtotalAmount: ShopifyMoney;
   };
+  discountCodes?: Array<{
+    applicable: boolean;
+    code: string;
+  }>;
   lines: {
     edges: Array<{ node: ShopifyCartLine }>;
   };
+}
+
+export type CartState = 'idle' | 'restoring' | 'ready' | 'mutating' | 'error';
+export type ShopifyDataSource = 'shopify' | 'demo' | 'unavailable';
+
+export interface CartActionResult extends CommerceResult<ShopifyCart> {
+  action: 'create' | 'restore' | 'add' | 'update' | 'remove' | 'discount';
 }
 
 export interface ShopifyCustomer {
