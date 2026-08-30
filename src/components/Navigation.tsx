@@ -458,18 +458,25 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="md:hidden fixed inset-0 z-50 bg-[#9C7B66] text-white flex flex-col h-[100dvh] overflow-hidden"
+              className="md:hidden fixed inset-0 z-50 bg-[#9C7B66] text-white flex flex-col h-[100dvh] overflow-hidden select-none touch-manipulation"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Top Header of Mobile Menu */}
-              <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-white/10 flex-shrink-0">
+              <div
+                style={{ paddingTop: "max(1.25rem, env(safe-area-inset-top, 24px))" }}
+                className="flex items-center justify-between px-6 pb-4 border-b border-white/10 flex-shrink-0"
+              >
                 <span className="font-sans text-xs tracking-[0.2em] font-medium text-white/90">
                   BRUTO Atelier
                 </span>
                 <button
                   type="button"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="p-2 -mr-2 text-white/80 hover:text-white transition-colors cursor-pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsMenuOpen(false);
+                  }}
+                  className="w-12 h-12 -mr-3 flex items-center justify-center text-white active:bg-white/15 active:scale-90 rounded-full transition-all cursor-pointer touch-manipulation"
                   aria-label="Cerrar menú"
                 >
                   <X className="w-6 h-6" />
@@ -480,12 +487,16 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
               <div className="flex-1 overflow-y-auto px-6 py-5 font-serif">
                 {activePanel === "contacto" || (activePanel && comingSoonCategories[activePanel]) ? (
                   <div>
-                    <div className="relative flex items-center justify-center">
+                    <div className="relative flex items-center justify-center min-h-[48px]">
                       <button
                         type="button"
-                        onClick={() => setActivePanel(null)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setActivePanel(null);
+                        }}
                         aria-label="Volver"
-                        className="absolute left-0 inline-flex items-center p-1.5 -ml-1.5 hover:opacity-80 transition-opacity min-w-[44px] min-h-[44px] justify-center"
+                        className="absolute left-0 inline-flex items-center justify-center w-12 h-12 -ml-3 active:bg-white/15 active:scale-90 rounded-full transition-all touch-manipulation cursor-pointer"
                       >
                         <ArrowLeft className="w-5 h-5" />
                       </button>
@@ -690,7 +701,10 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
               </div>
 
               {/* Pinned Sticky Footer for Account (Always Visible) */}
-              <div className="flex-shrink-0 border-t border-white/15 bg-[#8A6A55] p-5 pb-safe shadow-2xl">
+              <div
+                style={{ paddingBottom: "max(1.25rem, env(safe-area-inset-bottom, 20px))" }}
+                className="flex-shrink-0 border-t border-white/15 bg-[#8A6A55] p-5 shadow-2xl"
+              >
                 {user ? (
                   <div className="space-y-2.5">
                     <div className="flex items-center justify-between">
