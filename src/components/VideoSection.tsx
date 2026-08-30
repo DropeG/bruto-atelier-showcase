@@ -72,7 +72,7 @@ export const SingleVideoBanner = ({
         poster={poster}
         // @ts-expect-error - Atributo legacy requerido para iOS Safari auto-play sin botón de play
         webkit-playsinline="true"
-        preload="auto"
+        preload="metadata"
         className="w-full h-full object-cover block"
       >
         <source src={videoSource} type="video/mp4" />
@@ -84,9 +84,9 @@ export const SingleVideoBanner = ({
 
 const VideoSection = () => {
   const videos = [
-    { src: "/videos/video1.mp4", alt: "Video 1" },
-    { src: "/videos/video2.mp4", alt: "Video 2" },
-    { src: "/videos/video3.mp4", alt: "Video 3" },
+    { src: "/videos/video1.mp4", alt: "Video 1", poster: "/videos/video1-poster.webp" },
+    { src: "/videos/video2.mp4", alt: "Video 2", poster: "/videos/video2-poster.webp" },
+    { src: "/videos/video3.mp4", alt: "Video 3", poster: "/videos/video3-poster.webp" },
   ];
 
   return (
@@ -96,13 +96,14 @@ const VideoSection = () => {
         <div key={index} className="h-full w-1/3 flex items-center justify-center border-r border-white/10 last:border-r-0">
           <video
             src={video.src}
+            poster={video.poster}
             autoPlay
             loop
             muted
             playsInline
             // @ts-expect-error - Atributo legacy requerido para iOS Safari auto-play
             webkit-playsinline="true"
-            preload="auto"
+            preload="metadata"
             className="w-full h-full object-cover"
           >
             <source src={video.src} type="video/mp4" />

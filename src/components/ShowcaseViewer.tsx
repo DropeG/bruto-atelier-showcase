@@ -199,19 +199,37 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
                 {item.layout === "double" ? (
                   <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 animate-fade-in-up">
                     {[item.detailImage, item.secondaryImage].filter(Boolean).map((imageSrc, imageIndex) => (
-                      <div key={`${item.id}-image-${imageIndex}`} className="relative bg-white shadow-2xl" style={{ maxWidth: 'min(34vw, 360px)', maxHeight: '80vh' }}>
-                        <img src={imageSrc} alt={`${item.title} ${imageIndex + 1}`} draggable={false} className="w-full h-auto block md:object-contain select-none" style={{ maxHeight: '80vh' }} loading="eager" />
+                      <div key={`${item.id}-image-${imageIndex}`} className="relative bg-white shadow-2xl overflow-hidden" style={{ maxWidth: 'min(34vw, 360px)', maxHeight: '80vh' }}>
+                        {/* Placeholder para mantener las proporciones y dar preview borrosa (CLS fix & Perceived Performance) */}
+                        <img src={item.thumbnail} aria-hidden="true" draggable={false} className="w-full h-auto block md:object-contain select-none" style={{ maxHeight: '80vh', filter: 'blur(10px)', opacity: 0.7, transform: 'scale(1.02)' }} />
+                        <img 
+                          src={imageSrc} 
+                          alt={`${item.title} ${imageIndex + 1}`} 
+                          draggable={false} 
+                          className={`w-full h-full object-cover md:object-contain absolute inset-0 select-none transition-opacity duration-700 ease-out ${imagesLoaded[item.id] ? 'opacity-100' : 'opacity-0'}`}
+                          loading="eager" 
+                        />
                       </div>
                     ))}
                   </div>
                 ) : (
                   <div className="relative bg-white shadow-2xl animate-fade-in-up max-w-[85vw] md:max-w-[min(70vw,65vh)] xl:max-w-[85vw]" style={{ maxHeight: '80vh' }}>
-                    <img src={item.detailImage} alt={item.title} draggable={false} className="w-full h-auto block md:object-contain select-none" style={{ maxHeight: '80vh' }} loading="eager" decoding="async" fetchPriority="high" />
+                    {/* Placeholder para mantener las proporciones y dar preview borrosa (CLS fix & Perceived Performance) */}
+                    <img src={item.thumbnail} aria-hidden="true" draggable={false} className="w-full h-auto block md:object-contain select-none" style={{ maxHeight: '80vh', filter: 'blur(10px)', opacity: 0.7, transform: 'scale(1.02)' }} />
+                    <img 
+                      src={item.detailImage} 
+                      alt={item.title} 
+                      draggable={false} 
+                      className={`w-full h-full object-cover md:object-contain absolute inset-0 select-none transition-opacity duration-700 ease-out ${imagesLoaded[item.id] ? 'opacity-100' : 'opacity-0'}`} 
+                      loading="eager" 
+                      decoding="async" 
+                      fetchPriority="high" 
+                    />
                   </div>
                 )}
 
                 {/* Botón HABLEMOS Universal */}
-                <div className={`absolute bottom-[9%] md:bottom-[10%] left-0 w-full flex justify-center ${item.layout === "double" ? "relative bottom-0 mt-4" : ""}`}>
+                <div className={`absolute bottom-[9%] md:bottom-[10%] left-0 w-full flex justify-center transition-opacity duration-700 delay-150 ease-out ${imagesLoaded[item.id] ? 'opacity-100' : 'opacity-0'} ${item.layout === "double" ? "relative bottom-0 mt-4" : ""}`}>
                   
                   {/* Ancla del botón + subtítulo con contexto de ancho para evitar desbordes */}
                   <div className="relative flex w-full justify-center px-4">
