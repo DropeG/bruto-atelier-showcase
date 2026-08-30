@@ -90,9 +90,9 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
         initial={{ y: 0 }}
         animate={{ y: isAtTop ? 0 : -100 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
-        className={`${position} top-0 left-0 right-0 z-50 section-padding py-6 transition-colors duration-300 ${
+        className={`${position} top-0 left-0 right-0 z-30 section-padding py-6 transition-colors duration-300 ${
           isAtTop ? "bg-transparent" : "bg-background/80 backdrop-blur-sm"
-        }`}
+        } ${isMenuOpen ? "pointer-events-none md:pointer-events-auto" : ""}`}
       >
         <nav className="flex items-center justify-between">
           {/* Left side - Hamburger */}
@@ -210,7 +210,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 bg-black/20"
+            className="fixed inset-0 z-[90] bg-black/20"
             onClick={() => setIsMenuOpen(false)}
           >
             {/* Desktop Menu - floating */}
@@ -458,15 +458,15 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="md:hidden fixed inset-0 z-50 bg-[#9C7B66] text-white flex flex-col h-[100dvh] overflow-hidden select-none touch-manipulation"
+              className="md:hidden fixed inset-0 z-[100] bg-[#9C7B66] text-white flex flex-col h-[100dvh] overflow-hidden select-none touch-manipulation pointer-events-auto"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Top Header of Mobile Menu */}
               <div
-                style={{ paddingTop: "max(1.25rem, env(safe-area-inset-top, 24px))" }}
+                style={{ paddingTop: "max(1.5rem, env(safe-area-inset-top, 24px))" }}
                 className="flex items-center justify-between px-6 pb-4 border-b border-white/10 flex-shrink-0"
               >
-                <span className="font-sans text-xs tracking-[0.2em] font-medium text-white/90">
+                <span className="font-sans text-xs tracking-[0.2em] font-medium text-white/90 select-none pointer-events-none">
                   BRUTO Atelier
                 </span>
                 <button
@@ -476,18 +476,23 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                     e.stopPropagation();
                     setIsMenuOpen(false);
                   }}
-                  className="w-12 h-12 -mr-3 flex items-center justify-center text-white active:bg-white/15 active:scale-90 rounded-full transition-all cursor-pointer touch-manipulation"
+                  onTouchEnd={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsMenuOpen(false);
+                  }}
+                  className="relative z-[110] w-14 h-14 min-w-[56px] min-h-[56px] -mr-3 flex items-center justify-center text-white active:bg-white/20 active:scale-95 rounded-full transition-transform cursor-pointer touch-manipulation pointer-events-auto"
                   aria-label="Cerrar menú"
                 >
-                  <X className="w-6 h-6" />
+                  <X className="w-6 h-6 pointer-events-none stroke-[2]" />
                 </button>
               </div>
 
               {/* Scrollable Navigation Body */}
-              <div className="flex-1 overflow-y-auto px-6 py-5 font-serif">
+              <div className="flex-1 overflow-y-auto px-6 py-5 font-serif overscroll-contain">
                 {activePanel === "contacto" || (activePanel && comingSoonCategories[activePanel]) ? (
                   <div>
-                    <div className="relative flex items-center justify-center min-h-[48px]">
+                    <div className="relative flex items-center justify-center min-h-[56px]">
                       <button
                         type="button"
                         onClick={(e) => {
@@ -495,10 +500,15 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                           e.stopPropagation();
                           setActivePanel(null);
                         }}
+                        onTouchEnd={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setActivePanel(null);
+                        }}
                         aria-label="Volver"
-                        className="absolute left-0 inline-flex items-center justify-center w-12 h-12 -ml-3 active:bg-white/15 active:scale-90 rounded-full transition-all touch-manipulation cursor-pointer"
+                        className="absolute left-0 inline-flex items-center justify-center w-14 h-14 min-w-[56px] min-h-[56px] -ml-3 active:bg-white/20 active:scale-95 rounded-full transition-transform touch-manipulation cursor-pointer z-[110] pointer-events-auto"
                       >
-                        <ArrowLeft className="w-5 h-5" />
+                        <ArrowLeft className="w-5 h-5 pointer-events-none" />
                       </button>
                       <div className="text-sm font-medium tracking-[0.15em] uppercase text-white/90">
                         {activePanel === "contacto" ? "Contacto" : "Next Season"}
