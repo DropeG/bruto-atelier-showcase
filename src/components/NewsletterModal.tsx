@@ -363,7 +363,7 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
                   }}
                   className={`w-1/2 min-h-[38px] flex items-center justify-center gap-1.5 text-xs uppercase tracking-wider rounded-full transition-all duration-300 font-medium ${
                     !isLoginMode 
-                      ? "bg-[#F7F5F0] text-[#3D261C] font-semibold shadow-md" 
+                      ? "bg-[#EAD0B9] text-[#3D261C] font-semibold shadow-sm" 
                       : "text-[#F7F5F0]/80 hover:text-[#F7F5F0]"
                   }`}
                 >
@@ -383,7 +383,7 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
                   }}
                   className={`w-1/2 min-h-[38px] flex items-center justify-center text-xs uppercase tracking-wider rounded-full transition-all duration-300 font-medium ${
                     isLoginMode 
-                      ? "bg-[#F7F5F0] text-[#3D261C] font-semibold shadow-md" 
+                      ? "bg-[#EAD0B9] text-[#3D261C] font-semibold shadow-sm" 
                       : "text-[#F7F5F0]/80 hover:text-[#F7F5F0]"
                   }`}
                 >
@@ -501,7 +501,7 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-[#F7F5F0] text-[#3D261C] py-3.5 mt-2 min-h-[48px] text-xs uppercase tracking-[0.2em] font-medium hover:bg-white hover:shadow-lg transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.99] rounded-sm flex items-center justify-center"
+                  className="w-full bg-[#EAD0B9] text-[#3D261C] py-3.5 mt-2 min-h-[48px] text-xs uppercase tracking-[0.2em] font-medium hover:bg-[#dfc4ac] hover:shadow-lg transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.99] rounded-sm flex items-center justify-center"
                 >
                   {isLoading ? (
                     <span className="inline-flex items-center gap-2">
