@@ -466,7 +466,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                 style={{ paddingTop: "max(1.5rem, env(safe-area-inset-top, 24px))" }}
                 className="flex items-center justify-between px-6 pb-4 border-b border-white/10 flex-shrink-0"
               >
-                <span className="font-sans text-xs tracking-[0.2em] font-medium text-white/90 select-none pointer-events-none">
+                <span className="font-sans text-sm md:text-base tracking-[0.22em] font-semibold text-white select-none pointer-events-none">
                   BRUTO Atelier
                 </span>
                 <button
@@ -548,7 +548,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                           const cat = comingSoonCategories[activePanel];
                           return (
                             <div className="space-y-3 text-sm leading-relaxed font-serif max-w-sm mx-auto">
-                              <div className="text-[11px] tracking-[0.25em] uppercase text-white/75 font-sans font-medium">
+                              <div className="text-xs md:text-sm tracking-[0.25em] uppercase text-white/90 font-sans font-semibold">
                                 BRUTO Atelier
                               </div>
                               <div className="text-2xl font-serif font-medium tracking-wide">{cat.title}</div>

@@ -26,3 +26,6 @@ public/demos/
 
 # Vercel
 .vercel
+
+*.tsbuildinfo
+.impeccable/
