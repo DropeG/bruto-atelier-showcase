@@ -93,6 +93,23 @@ const Index = () => {
           <VideoSection />
         </div>
 
+        {/* Sequential Mobile Video Banners (1, 2, 3) */}
+        <SingleVideoBanner
+          src="/videos/video1.mp4"
+          mobileSrc="/videos/video1-mobile.mp4"
+          poster="/videos/video1-poster.webp"
+        />
+        <SingleVideoBanner
+          src="/videos/video2.mp4"
+          mobileSrc="/videos/video2-mobile.mp4"
+          poster="/videos/video2-poster.webp"
+        />
+        <SingleVideoBanner
+          src="/videos/video3.mp4"
+          mobileSrc="/videos/video3-mobile.mp4"
+          poster="/videos/video3-poster.webp"
+        />
+
         {/* ImageRow 1: Cocina y Mueble Azul */}
         <div id="section-row-1">
           <ImageRow
@@ -107,13 +124,6 @@ const Index = () => {
             rightBlurDataUrl={blurPlaceholders.imageHome2}
           />
         </div>
-
-        {/* Intercalated Mobile Video 1 */}
-        <SingleVideoBanner
-          src="/videos/video1.mp4"
-          mobileSrc="/videos/video1-mobile.mp4"
-          poster="/videos/video1-poster.webp"
-        />
 
         {/* ImageRow 2: Comedor y Paisaje */}
         <div id="section-row-2">
@@ -145,13 +155,6 @@ const Index = () => {
           />
         </div>
 
-        {/* Intercalated Mobile Video 2 */}
-        <SingleVideoBanner
-          src="/videos/video2.mp4"
-          mobileSrc="/videos/video2-mobile.mp4"
-          poster="/videos/video2-poster.webp"
-        />
-
         {/* ImageRow 4: Banqueta y Flores */}
         <div id="section-row-4">
           <ImageRow
@@ -166,13 +169,6 @@ const Index = () => {
             rightBlurDataUrl={blurPlaceholders.imageHome8}
           />
         </div>
-
-        {/* Intercalated Mobile Video 3 */}
-        <SingleVideoBanner
-          src="/videos/video3.mp4"
-          mobileSrc="/videos/video3-mobile.mp4"
-          poster="/videos/video3-poster.webp"
-        />
 
         {/* ImageRow 5: Mueble Rojo y Cabina */}
         <div id="section-row-5">
