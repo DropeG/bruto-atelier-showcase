@@ -27,7 +27,7 @@ type NavigationProps = {
 };
 
 const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) => {
-  const { user, logout, openAuthModal } = useAuth();
+  const { user, logout, openAuthModal, authModalMode } = useAuth();
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -175,7 +175,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                 </div>
               ) : (
                 <button
-                  onClick={openAuthModal}
+                  onClick={() => openAuthModal("login")}
                   className="p-2 hover:opacity-60 transition-opacity"
                   aria-label="Iniciar sesión"
                 >
@@ -749,19 +749,32 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                     </div>
                   </div>
                 ) : (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsMenuOpen(false);
-                      openAuthModal();
-                    }}
-                    className="w-full py-3 px-4 bg-white text-[#9C7B66] rounded-sm font-sans text-xs font-semibold uppercase tracking-wider flex items-center justify-between active:bg-white/90 transition-colors shadow-md cursor-pointer"
-                  >
-                    <span>Iniciar Sesión / Registro</span>
-                    <span className="bg-[#9C7B66]/15 text-[#9C7B66] px-2 py-0.5 rounded text-[10px] font-bold">
-                      10% OFF
-                    </span>
-                  </button>
+                  <div className="flex flex-col gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        openAuthModal("login");
+                      }}
+                      className="w-full py-3 px-4 bg-white text-[#9C7B66] rounded-sm font-sans text-xs font-semibold uppercase tracking-wider flex items-center justify-between active:bg-white/90 transition-colors shadow-md cursor-pointer"
+                    >
+                      <span>Iniciar Sesión</span>
+                      <span className="text-xs">→</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        openAuthModal("register");
+                      }}
+                      className="w-full py-2.5 px-4 bg-white/10 text-white rounded-sm font-sans text-xs font-medium uppercase tracking-wider flex items-center justify-between hover:bg-white/20 active:bg-white/15 transition-colors cursor-pointer"
+                    >
+                      <span>Unirme al Círculo Privado</span>
+                      <span className="bg-white/20 text-white px-2 py-0.5 rounded text-[10px] font-bold">
+                        10% OFF
+                      </span>
+                    </button>
+                  </div>
                 )}
               </div>
             </motion.div>
@@ -771,7 +784,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
 
       <NosotrosModal isOpen={isNosotrosOpen} onClose={() => setIsNosotrosOpen(false)} />
 
-      <NewsletterModal />
+      <NewsletterModal initialMode={authModalMode} />
     </>
   );
 };

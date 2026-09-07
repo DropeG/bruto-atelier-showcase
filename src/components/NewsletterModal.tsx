@@ -11,13 +11,32 @@ export interface NewsletterModalProps {
 const NewsletterModal: React.FC<NewsletterModalProps> = ({ 
   openModal, 
   onClose,
-  initialMode = "register" 
+  initialMode,
 }) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { user, login, signup, isLoading, error: authError, isAuthModalOpen, closeAuthModal } = useAuth();
+  const { user, login, signup, isLoading, error: authError, isAuthModalOpen, authModalMode, closeAuthModal } = useAuth();
   
-  const [isLoginMode, setIsLoginMode] = useState(initialMode === "login");
+  const isModalActive = openModal !== undefined ? openModal : isAuthModalOpen;
+  const currentTargetMode = initialMode ?? authModalMode ?? "register";
+  const [isLoginMode, setIsLoginMode] = useState(currentTargetMode === "login");
+  const [prevMode, setPrevMode] = useState(currentTargetMode);
+  const [prevIsOpen, setPrevIsOpen] = useState(isModalActive);
+  const [hasUserToggledTab, setHasUserToggledTab] = useState(false);
+
+  // Synchronously sync mode during render (before paint) so there is zero transition flash on open
+  if (currentTargetMode !== prevMode || (isModalActive && !prevIsOpen)) {
+    setPrevMode(currentTargetMode);
+    setPrevIsOpen(isModalActive);
+    setIsLoginMode(currentTargetMode === "login");
+    setHasUserToggledTab(false);
+  } else if (isModalActive !== prevIsOpen) {
+    setPrevIsOpen(isModalActive);
+    if (!isModalActive) {
+      setHasUserToggledTab(false);
+    }
+  }
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,13 +47,6 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
   // Touch swipe handling for mobile bottom sheet
   const touchStartY = useRef<number | null>(null);
   const touchCurrentY = useRef<number | null>(null);
-
-  // Sync mode if initialMode changes
-  useEffect(() => {
-    if (initialMode) {
-      setIsLoginMode(initialMode === "login");
-    }
-  }, [initialMode]);
 
   // Core modal logic using native HTMLDialogElement
   useEffect(() => {
@@ -87,6 +99,7 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
       setEmail("");
       setPassword("");
       setShowPassword(false);
+      setHasUserToggledTab(false);
       closeAuthModal();
       if (onClose) onClose();
     }, 380);
@@ -308,7 +321,7 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
           <div className="hidden md:block w-1/2 min-h-[540px] relative overflow-hidden bg-[#8B6B58]">
             <img
               src="/images/newsLetterModal/newsLetter.webp"
-              alt="Bruto Atelier Círculo Privado"
+              alt="BRUTO Atelier Círculo Privado"
               className="absolute inset-0 w-full h-full object-cover object-center brightness-95 contrast-[1.03]"
               loading="lazy"
             />
@@ -349,7 +362,7 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
               {/* Eyebrow */}
               <div className="mb-3 flex items-center gap-2">
                 <span className="text-[10px] uppercase tracking-[0.25em] text-[#F7F5F0]/75 font-sans font-medium">
-                  CÍRCULO PRIVADO • BRUTO ATELIER
+                  CÍRCULO PRIVADO • BRUTO Atelier
                 </span>
               </div>
 
@@ -358,10 +371,13 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
                 <button
                   type="button"
                   onClick={() => {
+                    setHasUserToggledTab(true);
                     setIsLoginMode(false);
                     setFormError("");
                   }}
-                  className={`w-1/2 min-h-[38px] flex items-center justify-center gap-1.5 text-xs uppercase tracking-wider rounded-full transition-all duration-300 font-medium ${
+                  className={`w-1/2 min-h-[38px] flex items-center justify-center gap-1.5 text-xs uppercase tracking-wider rounded-full ${
+                    hasUserToggledTab ? "transition-all duration-300" : "transition-none"
+                  } font-medium ${
                     !isLoginMode 
                       ? "bg-[#EAD0B9] text-[#3D261C] font-semibold shadow-sm" 
                       : "text-[#F7F5F0]/80 hover:text-[#F7F5F0]"
@@ -378,10 +394,13 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
                 <button
                   type="button"
                   onClick={() => {
+                    setHasUserToggledTab(true);
                     setIsLoginMode(true);
                     setFormError("");
                   }}
-                  className={`w-1/2 min-h-[38px] flex items-center justify-center text-xs uppercase tracking-wider rounded-full transition-all duration-300 font-medium ${
+                  className={`w-1/2 min-h-[38px] flex items-center justify-center text-xs uppercase tracking-wider rounded-full ${
+                    hasUserToggledTab ? "transition-all duration-300" : "transition-none"
+                  } font-medium ${
                     isLoginMode 
                       ? "bg-[#EAD0B9] text-[#3D261C] font-semibold shadow-sm" 
                       : "text-[#F7F5F0]/80 hover:text-[#F7F5F0]"

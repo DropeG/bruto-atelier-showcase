@@ -11,9 +11,10 @@ export interface User {
 export interface AuthContextType {
   user: User | null;
   isAuthModalOpen: boolean;
+  authModalMode: "login" | "register";
   isLoading: boolean;
   error: string | null;
-  openAuthModal: () => void;
+  openAuthModal: (mode?: "login" | "register") => void;
   closeAuthModal: () => void;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
@@ -25,6 +26,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState<"login" | "register">("register");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -53,8 +55,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     initAuth();
   }, []);
 
-  const openAuthModal = useCallback(() => {
+  const openAuthModal = useCallback((mode: "login" | "register" = "register") => {
     setError(null);
+    setAuthModalMode(mode);
     setIsAuthModalOpen(true);
   }, []);
   
@@ -130,6 +133,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       value={{
         user,
         isAuthModalOpen,
+        authModalMode,
         isLoading,
         error,
         openAuthModal,
