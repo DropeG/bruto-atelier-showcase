@@ -19,6 +19,7 @@ export const blurPlaceholders: { [key: string]: string } = {
   image7: "data:image/webp;base64,UklGRnIAAABXRUJQVlA4IGYAAAAwAgCdASoKAAoAAUAmJQBOgCPw5jozyq8RwAD2vv77/4M0ErV8ZOs5AF39mzKhv/T+Xs/ECrbtmrOL4Y/QS0WoE287ZtEOWm1iHaR68KCf450qd9D/hc39i5PVVPd/gWdjrWYQAAA=",
   image8: "data:image/webp;base64,UklGRnwAAABXRUJQVlA4IHAAAADwAQCdASoKAAoAAUAmJaACdADdHULvLQAA/r5+Sk+aZPuyGD/vceKa/5+u5pR7zqhvKbev6MVZojWEYXdpqTilCz99gpZlzq9/KvySon+OC6XTe+02Of17++vKAiD7P7bv9avh7825n66uR098MYAA",
   image9: "data:image/webp;base64,UklGRpAAAABXRUJQVlA4IIQAAAAwAgCdASoKAAoAAUAmJbACdAD/EuJ8RtqxkAD+bKQj1LZbSd6uxj4s1ds0JkCr7c7BLs3+CkoKRf3jb++lVthSeA4O85jjZqMODfPPfxzcFXDSPIIQ4wtX0u9EXtrHqprFQTqdN2U8QeUUI4Cf98tHumffGHglXnQHgRf5JkNhpZYAAAA=",
+  newsletterModal: "data:image/webp;base64,UklGRlgAAABXRUJQVlA4IEwAAADwAQCdASoKAAoAAoBCJagCdADdrPkOwAAAzjCC7/Nk50/KDiKQp76utF0o1VNOyO5UgGnFeXSIQxUvJCPTP3Rub30Af8Oa1+72AAAA",
 };
 
 export const getBlurDataUrl = (imageKey: string): string | undefined => {

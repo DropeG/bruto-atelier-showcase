@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { X, Check, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { blurPlaceholders } from "@/lib/blur-placeholders";
 
 export interface NewsletterModalProps {
   openModal?: boolean;
@@ -43,6 +44,30 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
   const [showPassword, setShowPassword] = useState(false);
   const [formError, setFormError] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+
+  // Pre-warmup modal image in memory cache during idle time on desktop (>=768px)
+  useEffect(() => {
+    if (typeof window === "undefined" || window.innerWidth < 768) return;
+    
+    const warmup = () => {
+      const img = new Image();
+      img.src = "/images/newsLetterModal/newsLetter.webp";
+      img.onload = () => setIsImageLoaded(true);
+    };
+
+    if ("requestIdleCallback" in window) {
+      const id = (window as unknown as { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback(warmup, { timeout: 2000 });
+      return () => {
+        if ("cancelIdleCallback" in window) {
+          (window as unknown as { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(id);
+        }
+      };
+    } else {
+      const timer = setTimeout(warmup, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   // Touch swipe handling for mobile bottom sheet
   const touchStartY = useRef<number | null>(null);
@@ -61,8 +86,13 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
     if (shouldOpen) {
       if (!dialog.open) {
         dialog.showModal();
-        // Prevent body background scrolling when modal is active
+        // Prevent body and html background scrolling when modal is active
         document.body.style.overflow = "hidden";
+        document.documentElement.style.overflow = "hidden";
+        // Remove accidental auto-focus on close button in WebKit/Safari
+        if (document.activeElement instanceof HTMLElement) {
+          document.activeElement.blur();
+        }
       }
     } else {
       // Check if modal has been shown before in localStorage and user is not logged in
@@ -72,12 +102,21 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
           if (!dialog.open && !user) {
             dialog.showModal();
             document.body.style.overflow = "hidden";
+            document.documentElement.style.overflow = "hidden";
+            if (document.activeElement instanceof HTMLElement) {
+              document.activeElement.blur();
+            }
             localStorage.setItem("newsletterModalShown", "true");
           }
         }, 2500);
         return () => clearTimeout(timer);
       }
     }
+
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
   }, [openModal, isAuthModalOpen, user]);
 
   const handleClose = useCallback(() => {
@@ -91,6 +130,7 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
       if (dialog.open) dialog.close();
       dialog.classList.remove("is-closing");
       document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
       
       // Reset states
       setIsSuccess(false);
@@ -198,9 +238,24 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
           background: transparent;
           border: none;
           outline: none;
-          overflow: visible;
-          max-width: 90vw;
+          overflow: hidden !important;
           margin: auto;
+          width: calc(100% - 2rem);
+          max-width: 92vw;
+        }
+
+        @media (min-width: 768px) {
+          dialog.circulo-dialog {
+            width: 100%;
+            max-width: 50rem; /* 800px en tablets */
+          }
+        }
+
+        @media (min-width: 1024px) {
+          dialog.circulo-dialog {
+            width: 100%;
+            max-width: 55rem; /* 880px tope definitivo en monitores grandes y ultrawide */
+          }
         }
 
         dialog.circulo-dialog::backdrop {
@@ -270,6 +325,16 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
           to { transform: translateY(100%); opacity: 0; }
         }
 
+        /* Remove default WebKit/Safari blue focus ring & tap highlight */
+        .circulo-dialog button,
+        .circulo-dialog button:focus,
+        .circulo-dialog button:focus-visible,
+        .circulo-dialog button:active {
+          outline: none !important;
+          box-shadow: none !important;
+          -webkit-tap-highlight-color: transparent !important;
+        }
+
         /* Autofill luxury styling fix for Chrome / Safari */
         .circulo-dialog input:-webkit-autofill,
         .circulo-dialog input:-webkit-autofill:hover, 
@@ -290,11 +355,11 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
           e.preventDefault();
           handleClose();
         }}
-        className="circulo-dialog w-full md:max-w-4xl"
+        className="circulo-dialog w-full"
       >
         <div 
           ref={containerRef}
-          className="bg-[#9C7B66] text-[#F7F5F0] overflow-hidden flex flex-col md:flex-row shadow-2xl relative rounded-t-3xl md:rounded-none max-h-[90dvh] md:max-h-none overflow-y-auto md:overflow-visible overscroll-contain"
+          className="bg-[#9C7B66] text-[#F7F5F0] overflow-hidden flex flex-col md:flex-row shadow-2xl relative rounded-t-3xl md:rounded-sm max-h-[90dvh] md:max-h-none overflow-y-auto md:overflow-hidden overscroll-contain"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Mobile Drag Handle (Swipe down to dismiss) */}
@@ -311,24 +376,32 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
           <button
             onClick={handleClose}
             disabled={isSuccess}
-            className="absolute top-3 right-3 md:top-4 md:right-4 z-30 text-[#F7F5F0]/80 hover:text-[#F7F5F0] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full hover:bg-black/10 active:scale-95 disabled:opacity-0"
+            tabIndex={-1}
+            className="absolute top-3 right-3 md:top-4 md:right-4 z-30 text-[#F7F5F0]/80 hover:text-[#F7F5F0] transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center rounded-full hover:bg-black/10 active:scale-95 disabled:opacity-0 focus:outline-none focus:ring-0 focus-visible:outline-none select-none"
             aria-label="Cerrar ventana"
           >
             <X className="w-5 h-5 md:w-6 md:h-6" strokeWidth={1.5} />
           </button>
 
           {/* Desktop Editorial Image Column (Hidden on mobile for 100% thumb-zone focus) */}
-          <div className="hidden md:block w-1/2 min-h-[540px] relative overflow-hidden bg-[#8B6B58]">
+          <div 
+            className="hidden md:block w-1/2 min-h-[520px] lg:min-h-[560px] relative overflow-hidden bg-[#8B6B58] self-stretch bg-cover bg-center"
+            style={{ backgroundImage: `url(${blurPlaceholders.newsletterModal})` }}
+          >
             <img
               src="/images/newsLetterModal/newsLetter.webp"
-              alt="BRUTO Atelier Círculo Privado"
-              className="absolute inset-0 w-full h-full object-cover object-center brightness-95 contrast-[1.03]"
-              loading="lazy"
+              alt="BRUTO Atelier Selectos"
+              onLoad={() => setIsImageLoaded(true)}
+              className={`absolute inset-0 w-full h-full object-cover object-center brightness-95 contrast-[1.03] transition-opacity duration-500 ${
+                isImageLoaded ? "opacity-100" : "opacity-0"
+              }`}
+              loading="eager"
+              decoding="async"
             />
           </div>
 
           {/* Form Side / Thumb Zone Area */}
-          <div className="w-full md:w-1/2 p-6 sm:p-8 md:p-12 flex flex-col justify-center relative overflow-hidden">
+          <div className="w-full md:w-1/2 p-6 sm:p-8 md:p-10 lg:p-11 flex flex-col justify-center relative overflow-y-auto md:overflow-hidden">
             
             {/* Success State Overlay */}
             <div 
@@ -341,7 +414,7 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
               </div>
               
               <h2 className="text-2xl sm:text-3xl font-light text-center mb-3 tracking-[-0.02em] font-serif">
-                {isLoginMode ? "¡Bienvenido de vuelta!" : "¡Bienvenido al Círculo Privado!"}
+                {isLoginMode ? "¡Bienvenido de vuelta!" : "¡Bienvenido a Selectos!"}
               </h2>
               
               <p className="text-sm font-light text-[#F7F5F0]/90 leading-relaxed max-w-[320px] mx-auto mb-6">
@@ -357,12 +430,12 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
             </div>
 
             {/* Main Interactive Form Area */}
-            <div className={`transition-all duration-500 flex flex-col justify-center ${isSuccess ? 'opacity-0 scale-[0.98] pointer-events-none' : 'opacity-100 scale-100'}`}>
+            <div className={`w-full max-w-[380px] mx-auto transition-all duration-500 flex flex-col justify-center ${isSuccess ? 'opacity-0 scale-[0.98] pointer-events-none' : 'opacity-100 scale-100'}`}>
               
               {/* Eyebrow */}
               <div className="mb-3 flex items-center gap-2">
                 <span className="text-[10px] uppercase tracking-[0.25em] text-[#F7F5F0]/75 font-sans font-medium">
-                  CÍRCULO PRIVADO • BRUTO Atelier
+                  SELECTOS • BRUTO Atelier
                 </span>
               </div>
 
@@ -411,15 +484,9 @@ const NewsletterModal: React.FC<NewsletterModalProps> = ({
               </div>
 
               {/* Dynamic Header */}
-              <h2 className="text-2xl sm:text-3xl font-light mb-1.5 tracking-[-0.02em] font-serif leading-tight">
-                {isLoginMode ? "Acceso de Socios" : "10% en tu primera compra"}
+              <h2 className="text-[28px] sm:text-3xl md:text-[32px] font-normal sm:font-light mb-5 sm:mb-6 tracking-[-0.02em] font-serif leading-[1.2]">
+                {isLoginMode ? "Acceso" : "Crear Cuenta"}
               </h2>
-              
-              <p className="mb-6 text-xs sm:text-sm font-light text-[#F7F5F0]/80 leading-normal">
-                {isLoginMode 
-                  ? "Inicia sesión para acceder a tus tarifas preferenciales y pedidos." 
-                  : "Únete al Círculo Privado para disfrutar de asesoría personalizada y descuentos exclusivos."}
-              </p>
 
               {/* Form inputs */}
               <form onSubmit={handleSubmit} className="space-y-4">

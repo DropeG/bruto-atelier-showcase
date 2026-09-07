@@ -769,7 +769,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                       }}
                       className="w-full py-2.5 px-4 bg-white/10 text-white rounded-sm font-sans text-xs font-medium uppercase tracking-wider flex items-center justify-between hover:bg-white/20 active:bg-white/15 transition-colors cursor-pointer"
                     >
-                      <span>Unirme al Círculo Privado</span>
+                      <span>Unirme a Selectos</span>
                       <span className="bg-white/20 text-white px-2 py-0.5 rounded text-[10px] font-bold">
                         10% OFF
                       </span>
