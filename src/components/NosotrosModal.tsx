@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
+import { blurPlaceholders } from "../lib/blur-placeholders";
 
 interface NosotrosModalProps {
   isOpen: boolean;
@@ -8,22 +9,64 @@ interface NosotrosModalProps {
 
 const NosotrosModal: React.FC<NosotrosModalProps> = ({ isOpen, onClose }) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
+  // Pre-warm the photo into the browser cache during idle cycles
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const warmup = () => {
+      const img = new Image();
+      img.src = "/images/nosotros/nosotros.webp";
+      img.onload = () => setIsImageLoaded(true);
+    };
+
+    if ("requestIdleCallback" in window) {
+      const id = (window as unknown as { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback(warmup, { timeout: 2500 });
+      return () => {
+        if ("cancelIdleCallback" in window) {
+          (window as unknown as { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(id);
+        }
+      };
+    } else {
+      const timer = setTimeout(warmup, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  // Modal open/close lifecycle, scroll locking, and Safari focus suppression
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
 
     if (isOpen) {
-      if (!dialog.open) dialog.showModal();
+      if (!dialog.open) {
+        dialog.showModal();
+        // Prevent body and html background scrolling
+        document.body.style.overflow = "hidden";
+        document.documentElement.style.overflow = "hidden";
+        // Suppress accidental auto-focus / blue ring in WebKit/Safari
+        if (document.activeElement instanceof HTMLElement) {
+          document.activeElement.blur();
+        }
+      }
     } else {
       if (dialog.open) {
         dialog.classList.add("is-closing");
         setTimeout(() => {
           dialog.close();
           dialog.classList.remove("is-closing");
+          // Restore background scrolling
+          document.body.style.overflow = "";
+          document.documentElement.style.overflow = "";
         }, 400);
       }
     }
+
+    return () => {
+      document.body.style.overflow = "";
+      document.documentElement.style.overflow = "";
+    };
   }, [isOpen]);
 
   const handleClose = () => {
@@ -35,8 +78,6 @@ const NosotrosModal: React.FC<NosotrosModalProps> = ({ isOpen, onClose }) => {
       handleClose();
     }
   };
-
-  if (!isOpen && !dialogRef.current?.open) return null;
 
   return (
     <>
@@ -69,6 +110,16 @@ const NosotrosModal: React.FC<NosotrosModalProps> = ({ isOpen, onClose }) => {
           to { opacity: 0; transform: translateY(20px) scale(0.97); }
         }
 
+        /* Suppress WebKit/Safari blue focus ring & tap highlight */
+        .nosotros-dialog button,
+        .nosotros-dialog button:focus,
+        .nosotros-dialog button:focus-visible,
+        .nosotros-dialog button:active {
+          outline: none !important;
+          box-shadow: none !important;
+          -webkit-tap-highlight-color: transparent !important;
+        }
+
         .text-balance {
           text-wrap: balance;
         }
@@ -77,6 +128,10 @@ const NosotrosModal: React.FC<NosotrosModalProps> = ({ isOpen, onClose }) => {
       <dialog
         ref={dialogRef}
         onClick={handleBackdropClick}
+        onCancel={(e) => {
+          e.preventDefault();
+          handleClose();
+        }}
         className="nosotros-dialog p-0 bg-transparent rounded-none outline-none m-auto overflow-hidden backdrop:bg-black/65 w-full max-w-[88vw] sm:max-w-lg md:max-w-4xl lg:max-w-5xl max-h-[85vh] md:max-h-[88vh]"
       >
         <div
@@ -86,21 +141,30 @@ const NosotrosModal: React.FC<NosotrosModalProps> = ({ isOpen, onClose }) => {
           {/* Close button */}
           <button
             onClick={handleClose}
-            className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 text-[#F7F5F0]/80 md:hover:text-[#F7F5F0] transition-colors p-2 bg-black/30 backdrop-blur-md rounded-full active:scale-95 shadow-md"
+            tabIndex={-1}
+            className="absolute top-3 right-3 sm:top-4 sm:right-4 z-20 text-[#F7F5F0]/80 md:hover:text-[#F7F5F0] transition-colors p-2 bg-black/30 backdrop-blur-md rounded-full active:scale-95 shadow-md focus:outline-none focus:ring-0 focus-visible:outline-none select-none min-w-[44px] min-h-[44px] flex items-center justify-center"
             aria-label="Cerrar"
           >
             <X className="w-4 h-4 sm:w-5 sm:h-5" strokeWidth={1.5} />
           </button>
 
           {/* Left Side: Photo */}
-          <div className="w-full aspect-[4/3] sm:aspect-square md:aspect-auto md:w-1/2 relative overflow-hidden bg-[#8B6B58] shrink-0">
+          <div 
+            className="w-full aspect-[4/3] sm:aspect-square md:aspect-auto md:w-1/2 relative overflow-hidden bg-[#8B6B58] shrink-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${blurPlaceholders.nosotrosModal})` }}
+          >
             <img
               src="/images/nosotros/nosotros.webp"
               alt="Mladen Marinovic - BRUTO Atelier"
-              className="absolute inset-0 w-full h-full object-cover object-center"
+              onLoad={() => setIsImageLoaded(true)}
+              loading="eager"
+              decoding="async"
+              className={`absolute inset-0 w-full h-full object-cover object-center transition-opacity duration-500 ${
+                isImageLoaded ? "opacity-100" : "opacity-0"
+              }`}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-            <div className="absolute bottom-3 left-4 right-4 text-[11px] sm:text-xs font-serif italic text-white/90">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute bottom-3 left-4 right-4 text-[11px] sm:text-xs font-serif italic text-white/90 pointer-events-none">
               Mladen Marinovic' — Creative Director
             </div>
           </div>
