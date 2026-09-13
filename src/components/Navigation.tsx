@@ -239,7 +239,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               setIsMenuOpen(false);
                               navigate("/showcase/arquitectura");
                             }}
-                            className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm"
+                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm focus:outline-none focus-visible:outline-none"
                           >
                             {link.label}
                           </button>
@@ -250,7 +250,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               setIsMenuOpen(false);
                               navigate("/showcase/interiorismo");
                             }}
-                            className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm"
+                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm focus:outline-none focus-visible:outline-none"
                           >
                             {link.label}
                           </button>
@@ -262,7 +262,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                 prev === "mobiliario" ? null : "mobiliario"
                               )
                             }
-                            className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm"
+                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm focus:outline-none focus-visible:outline-none"
                           >
                             {link.label}
                           </button>
@@ -274,7 +274,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               setActivePanel(null);
                               setIsNosotrosOpen(true);
                             }}
-                            className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm"
+                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm focus:outline-none focus-visible:outline-none"
                           >
                             {link.label}
                           </button>
@@ -286,7 +286,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                 prev === "contacto" ? null : "contacto"
                               )
                             }
-                            className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm"
+                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm focus:outline-none focus-visible:outline-none"
                           >
                             {link.label}
                           </button>
@@ -301,7 +301,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                     prev === csKey ? null : csKey
                                   )
                                 }
-                                className="w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center justify-between hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm"
+                                className="w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center justify-between hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm focus:outline-none focus-visible:outline-none"
                               >
                                 <span>{link.label}</span>
                                 <span className="text-[9px] uppercase tracking-wider text-white/80 bg-white/20 px-1.5 py-0.5 rounded font-sans">
@@ -317,7 +317,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               setIsMenuOpen(false);
                               navigate(link.href);
                             }}
-                            className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm"
+                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm focus:outline-none focus-visible:outline-none"
                           >
                             {link.label}
                           </button>
@@ -353,7 +353,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                 setIsMenuOpen(false);
                                 navigate("/showcase/mobiliario/coleccion");
                               }}
-                              className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center hover:bg-[#EAD0B9] transition-colors rounded-sm"
+                              className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] transition-colors rounded-sm focus:outline-none focus-visible:outline-none"
                             >
                               Colección
                             </button>
@@ -363,7 +363,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                 setIsMenuOpen(false);
                                 navigate("/showcase/mobiliario/series");
                               }}
-                              className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center hover:bg-[#EAD0B9] transition-colors rounded-sm"
+                              className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] transition-colors rounded-sm focus:outline-none focus-visible:outline-none"
                             >
                               Serie
                             </button>
@@ -373,7 +373,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                 setIsMenuOpen(false);
                                 navigate("/showcase/mobiliario/piezas");
                               }}
-                              className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center hover:bg-[#EAD0B9] transition-colors rounded-sm"
+                              className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] transition-colors rounded-sm focus:outline-none focus-visible:outline-none"
                             >
                               Piezas
                             </button>
@@ -427,7 +427,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                           return (
                             <div className="w-[280px] max-w-full font-serif space-y-3">
                               <div className="text-[10px] tracking-[0.25em] uppercase text-white/70 font-sans font-medium">
-                                NEXT SEASON • BRUTO Atelier
+                                NEXT SEASON
                               </div>
                               <div className="text-xl font-semibold tracking-wide">
                                 {cat.title}
@@ -438,9 +438,6 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                   alt={cat.title}
                                   className="w-full h-full object-cover object-center"
                                 />
-                              </div>
-                              <div className="pt-1 text-[10px] font-sans tracking-widest text-white/60 uppercase">
-                                Disponible Próximamente · 2026
                               </div>
                             </div>
                           );
@@ -548,9 +545,6 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                           const cat = comingSoonCategories[activePanel];
                           return (
                             <div className="space-y-3 text-sm leading-relaxed font-serif max-w-sm mx-auto">
-                              <div className="text-xs md:text-sm tracking-[0.25em] uppercase text-white/90 font-sans font-semibold">
-                                BRUTO Atelier
-                              </div>
                               <div className="text-2xl font-serif font-medium tracking-wide">{cat.title}</div>
                               <div className="relative aspect-[4/5] w-[220px] max-w-full rounded-md overflow-hidden border border-white/20 shadow-md my-3">
                                 <img
@@ -558,9 +552,6 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                   alt={cat.title}
                                   className="w-full h-full object-cover object-center"
                                 />
-                              </div>
-                              <div className="text-[11px] font-sans tracking-[0.15em] text-white/70 uppercase text-left pt-1">
-                                Disponible Próximamente · 2026
                               </div>
                             </div>
                           );
@@ -585,7 +576,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               setIsMenuOpen(false);
                               navigate("/showcase/arquitectura");
                             }}
-                            className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center transition-colors focus:outline-none active:bg-white/10 rounded-sm"
+                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center transition-colors focus:outline-none active:bg-white/10 rounded-sm"
                           >
                             {link.label}
                           </button>
@@ -596,7 +587,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               setIsMenuOpen(false);
                               navigate("/showcase/interiorismo");
                             }}
-                            className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center transition-colors focus:outline-none active:bg-white/10 rounded-sm"
+                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center transition-colors focus:outline-none active:bg-white/10 rounded-sm"
                           >
                             {link.label}
                           </button>
@@ -609,7 +600,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                   prev === "mobiliario" ? null : "mobiliario"
                                 )
                               }
-                              className="w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center justify-between transition-colors focus:outline-none active:bg-white/10 rounded-sm"
+                              className="w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center justify-between transition-colors focus:outline-none active:bg-white/10 rounded-sm"
                             >
                               <span>{link.label}</span>
                               <span className={`text-xs transition-transform duration-200 ${activePanel === "mobiliario" ? "rotate-90" : ""}`}>
@@ -631,7 +622,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                       setIsMenuOpen(false);
                                       navigate("/showcase/mobiliario/coleccion");
                                     }}
-                                    className="block w-full text-left px-3 py-2.5 min-h-[44px] flex items-center active:bg-white/20 transition-colors focus:outline-none rounded-sm"
+                                    className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center active:bg-white/20 transition-colors focus:outline-none rounded-sm"
                                   >
                                     Colección
                                   </button>
@@ -641,7 +632,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                       setIsMenuOpen(false);
                                       navigate("/showcase/mobiliario/series");
                                     }}
-                                    className="block w-full text-left px-3 py-2.5 min-h-[44px] flex items-center active:bg-white/20 transition-colors focus:outline-none rounded-sm"
+                                    className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center active:bg-white/20 transition-colors focus:outline-none rounded-sm"
                                   >
                                     Serie
                                   </button>
@@ -651,7 +642,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                       setIsMenuOpen(false);
                                       navigate("/showcase/mobiliario/piezas");
                                     }}
-                                    className="block w-full text-left px-3 py-2.5 min-h-[44px] flex items-center active:bg-white/20 transition-colors focus:outline-none rounded-sm"
+                                    className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center active:bg-white/20 transition-colors focus:outline-none rounded-sm"
                                   >
                                     Piezas
                                   </button>
@@ -667,7 +658,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               setActivePanel(null);
                               setIsNosotrosOpen(true);
                             }}
-                            className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center transition-colors focus:outline-none active:bg-white/10 rounded-sm"
+                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center transition-colors focus:outline-none active:bg-white/10 rounded-sm"
                           >
                             {link.label}
                           </button>
@@ -675,7 +666,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                           <button
                             type="button"
                             onClick={() => setActivePanel("contacto")}
-                            className="block w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center transition-colors focus:outline-none active:bg-white/10 rounded-sm"
+                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center transition-colors focus:outline-none active:bg-white/10 rounded-sm"
                           >
                             {link.label}
                           </button>
@@ -686,7 +677,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               <button
                                 type="button"
                                 onClick={() => setActivePanel(csKey)}
-                                className="w-full text-left px-3 py-2.5 -mx-3 min-h-[44px] flex items-center justify-between transition-colors focus:outline-none active:bg-white/10 rounded-sm"
+                                className="w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center justify-between transition-colors focus:outline-none active:bg-white/10 rounded-sm"
                               >
                                 <span>{link.label}</span>
                                 <span className="text-[9px] uppercase tracking-wider text-white/80 bg-white/20 px-2 py-0.5 rounded font-sans">
@@ -699,7 +690,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                           <a
                             href={link.href}
                             onClick={() => setIsMenuOpen(false)}
-                            className="block px-3 py-2.5 -mx-3 min-h-[44px] flex items-center transition-colors rounded-sm"
+                            className="block px-3.5 py-2.5 min-h-[44px] flex items-center transition-colors rounded-sm"
                           >
                             {link.label}
                           </a>
