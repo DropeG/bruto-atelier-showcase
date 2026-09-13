@@ -72,7 +72,7 @@ const ComingSoonView: React.FC<ComingSoonViewProps> = ({ category }) => {
 
       {/* Footer Watermark */}
       <div className="w-full py-4 px-6 sm:px-12 flex justify-between items-center text-[9px] sm:text-[10px] text-white/40 tracking-widest font-sans border-t border-white/10 shrink-0">
-        <div>BRUTO ATELIER © 2026</div>
+        <div>BRUTO Atelier © 2026</div>
         <div className="uppercase hidden sm:block">Colección de {category.title}</div>
       </div>
     </div>

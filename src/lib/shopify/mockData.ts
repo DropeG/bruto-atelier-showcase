@@ -1,7 +1,7 @@
 import { ShopifyProduct, ShopInfo } from '@/types/shopify';
 
 export const MOCK_SHOP_INFO: ShopInfo = {
-  name: 'Bruto Atelier',
+  name: 'BRUTO Atelier',
   description: 'Atelier de diseño de muebles a medida, arquitectura e interiorismo.',
   primaryDomain: {
     url: 'https://bruto-atelier.myshopify.com',
@@ -21,7 +21,7 @@ export const MOCK_PRODUCTS: ShopifyProduct[] = [
     descriptionHtml: '<p>Mesa monolítica esculpida en mármol travertino con acabado cepillado orgánico y estructura interna reforzada.</p>',
     availableForSale: true,
     tags: ['Mobiliario', 'Colección', 'Comedor', 'Mármol'],
-    vendor: 'Bruto Atelier',
+    vendor: 'BRUTO Atelier',
     productType: 'Mobiliario',
     priceRange: {
       minVariantPrice: { amount: '2450000', currencyCode: 'CLP' },
@@ -87,7 +87,7 @@ export const MOCK_PRODUCTS: ShopifyProduct[] = [
     descriptionHtml: '<p>Sillón de lectura ergonómico en tapicería lana bouclé sobre una estructura artesanal de roble fumado.</p>',
     availableForSale: true,
     tags: ['Mobiliario', 'Series', 'Living', 'Madera'],
-    vendor: 'Bruto Atelier',
+    vendor: 'BRUTO Atelier',
     productType: 'Mobiliario',
     priceRange: {
       minVariantPrice: { amount: '980000', currencyCode: 'CLP' },
@@ -143,7 +143,7 @@ export const MOCK_PRODUCTS: ShopifyProduct[] = [
     descriptionHtml: '<p>Pieza de hall escultural de edición limitada construida en hormigón fundido a mano y chapa de nogal americano.</p>',
     availableForSale: true,
     tags: ['Mobiliario', 'Piezas', 'Hall', 'Edición Limitada'],
-    vendor: 'Bruto Atelier',
+    vendor: 'BRUTO Atelier',
     productType: 'Mobiliario',
     priceRange: {
       minVariantPrice: { amount: '1350000', currencyCode: 'CLP' },

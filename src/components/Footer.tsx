@@ -2,13 +2,13 @@
 
 const Footer = () => {
   return (
-    <footer className="lg:landscape:snap-start lg:landscape:snap-always bg-background text-foreground py-8 px-6 min-h-auto lg:landscape:h-screen lg:landscape:flex lg:landscape:items-center lg:landscape:justify-center">
+    <footer className="lg:landscape:snap-start lg:landscape:snap-always bg-[#9C7B66] text-[#F7F5F0] py-8 px-6 min-h-auto lg:landscape:h-screen lg:landscape:flex lg:landscape:items-center lg:landscape:justify-center font-serif">
       <div className="max-w-6xl mx-auto w-full">
         <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-12 items-start">
-          {/* Seccion BRUTO ATELIER */}
+          {/* Seccion BRUTO Atelier */}
           <div className="flex flex-col">
             <div>
-              <h2 className="font-bold text-lg md:text-4xl mb-2">BRUTO ATELIER</h2>
+              <h2 className="font-bold text-lg md:text-4xl mb-2">BRUTO Atelier</h2>
               <div className="space-y-1 text-xs md:text-lg">
                 <p>Vitacura 4747</p>
                 <p>7560801 Vitacura</p>
@@ -36,7 +36,7 @@ const Footer = () => {
 
             {/* Seccion COPYRIGHT - aparece debajo en mobile */}
             <div className="md:hidden mt-6">
-              <p className="font-bold text-xs">© 2026 BRUTO ATELIER</p>
+              <p className="font-bold text-xs">© 2026 BRUTO Atelier</p>
               <p className="pt-2 text-xs">Todos los derechos reservados.</p>
             </div>
           </div>
@@ -64,8 +64,8 @@ const Footer = () => {
 
           {/* Seccion COPYRIGHT - solo en desktop */}
           <div className="hidden md:block">
-            <p className="font-bold text-xs md:text-base">© 2026 BRUTO ATELIER</p>
-            <p className="mt-2 text-xs">Este sitio web y su contenido son propiedad intelectual de BRUTO ATELIER, reservados todos los derechos.</p>
+            <p className="font-bold text-xs md:text-base">© 2026 BRUTO Atelier</p>
+            <p className="mt-2 text-xs">Este sitio web y su contenido son propiedad intelectual de BRUTO Atelier, reservados todos los derechos.</p>
           </div>
         </div>
       </div>
