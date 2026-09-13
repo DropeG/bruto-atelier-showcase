@@ -463,7 +463,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                 style={{ paddingTop: "max(1.5rem, env(safe-area-inset-top, 24px))" }}
                 className="flex items-center justify-between px-6 pb-4 border-b border-white/10 flex-shrink-0"
               >
-                <span className="font-sans text-sm md:text-base tracking-[0.22em] font-semibold text-white select-none pointer-events-none">
+                <span className="font-serif text-base md:text-lg tracking-wide text-white select-none pointer-events-none">
                   BRUTO Atelier
                 </span>
                 <button
@@ -486,7 +486,10 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
               </div>
 
               {/* Scrollable Navigation Body */}
-              <div className="flex-1 overflow-y-auto px-6 py-5 font-serif overscroll-contain">
+              <div
+                style={{ paddingBottom: user ? "1.5rem" : "max(2.5rem, env(safe-area-inset-bottom, 24px))" }}
+                className="flex-1 overflow-y-auto px-6 pt-5 font-serif overscroll-contain"
+              >
                 {activePanel === "contacto" || (activePanel && comingSoonCategories[activePanel]) ? (
                   <div>
                     <div className="relative flex items-center justify-center min-h-[56px]">
@@ -701,12 +704,12 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                 )}
               </div>
 
-              {/* Pinned Sticky Footer for Account (Always Visible) */}
-              <div
-                style={{ paddingBottom: "max(1.25rem, env(safe-area-inset-bottom, 20px))" }}
-                className="flex-shrink-0 border-t border-white/15 bg-[#8A6A55] p-5 shadow-2xl"
-              >
-                {user ? (
+              {/* Pinned Sticky Footer for Account (Only when logged in) */}
+              {user && (
+                <div
+                  style={{ paddingBottom: "max(1.25rem, env(safe-area-inset-bottom, 20px))" }}
+                  className="flex-shrink-0 border-t border-white/15 bg-[#8A6A55] p-5 shadow-2xl"
+                >
                   <div className="space-y-2.5">
                     <div className="flex items-center justify-between">
                       <div>
@@ -739,35 +742,8 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                       </button>
                     </div>
                   </div>
-                ) : (
-                  <div className="flex flex-col gap-2">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsMenuOpen(false);
-                        openAuthModal("login");
-                      }}
-                      className="w-full py-3 px-4 bg-white text-[#9C7B66] rounded-sm font-sans text-xs font-semibold uppercase tracking-wider flex items-center justify-between active:bg-white/90 transition-colors shadow-md cursor-pointer"
-                    >
-                      <span>Iniciar Sesión</span>
-                      <span className="text-xs">→</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsMenuOpen(false);
-                        openAuthModal("register");
-                      }}
-                      className="w-full py-2.5 px-4 bg-white/10 text-white rounded-sm font-sans text-xs font-medium uppercase tracking-wider flex items-center justify-between hover:bg-white/20 active:bg-white/15 transition-colors cursor-pointer"
-                    >
-                      <span>Unirme a Selectos</span>
-                      <span className="bg-white/20 text-white px-2 py-0.5 rounded text-[10px] font-bold">
-                        10% OFF
-                      </span>
-                    </button>
-                  </div>
-                )}
-              </div>
+                </div>
+              )}
             </motion.div>
           </motion.div>
         )}
