@@ -6,6 +6,7 @@ import {
   NosotrosModal,
   WhatsAppButton,
   DiscountButton,
+  DesktopCatalogGrid,
 } from "@/components";
 import { SingleVideoBanner } from "@/components/VideoSection";
 import { useScroll } from "@/contexts/ScrollContext";
@@ -75,7 +76,7 @@ const Index = () => {
     <div className="relative">
       {!isDemoMode && <NosotrosModal isOpen={openNosotros} onClose={() => setOpenNosotros(false)} />}
       {!isDemoMode && <WhatsAppButton />}
-      {!isDemoMode && !user && <DiscountButton onClick={openAuthModal} isVisible={showDiscount} />}
+      {!isDemoMode && !user && <DiscountButton onClick={() => openAuthModal("register")} isVisible={showDiscount} />}
 
       {/* Main Collection Container */}
       <div
@@ -91,6 +92,11 @@ const Index = () => {
         {/* Section 2: Desktop Video Block */}
         <div id="section-video">
           <VideoSection />
+        </div>
+
+        {/* Section 2.5: Desktop Catalog Grid (Mockup) */}
+        <div id="section-desktop-catalog-grid" className="hidden lg:block lg:landscape:snap-start lg:landscape:snap-always h-screen w-full">
+          <DesktopCatalogGrid />
         </div>
 
         {/* Sequential Mobile Video Banners (1, 2, 3) */}

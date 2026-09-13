@@ -16,3 +16,4 @@ export { default as ProductSection } from "./ProductSection";
 export { default as Layout } from "./Layout";
 export { default as NosotrosModal } from "./NosotrosModal";
 export { default as ComingSoonView } from "./ComingSoonView";
+export * from "./DesktopCatalogGrid";
