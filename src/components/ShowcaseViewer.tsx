@@ -1,9 +1,12 @@
-import { useEffect, useState } from "react";
+import { useRef } from "react";
+import { useLocation } from "react-router-dom";
+import { useGalleryPresentation } from "@/hooks/use-gallery-presentation";
+import { backgroundFor } from "@/lib/gallery-images";
 import { useNavigate } from "react-router-dom";
 import { motion, PanInfo } from "framer-motion";
 
-// FASE 1: Tipado Universal. 
-// Esta interfaz soporta tanto imágenes simples (Arquitectura, Piezas) 
+// FASE 1: Tipado Universal.
+// Esta interfaz soporta tanto imágenes simples (Arquitectura, Piezas)
 // como dobles (Colección), haciéndola 100% reutilizable.
 export interface ShowcaseItem {
   id: string | number;
@@ -24,69 +27,17 @@ interface ShowcaseViewerProps {
 
 const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: ShowcaseViewerProps) => {
   const navigate = useNavigate();
-  const [showFront, setShowFront] = useState(true);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [imagesLoaded, setImagesLoaded] = useState<Record<string | number, boolean>>({});
-
-  // 1. Lógica de Precarga Optimizada y Resiliente
-  useEffect(() => {
-    if (!items || items.length === 0) return;
-
-    items.forEach(item => {
-      const imageSources = [item.detailImage, item.thumbnail, item.secondaryImage].filter(Boolean) as string[];
-      let loadedCount = 0;
-
-      imageSources.forEach(source => {
-        const img = new Image();
-        const handleDone = () => {
-          loadedCount += 1;
-          if (loadedCount === imageSources.length) {
-            setImagesLoaded(prev => ({ ...prev, [item.id]: true }));
-          }
-        };
-
-        img.onload = handleDone;
-        img.onerror = handleDone; // Fallback ante errores de red o caché
-        img.src = source;
-
-        if (img.complete) {
-          handleDone();
-        }
-      });
-    });
-  }, [items]);
-
-  // 2. Lógica de Carrusel Automático
-  useEffect(() => {
-    if (!autoPlay || items.length <= 1) return; // No hacer autoplay si es una sola foto (ej: Category.tsx)
-
-    const interval = setInterval(() => {
-      setCurrentIndex(prevIndex => (prevIndex + 1) % items.length);
-    }, intervalTime);
-
-    return () => clearInterval(interval);
-  }, [items.length, autoPlay, intervalTime, currentIndex]);
-
-  // 3. Lógica de Revelado (Interacción del usuario)
-  useEffect(() => {
-    const timer = setTimeout(() => setShowFront(true), 1000);
-
-    const handleInteraction = () => {
-      setShowFront(true);
-      clearTimeout(timer);
-      window.removeEventListener("wheel", handleInteraction);
-      window.removeEventListener("touchmove", handleInteraction);
-    };
-
-    window.addEventListener("wheel", handleInteraction, { passive: true });
-    window.addEventListener("touchmove", handleInteraction, { passive: true });
-
-    return () => {
-      clearTimeout(timer);
-      window.removeEventListener("wheel", handleInteraction);
-      window.removeEventListener("touchmove", handleInteraction);
-    };
-  }, []);
+  const location = useLocation();
+  const { currentIndex, outgoing, staged, prepared, select, requestedIndex, reduced } = useGalleryPresentation(items, autoPlay, intervalTime);
+  const visibleLayers = new Set([currentIndex, outgoing, staged]);
+  const layers = items.map((item, index) => ({ item, index })).filter(({ index }) => visibleLayers.has(index));
+  const imagesLoaded = Object.fromEntries(items.map((item, index) => [item.id, prepared[index]?.detail]));
+  const showFront = true;
+  const firstPresentedIndex = useRef<number | null>(null);
+  if (firstPresentedIndex.current === null && prepared[currentIndex]?.detail) firstPresentedIndex.current = currentIndex;
+  const hasChanged = useRef(false);
+  // Keep the first entrance intact even if the user starts a crossfade before it finishes.
+  if (firstPresentedIndex.current !== null && !visibleLayers.has(firstPresentedIndex.current)) hasChanged.current = true;
 
   if (!items || items.length === 0) {
     return (
@@ -96,27 +47,29 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
     );
   }
 
-  const allImagesLoaded = items.every((item) => imagesLoaded[item.id]);
 
   const handlePanEnd = (_: unknown, info: PanInfo) => {
     if (items.length <= 1) return;
     const swipeThreshold = 50;
     if (info.offset.x < -swipeThreshold) {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % items.length);
+      select((requestedIndex + 1) % items.length);
     } else if (info.offset.x > swipeThreshold) {
-      setCurrentIndex((prevIndex) => (prevIndex === 0 ? items.length - 1 : prevIndex - 1));
+      select((requestedIndex + items.length - 1) % items.length);
     }
   };
 
   return (
-    <motion.div 
+    <motion.div
       onPanEnd={handlePanEnd}
       className="relative w-full min-h-screen h-screen overflow-hidden bg-black select-none touch-pan-y cursor-grab active:cursor-grabbing"
     >
 
       {/* Botón de volver */}
       <button
-        onClick={() => navigate(-1)}
+        onClick={() => {
+          if ((location.state as { fromGallery?: boolean } | null)?.fromGallery || window.history.state?.idx > 0) navigate(-1);
+          else navigate("/", { replace: true });
+        }}
         className="absolute left-8 z-40 text-white/70 hover:text-white transition-all duration-300 group min-w-[44px] min-h-[44px] flex items-center justify-center -ml-2 -mt-2"
         style={{ top: "max(2rem, calc(1rem + env(safe-area-inset-top, 0px)))" }}
         aria-label="Volver"
@@ -135,7 +88,8 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
           {items.map((_, index) => (
             <button
               key={index}
-              onClick={() => setCurrentIndex(index)}
+              onClick={() => select(index)}
+              aria-current={index === currentIndex ? "true" : undefined}
               className="min-w-[32px] min-h-[44px] flex items-center justify-center p-1.5 focus:outline-none group"
               aria-label={`Ir a imagen ${index + 1}`}
             >
@@ -150,63 +104,68 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
       )}
 
       {/* Capas de fondo (Thumbnails con blur) */}
-      {items.map((item, index) => (
+      {layers.map(({ item, index }) => (
         <div
           key={`bg-${item.id}`}
-          className="absolute inset-0 transition-all duration-[2500ms]"
-          style={{ 
+          className="absolute inset-0 transition-[opacity,transform] duration-[2500ms]"
+          style={{
             opacity: index === currentIndex ? 1 : 0,
+            transitionDuration: reduced ? "0ms" : "2500ms",
             pointerEvents: index === currentIndex ? 'auto' : 'none',
             transform: index === currentIndex ? 'scale(1.12)' : 'scale(1.05)',
+            backgroundImage: `url(${backgroundFor(item.thumbnail).placeholder})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
             transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
           }}
         >
           <img
-            src={item.thumbnail}
+            key={prepared[index]?.background || 'placeholder'}
+            src={prepared[index]?.background || backgroundFor(item.thumbnail).placeholder}
             alt={item.title}
             draggable={false}
-            className="absolute inset-0 w-full h-full object-cover object-center select-none"
-            style={{ 
+            className={`absolute inset-0 w-full h-full object-cover object-center select-none ${prepared[index]?.background ? 'gallery-background-ready' : ''}`}
+            style={{
               minHeight: "100vh",
               filter: index === currentIndex && showFront ? "blur(1px)" : "blur(4px)",
               transition: "filter 0.6s ease-out"
             }}
             loading="lazy"
             decoding="async"
-            fetchPriority={index === currentIndex ? "high" : "low"} 
           />
           <div className="absolute inset-0 bg-black/20" />
         </div>
       ))}
 
-      {/* Imágenes principales (Detalle) en el centro */}  
+      {/* Imágenes principales (Detalle) en el centro */}
       {showFront && (
         <div className="absolute inset-0 flex flex-col items-center justify-center z-20 pointer-events-none">
-          {items.map((item, index) => (
+          {layers.filter(({ index }) => prepared[index]?.detail).map(({ item, index }) => (
             <div
               key={`detail-${item.id}`}
-              className="absolute inset-0 flex items-center justify-center transition-all duration-[2500ms]"
-              style={{ 
+              className="absolute inset-0 flex items-center justify-center transition-[opacity,transform] duration-[2500ms]"
+              style={{
                 opacity: index === currentIndex ? 1 : 0,
+                transitionDuration: reduced ? "0ms" : "2500ms",
                 pointerEvents: index === currentIndex ? 'auto' : 'none',
                 transform: index === currentIndex ? 'scale(1.03)' : 'scale(0.98)',
                 transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
               }}
             >
               <div className="relative flex flex-col items-center gap-6 px-4">
-                
+
                 {/* Renderizado: Doble vs Simple */}
                 {item.layout === "double" ? (
                   <>
-                    <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 animate-fade-in-up">
+                    <div className={`flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 ${index === firstPresentedIndex.current && !hasChanged.current ? "animate-fade-in-up" : ""}`}>
                       {[item.detailImage, item.secondaryImage].filter(Boolean).map((imageSrc, imageIndex) => (
                         <div key={`${item.id}-image-${imageIndex}`} className="relative bg-white shadow-2xl overflow-hidden aspect-[4/5] w-[70vw] max-w-[min(34vw,360px)]" style={{ maxHeight: '80vh' }}>
-                          <img 
-                            src={imageSrc} 
-                            alt={`${item.title} ${imageIndex + 1}`} 
-                            draggable={false} 
+                          <img
+                            src={imageSrc}
+                            alt={`${item.title} ${imageIndex + 1}`}
+                            draggable={false}
                             className={`w-full h-full object-cover select-none transition-opacity duration-700 ease-out ${imagesLoaded[item.id] ? 'opacity-100' : 'opacity-0'}`}
-                            loading="eager" 
+                            loading="eager"
                           />
                         </div>
                       ))}
@@ -228,18 +187,17 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
                     </div>
                   </>
                 ) : (
-                  <div 
-                    className="relative bg-white shadow-2xl animate-fade-in-up aspect-[4/5] w-[88vw] max-w-[min(88vw,390px)] md:max-w-[min(70vw,64vh)] overflow-hidden" 
+                  <div
+                    className={`relative bg-white shadow-2xl aspect-[4/5] w-[88vw] max-w-[min(88vw,390px)] md:max-w-[min(70vw,64vh)] overflow-hidden ${index === firstPresentedIndex.current && !hasChanged.current ? "animate-fade-in-up" : ""}`}
                     style={{ maxHeight: '80vh' }}
                   >
-                    <img 
-                      src={item.detailImage} 
-                      alt={item.title} 
-                      draggable={false} 
-                      className={`w-full h-full object-cover select-none transition-opacity duration-700 ease-out ${imagesLoaded[item.id] ? 'opacity-100' : 'opacity-0'}`} 
-                      loading="eager" 
-                      decoding="async" 
-                      fetchPriority="high" 
+                    <img
+                      src={item.detailImage}
+                      alt={item.title}
+                      draggable={false}
+                      className={`w-full h-full object-cover select-none transition-opacity duration-700 ease-out ${imagesLoaded[item.id] ? 'opacity-100' : 'opacity-0'}`}
+                      loading="eager"
+                      decoding="async"
                     />
 
                     {/* Zona inferior Passe-partout (18.8% exacto): Botón HABLEMOS + Subtítulo integrados */}
@@ -265,7 +223,7 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
           ))}
         </div>
       )}
-      
+
       {/* Animaciones CSS compartidas */}
       <style>{`
         @keyframes fadeInUp {
@@ -274,6 +232,14 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
         }
         .animate-fade-in-up {
           animation: fadeInUp 1s cubic-bezier(.23,1.01,.32,1) forwards;
+        }
+        @keyframes galleryBackgroundReady {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        .gallery-background-ready { animation: galleryBackgroundReady .6s ease-out both; }
+        @media (prefers-reduced-motion: reduce) {
+          .animate-fade-in-up, .gallery-background-ready { animation: none; }
         }
       `}</style>
     </motion.div>

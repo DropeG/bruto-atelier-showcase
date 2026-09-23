@@ -12,7 +12,7 @@ const Category = () => {
   const isMobile = useIsMobile();
   
   // 1. Resolve current context from parameters or URL path
-  let currentDiscipline = discipline as string | undefined;
+  let currentDiscipline = discipline as Discipline | undefined;
   let currentType = type as MobiliarioType | undefined;
   
   // Extract path identifier
@@ -79,7 +79,7 @@ const Category = () => {
     }
   }
 
-  return <ShowcaseViewer items={items} autoPlay={autoPlay} />;
+  return <ShowcaseViewer key={location.pathname} items={items} autoPlay={autoPlay} />;
 };
 
 export default Category;

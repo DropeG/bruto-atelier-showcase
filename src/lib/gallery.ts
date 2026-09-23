@@ -5,6 +5,9 @@ import { galleryItems, GalleryItem, Discipline, MobiliarioType } from "@/data/Ga
  * Encapsulates all lookup and routing logic for the studio's portfolio.
  */
 export const GalleryService = {
+  getItemByUrl(url: string): GalleryItem | undefined {
+    return galleryItems.find(item => this.getItemUrl(item) === url);
+  },
   /**
    * Returns all items in the gallery.
    */

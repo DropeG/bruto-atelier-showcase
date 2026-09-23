@@ -1,0 +1,32 @@
+[
+  {
+    "minVisible": 0.508338,
+    "response": 61,
+    "maxFrame": 17.699999999999818,
+    "framesOver50": 0
+  },
+  {
+    "minVisible": 0.508243,
+    "response": 60.79999998211861,
+    "maxFrame": 17.600000000000364,
+    "framesOver50": 0
+  },
+  {
+    "minVisible": 0.507394,
+    "response": 61.399999999999636,
+    "maxFrame": 17.700000000000728,
+    "framesOver50": 0
+  },
+  {
+    "minVisible": 0.508278,
+    "response": 64.89999999403881,
+    "maxFrame": 17.700000000000728,
+    "framesOver50": 0
+  },
+  {
+    "minVisible": 0.508234,
+    "response": 50.29999999404026,
+    "maxFrame": 17.700000000000728,
+    "framesOver50": 0
+  }
+]

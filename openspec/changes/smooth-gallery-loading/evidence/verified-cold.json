@@ -1,0 +1,297 @@
+[
+  {
+    "url": "/showcase/mobiliario/series/9",
+    "images": {
+      "/images/gallery/series-02-detail1.webp": {
+        "prepared": 580,
+        "loaded": 584,
+        "decoding": true,
+        "decoded": 586,
+        "visible": 601,
+        "full": 1217
+      },
+      "/images/gallery/responsive/rojo-1600.webp": {
+        "prepared": 1337
+      },
+      "/images/gallery/series-01-detail1.webp": {
+        "prepared": 2482,
+        "loaded": 6951,
+        "decoding": true,
+        "decoded": 6953,
+        "visible": 7151,
+        "full": 9168
+      },
+      "/images/gallery/responsive/series-01-thumb-1600.webp": {
+        "prepared": 3363
+      }
+    },
+    "resources": [
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-02-detail1.webp",
+        "start": 6,
+        "end": 565,
+        "bytes": 78080
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/responsive/rojo-1600.webp",
+        "start": 580,
+        "end": 1307,
+        "bytes": 114902
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-01-detail1.webp",
+        "start": 1939,
+        "end": 2469,
+        "bytes": 75052
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/responsive/series-01-thumb-1600.webp",
+        "start": 2482,
+        "end": 3324,
+        "bytes": 137068
+      }
+    ],
+    "duration": 11000,
+    "maxFrame": 17.700000000000728,
+    "framesOver50": 0,
+    "done": true,
+    "frameCount": 661,
+    "galleryBytes": 405102
+  },
+  {
+    "url": "/showcase/mobiliario/series/9",
+    "images": {
+      "/images/gallery/series-02-detail1.webp": {
+        "prepared": 578,
+        "loaded": 585,
+        "decoding": true,
+        "decoded": 587,
+        "visible": 601,
+        "full": 1218
+      },
+      "/images/gallery/responsive/rojo-1600.webp": {
+        "prepared": 1333
+      },
+      "/images/gallery/series-01-detail1.webp": {
+        "prepared": 2481,
+        "loaded": 6952,
+        "decoding": true,
+        "decoded": 6954,
+        "visible": 7152,
+        "full": 9168
+      },
+      "/images/gallery/responsive/series-01-thumb-1600.webp": {
+        "prepared": 3342
+      }
+    },
+    "resources": [
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-02-detail1.webp",
+        "start": 3,
+        "end": 558,
+        "bytes": 78080
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/responsive/rojo-1600.webp",
+        "start": 578,
+        "end": 1307,
+        "bytes": 114902
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-01-detail1.webp",
+        "start": 1934,
+        "end": 2469,
+        "bytes": 75052
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/responsive/series-01-thumb-1600.webp",
+        "start": 2481,
+        "end": 3325,
+        "bytes": 137068
+      }
+    ],
+    "duration": 11000,
+    "maxFrame": 17.69999999999891,
+    "framesOver50": 0,
+    "done": true,
+    "frameCount": 661,
+    "galleryBytes": 405102
+  },
+  {
+    "url": "/showcase/mobiliario/series/9",
+    "images": {
+      "/images/gallery/series-02-detail1.webp": {
+        "prepared": 565,
+        "loaded": 574,
+        "decoding": true,
+        "decoded": 575,
+        "visible": 590,
+        "full": 1207
+      },
+      "/images/gallery/responsive/rojo-1600.webp": {
+        "prepared": 1320
+      },
+      "/images/gallery/series-01-detail1.webp": {
+        "prepared": 2471,
+        "loaded": 6924,
+        "decoding": true,
+        "decoded": 6927,
+        "visible": 7124,
+        "full": 9140
+      },
+      "/images/gallery/responsive/series-01-thumb-1600.webp": {
+        "prepared": 3350
+      }
+    },
+    "resources": [
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-02-detail1.webp",
+        "start": 3,
+        "end": 552,
+        "bytes": 78080
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/responsive/rojo-1600.webp",
+        "start": 565,
+        "end": 1294,
+        "bytes": 114902
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-01-detail1.webp",
+        "start": 1922,
+        "end": 2458,
+        "bytes": 75052
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/responsive/series-01-thumb-1600.webp",
+        "start": 2472,
+        "end": 3312,
+        "bytes": 137068
+      }
+    ],
+    "duration": 11000,
+    "maxFrame": 17.799999999999272,
+    "framesOver50": 0,
+    "done": true,
+    "frameCount": 661,
+    "galleryBytes": 405102
+  },
+  {
+    "url": "/showcase/mobiliario/series/9",
+    "images": {
+      "/images/gallery/series-02-detail1.webp": {
+        "prepared": 565,
+        "loaded": 568,
+        "decoding": true,
+        "decoded": 569,
+        "visible": 584,
+        "full": 1201
+      },
+      "/images/gallery/responsive/rojo-1600.webp": {
+        "prepared": 1320
+      },
+      "/images/gallery/series-01-detail1.webp": {
+        "prepared": 2465,
+        "loaded": 6934,
+        "decoding": true,
+        "decoded": 6936,
+        "visible": 7134,
+        "full": 9151
+      },
+      "/images/gallery/responsive/series-01-thumb-1600.webp": {
+        "prepared": 3345
+      }
+    },
+    "resources": [
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-02-detail1.webp",
+        "start": 3,
+        "end": 552,
+        "bytes": 78080
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/responsive/rojo-1600.webp",
+        "start": 565,
+        "end": 1295,
+        "bytes": 114902
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-01-detail1.webp",
+        "start": 1921,
+        "end": 2451,
+        "bytes": 75052
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/responsive/series-01-thumb-1600.webp",
+        "start": 2465,
+        "end": 3305,
+        "bytes": 137068
+      }
+    ],
+    "duration": 11000,
+    "maxFrame": 17.700000000000728,
+    "framesOver50": 0,
+    "done": true,
+    "frameCount": 661,
+    "galleryBytes": 405102
+  },
+  {
+    "url": "/showcase/mobiliario/series/9",
+    "images": {
+      "/images/gallery/series-02-detail1.webp": {
+        "prepared": 568,
+        "loaded": 576,
+        "decoding": true,
+        "decoded": 577,
+        "visible": 593,
+        "full": 1210
+      },
+      "/images/gallery/responsive/rojo-1600.webp": {
+        "prepared": 1315
+      },
+      "/images/gallery/series-01-detail1.webp": {
+        "prepared": 2463,
+        "loaded": 6927,
+        "decoding": true,
+        "decoded": 6929,
+        "visible": 7127,
+        "full": 9143
+      },
+      "/images/gallery/responsive/series-01-thumb-1600.webp": {
+        "prepared": 3328
+      }
+    },
+    "resources": [
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-02-detail1.webp",
+        "start": 3,
+        "end": 557,
+        "bytes": 78080
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/responsive/rojo-1600.webp",
+        "start": 569,
+        "end": 1299,
+        "bytes": 114902
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-01-detail1.webp",
+        "start": 1917,
+        "end": 2453,
+        "bytes": 75052
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/responsive/series-01-thumb-1600.webp",
+        "start": 2463,
+        "end": 3309,
+        "bytes": 137068
+      }
+    ],
+    "duration": 11000,
+    "maxFrame": 17.799999999999272,
+    "framesOver50": 0,
+    "done": true,
+    "frameCount": 661,
+    "galleryBytes": 405102
+  }
+]

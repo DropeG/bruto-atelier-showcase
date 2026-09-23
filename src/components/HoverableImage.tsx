@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useScroll } from "@/contexts/ScrollContext";
+import { GalleryService } from "@/lib/gallery";
+import { prepareGalleryIntent } from "@/lib/gallery-images";
+
+// Only records successful native loads; never starts a download on gallery mount.
+const loadedThumbnails = new Set<string>();
 
 interface HoverableImageProps {
   src: string;
@@ -18,7 +23,20 @@ const HoverableImage: React.FC<HoverableImageProps> = ({
   blurDataUrl 
 }) => {
   const { saveSectionId } = useScroll();
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(() => loadedThumbnails.has(src));
+  const imageRef = useRef<HTMLImageElement>(null);
+  const intentTimer = useRef<ReturnType<typeof setTimeout>>();
+  const cancelIntent = () => clearTimeout(intentTimer.current);
+  const prepareIntent = () => {
+    cancelIntent();
+    const item = href && GalleryService.getItemByUrl(href);
+    if (item) void prepareGalleryIntent(item);
+  };
+  useEffect(() => cancelIntent, []);
+  useLayoutEffect(() => {
+    const ready = loadedThumbnails.has(src) || Boolean(imageRef.current?.complete && imageRef.current.naturalWidth);
+    setIsLoaded(ready);
+  }, [src]);
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     // Buscar el elemento padre con ID que empiece con "section-" de forma limpia en el árbol DOM
@@ -33,6 +51,7 @@ const HoverableImage: React.FC<HoverableImageProps> = ({
   };
 
   const handleImageLoad = () => {
+    loadedThumbnails.add(src);
     setIsLoaded(true);
   };
 
@@ -44,6 +63,7 @@ const HoverableImage: React.FC<HoverableImageProps> = ({
     // keep the "group" wrapper but move hover behaviour to CSS media queries
     <div className="relative group w-full h-full cursor-pointer">
       <img
+        ref={imageRef}
         src={src}
         alt={alt}
         onLoad={handleImageLoad}
@@ -83,7 +103,12 @@ const HoverableImage: React.FC<HoverableImageProps> = ({
 
   if (href) {
     return (
-      <Link to={href} onClick={handleLinkClick} className="block w-full h-full">
+      <Link to={href} state={{ fromGallery: true }} onClick={handleLinkClick}
+        onPointerEnter={event => {
+          if (event.pointerType === 'mouse') intentTimer.current = setTimeout(prepareIntent, 120);
+        }}
+        onPointerLeave={cancelIntent} onFocus={prepareIntent} onBlur={cancelIntent}
+        onPointerDown={prepareIntent} className="block w-full h-full">
         {image}
       </Link>
     );

@@ -1,0 +1,257 @@
+[
+  {
+    "url": "/showcase/mobiliario/series/9",
+    "images": {
+      "/images/gallery/series-02-detail1.webp": {
+        "loaded": 1787,
+        "decoding": true,
+        "decoded": 1799,
+        "visible": 10070,
+        "full": 10187
+      },
+      "/images/gallery/series-01-detail1.webp": {
+        "loaded": 1687,
+        "decoding": true,
+        "decoded": 1719,
+        "visible": 5037,
+        "full": 5153
+      }
+    },
+    "resources": [
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-01-detail1.webp",
+        "start": 5,
+        "end": 1682,
+        "bytes": 75052
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-02-detail1.webp",
+        "start": 5,
+        "end": 1727,
+        "bytes": 78080
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/rojo.jpeg",
+        "start": 5,
+        "end": 6085,
+        "bytes": 841235
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-01-thumb.webp",
+        "start": 5,
+        "end": 2799,
+        "bytes": 184826
+      }
+    ],
+    "duration": 13000,
+    "maxFrame": 17.699999999999818,
+    "framesOver50": 0,
+    "done": true,
+    "frameCount": 781,
+    "galleryBytes": 1179193
+  },
+  {
+    "url": "/showcase/mobiliario/series/9",
+    "images": {
+      "/images/gallery/series-02-detail1.webp": {
+        "loaded": 1649,
+        "decoding": true,
+        "decoded": 1661,
+        "visible": 10066,
+        "full": 10182
+      },
+      "/images/gallery/series-01-detail1.webp": {
+        "loaded": 1699,
+        "decoding": true,
+        "decoded": 1711,
+        "visible": 5032,
+        "full": 5149
+      }
+    },
+    "resources": [
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-02-detail1.webp",
+        "start": 4,
+        "end": 1639,
+        "bytes": 78080
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-01-detail1.webp",
+        "start": 4,
+        "end": 1692,
+        "bytes": 75052
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-01-thumb.webp",
+        "start": 4,
+        "end": 2801,
+        "bytes": 184826
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/rojo.jpeg",
+        "start": 4,
+        "end": 6079,
+        "bytes": 841235
+      }
+    ],
+    "duration": 13000,
+    "maxFrame": 17.700000000000728,
+    "framesOver50": 0,
+    "done": true,
+    "frameCount": 781,
+    "galleryBytes": 1179193
+  },
+  {
+    "url": "/showcase/mobiliario/series/9",
+    "images": {
+      "/images/gallery/series-02-detail1.webp": {
+        "loaded": 1719,
+        "decoding": true,
+        "decoded": 1735,
+        "visible": 10069,
+        "full": 10186
+      },
+      "/images/gallery/series-01-detail1.webp": {
+        "loaded": 1669,
+        "decoding": true,
+        "decoded": 1685,
+        "visible": 5035,
+        "full": 5152
+      }
+    },
+    "resources": [
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-01-detail1.webp",
+        "start": 3,
+        "end": 1666,
+        "bytes": 75052
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-02-detail1.webp",
+        "start": 3,
+        "end": 1717,
+        "bytes": 78080
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-01-thumb.webp",
+        "start": 3,
+        "end": 2791,
+        "bytes": 184826
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/rojo.jpeg",
+        "start": 3,
+        "end": 6076,
+        "bytes": 841235
+      }
+    ],
+    "duration": 13000,
+    "maxFrame": 17.700000000000728,
+    "framesOver50": 0,
+    "done": true,
+    "frameCount": 781,
+    "galleryBytes": 1179193
+  },
+  {
+    "url": "/showcase/mobiliario/series/9",
+    "images": {
+      "/images/gallery/series-02-detail1.webp": {
+        "loaded": 1762,
+        "decoding": true,
+        "decoded": 1779,
+        "visible": 10062,
+        "full": 10179
+      },
+      "/images/gallery/series-01-detail1.webp": {
+        "loaded": 1695,
+        "decoding": true,
+        "decoded": 1711,
+        "visible": 5028,
+        "full": 5146
+      }
+    },
+    "resources": [
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-01-detail1.webp",
+        "start": 3,
+        "end": 1680,
+        "bytes": 75052
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-02-detail1.webp",
+        "start": 3,
+        "end": 1716,
+        "bytes": 78080
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-01-thumb.webp",
+        "start": 3,
+        "end": 2797,
+        "bytes": 184826
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/rojo.jpeg",
+        "start": 3,
+        "end": 6075,
+        "bytes": 841235
+      }
+    ],
+    "duration": 13000,
+    "maxFrame": 17.700000000000728,
+    "framesOver50": 0,
+    "done": true,
+    "frameCount": 781,
+    "galleryBytes": 1179193
+  },
+  {
+    "url": "/showcase/mobiliario/series/9",
+    "images": {
+      "/images/gallery/series-02-detail1.webp": {
+        "loaded": 1713,
+        "decoding": true,
+        "decoded": 1728,
+        "visible": 10046,
+        "full": 10163
+      },
+      "/images/gallery/series-01-detail1.webp": {
+        "loaded": 1746,
+        "decoding": true,
+        "decoded": 1761,
+        "visible": 5030,
+        "full": 5146
+      }
+    },
+    "resources": [
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-02-detail1.webp",
+        "start": 3,
+        "end": 1696,
+        "bytes": 78080
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-01-detail1.webp",
+        "start": 3,
+        "end": 1735,
+        "bytes": 75052
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/series-01-thumb.webp",
+        "start": 3,
+        "end": 2845,
+        "bytes": 184826
+      },
+      {
+        "name": "http://127.0.0.1:4178/images/gallery/rojo.jpeg",
+        "start": 3,
+        "end": 6108,
+        "bytes": 841235
+      }
+    ],
+    "duration": 13000,
+    "maxFrame": 17.700000000000728,
+    "framesOver50": 0,
+    "done": true,
+    "frameCount": 781,
+    "galleryBytes": 1179193
+  }
+]
