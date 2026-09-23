@@ -197,22 +197,39 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
                 
                 {/* Renderizado: Doble vs Simple */}
                 {item.layout === "double" ? (
-                  <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 animate-fade-in-up">
-                    {[item.detailImage, item.secondaryImage].filter(Boolean).map((imageSrc, imageIndex) => (
-                      <div key={`${item.id}-image-${imageIndex}`} className="relative bg-white shadow-2xl overflow-hidden aspect-[4/5] w-[70vw] max-w-[min(34vw,360px)]" style={{ maxHeight: '80vh' }}>
-                        <img 
-                          src={imageSrc} 
-                          alt={`${item.title} ${imageIndex + 1}`} 
-                          draggable={false} 
-                          className={`w-full h-full object-cover select-none transition-opacity duration-700 ease-out ${imagesLoaded[item.id] ? 'opacity-100' : 'opacity-0'}`}
-                          loading="eager" 
-                        />
-                      </div>
-                    ))}
-                  </div>
+                  <>
+                    <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-8 animate-fade-in-up">
+                      {[item.detailImage, item.secondaryImage].filter(Boolean).map((imageSrc, imageIndex) => (
+                        <div key={`${item.id}-image-${imageIndex}`} className="relative bg-white shadow-2xl overflow-hidden aspect-[4/5] w-[70vw] max-w-[min(34vw,360px)]" style={{ maxHeight: '80vh' }}>
+                          <img 
+                            src={imageSrc} 
+                            alt={`${item.title} ${imageIndex + 1}`} 
+                            draggable={false} 
+                            className={`w-full h-full object-cover select-none transition-opacity duration-700 ease-out ${imagesLoaded[item.id] ? 'opacity-100' : 'opacity-0'}`}
+                            loading="eager" 
+                          />
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Botón HABLEMOS + Subtítulo para layout doble */}
+                    <div className={`flex flex-col items-center justify-center transition-opacity duration-700 delay-150 ease-out z-10 pointer-events-none ${imagesLoaded[item.id] ? 'opacity-100' : 'opacity-0'}`}>
+                      <button
+                        onClick={() => window.open("https://wa.me/56949569887", "_blank", "noopener,noreferrer")}
+                        className="pointer-events-auto text-[#694634] border-[#694634] group flex items-center px-6 py-2 md:px-9 md:py-2.5 bg-transparent font-serif text-[10.5px] md:text-xs tracking-[0.22em] md:tracking-[0.25em] border transition-all duration-500 ease-out cursor-pointer relative overflow-hidden hover:-translate-y-0.5 hover:shadow-[0_6px_25px_rgba(105,70,52,0.12)]"
+                      >
+                        HABLEMOS
+                      </button>
+                      {item.subtitle && (
+                        <p className="mt-1.5 md:mt-2 w-full max-w-[280px] md:max-w-[420px] px-2 text-[9.5px] leading-tight md:text-xs text-center font-serif tracking-wide whitespace-normal break-words pointer-events-none text-[#694634]/90 select-none">
+                          {item.subtitle}
+                        </p>
+                      )}
+                    </div>
+                  </>
                 ) : (
                   <div 
-                    className="relative bg-white shadow-2xl animate-fade-in-up aspect-[4/5] w-[85vw] max-w-[min(70vw,64vh)] overflow-hidden" 
+                    className="relative bg-white shadow-2xl animate-fade-in-up aspect-[4/5] w-[88vw] max-w-[min(88vw,390px)] md:max-w-[min(70vw,64vh)] overflow-hidden" 
                     style={{ maxHeight: '80vh' }}
                   >
                     <img 
@@ -224,30 +241,24 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
                       decoding="async" 
                       fetchPriority="high" 
                     />
+
+                    {/* Zona inferior Passe-partout (18.8% exacto): Botón HABLEMOS + Subtítulo integrados */}
+                    <div className={`absolute bottom-0 inset-x-0 h-[18.8%] flex flex-col items-center justify-center px-4 transition-opacity duration-700 delay-150 ease-out z-10 pointer-events-none ${imagesLoaded[item.id] ? 'opacity-100' : 'opacity-0'}`}>
+                      <button
+                        onClick={() => window.open("https://wa.me/56949569887", "_blank", "noopener,noreferrer")}
+                        className="pointer-events-auto text-[#694634] border-[#694634] group flex items-center px-6 py-2 md:px-9 md:py-2.5 bg-transparent font-serif text-[10.5px] md:text-xs tracking-[0.22em] md:tracking-[0.25em] border transition-all duration-500 ease-out cursor-pointer relative overflow-hidden hover:-translate-y-0.5 hover:shadow-[0_6px_25px_rgba(105,70,52,0.12)]"
+                      >
+                        HABLEMOS
+                      </button>
+
+                      {item.subtitle && (
+                        <p className="mt-1.5 md:mt-2 w-full max-w-[290px] md:max-w-[420px] px-2 text-[9.5px] leading-tight md:text-xs text-center font-serif tracking-wide whitespace-normal break-words pointer-events-none text-[#694634]/90 select-none">
+                          {item.subtitle}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 )}
-
-                {/* Botón HABLEMOS Universal */}
-                <div className={`absolute bottom-[9%] md:bottom-[10%] left-0 w-full flex justify-center transition-opacity duration-700 delay-150 ease-out ${imagesLoaded[item.id] ? 'opacity-100' : 'opacity-0'} ${item.layout === "double" ? "relative bottom-0 mt-4" : ""}`}>
-                  
-                  {/* Ancla del botón + subtítulo con contexto de ancho para evitar desbordes */}
-                  <div className="relative flex w-full justify-center px-4">
-                    <button
-                      onClick={() => window.open("https://wa.me/56949569887", "_blank", "noopener,noreferrer")}
-                      className="pointer-events-auto text-[#694634] border-[#694634] group flex items-center px-6 py-2.5 md:px-10 md:py-2.5 bg-transparent font-serif text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.25em] border transition-all duration-700 ease-out cursor-pointer relative overflow-hidden hover:-translate-y-1 hover:shadow-[0_8px_30px_rgb(0,0,0,0.07)]"
-                    >
-                      HABLEMOS
-                    </button>
-
-                    {/* Subtítulo centrado y con ancho limitado para que no se salga de la foto */}
-                    {item.subtitle && (
-                      <span className="absolute top-full left-1/2 mt-2 md:mb-3 w-full max-w-[280px] md:max-w-[420px] -translate-x-1/2 px-4 text-[10px] leading-tight md:text-[13px] text-center font-serif tracking-wide whitespace-normal break-words pointer-events-none text-[#694634]">
-                        {item.subtitle}
-                      </span>
-                    )}
-                  </div>
-
-                </div>
 
               </div>
             </div>
