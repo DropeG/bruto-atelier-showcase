@@ -82,10 +82,10 @@ export function canSpeculate() {
 export function backgroundFor(thumbnail: string) {
   const metadata = backgrounds[thumbnail as keyof typeof backgrounds];
   if (!metadata) return { src: thumbnail, placeholder: thumbnail };
-  // Account for portrait cover cropping and the existing 1.12 background scale.
-  const width = Math.max(window.innerWidth, window.innerHeight * metadata.width / metadata.height) * 1.12;
-  const required = width * (window.devicePixelRatio || 1);
-  const variant = metadata.variants.find(v => v.width >= required) || metadata.variants[metadata.variants.length - 1];
+  // The background is deliberately softened and darkened behind the detail;
+  // loading retina-sized variants only delays the transition without adding
+  // useful visible detail.
+  const variant = metadata.variants[0];
   return { src: variant.src, placeholder: metadata.placeholder };
 }
 

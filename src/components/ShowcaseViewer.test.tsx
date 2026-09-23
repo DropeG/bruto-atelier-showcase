@@ -54,6 +54,12 @@ afterEach(async () => {
 });
 
 describe('gallery presentation with delayed resources', () => {
+  it('starts preparing the background without waiting for the detail image', () => {
+    mount(false);
+    expect(requests.has(items[0].detailImage)).toBe(true);
+    expect(requests.has(items[0].thumbnail)).toBe(true);
+  });
+
   it('shares one download and decode between preparation consumers', async () => {
     const src = items[0].detailImage;
     const first = prepareImage(src, 'low');
@@ -259,9 +265,11 @@ describe('gallery presentation with delayed resources', () => {
 
   it('ignores a pending completion after leaving the viewer', async () => {
     const view = mount();
+    expect(requests.get(items[0].thumbnail)).toHaveLength(1);
     view.unmount();
     await load(items[0].detailImage);
-    expect(requests.has(items[0].thumbnail)).toBe(false);
+    await load(items[0].thumbnail);
+    expect(requests.get(items[0].thumbnail)).toHaveLength(1);
     expect(document.querySelector('img')).toBeNull();
   });
 });

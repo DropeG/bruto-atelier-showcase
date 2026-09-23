@@ -54,6 +54,15 @@ export function useGalleryPresentation(items: GalleryImageItem[], autoPlay: bool
       }));
     };
     async function prepare() {
+      // Start the visible background alongside the detail. The detail keeps the
+      // higher fetch priority, while the background no longer waits behind it.
+      const backgroundPromise = prepareImage(background, 'auto').then(() => {
+        if (cancelled) return;
+        update({ background, backgroundSettled: reduced });
+        if (!reduced) backgroundTimer = setTimeout(() => update({ backgroundSettled: true }), 240);
+      }).catch(() => {
+        if (!cancelled) update({ backgroundSettled: true });
+      });
       try {
         await prepareDetails(item);
         if (cancelled) return;
@@ -78,22 +87,11 @@ export function useGalleryPresentation(items: GalleryImageItem[], autoPlay: bool
             });
           });
         }
-        let loadedBackground: string | null = null;
-        try { await prepareImage(background); loadedBackground = background; } catch { /* Keep same-image placeholder. */ }
-        if (cancelled) return;
-        update({ background: loadedBackground, backgroundSettled: !loadedBackground || reduced });
-        if (loadedBackground && !reduced) {
-          backgroundTimer = setTimeout(() => update({ backgroundSettled: true }), 600);
-        }
       } catch {
         if (cancelled) return;
         setFailed(true);
-        // Direct entry still has a usable background and back control.
-        if (!presented.current) {
-          try { await prepareImage(background); update({ background, backgroundSettled: true }); }
-          catch { update({ backgroundSettled: true }); }
-        }
       }
+      await backgroundPromise;
     }
     void prepare();
     return () => { cancelled = true; clearTimeout(backgroundTimer); cancelAnimationFrame(frame); cancelAnimationFrame(secondFrame); release(); };

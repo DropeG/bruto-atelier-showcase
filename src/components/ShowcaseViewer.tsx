@@ -237,7 +237,7 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
           from { opacity: 0; }
           to { opacity: 1; }
         }
-        .gallery-background-ready { animation: galleryBackgroundReady .6s ease-out both; }
+        .gallery-background-ready { animation: galleryBackgroundReady .24s ease-out both; }
         @media (prefers-reduced-motion: reduce) {
           .animate-fade-in-up, .gallery-background-ready { animation: none; }
         }
