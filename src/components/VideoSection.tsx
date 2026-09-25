@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 
 export const SingleVideoBanner = ({
   src,
@@ -10,58 +10,106 @@ export const SingleVideoBanner = ({
   poster?: string;
   label?: string;
 }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const videoSource = mobileSrc || src;
+  const [hasStartedPlaying, setHasStartedPlaying] = useState(false);
+  const isIntersectingRef = useRef(false);
 
-  useEffect(() => {
+  const attemptPlay = useCallback(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Forzar propiedades DOM explícitas para compatibilidad con iOS Safari / Chrome Mobile / iPadOS
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.catch(() => {
+        // En caso de bloqueo por modo de bajo consumo de iOS, reactivar al interactuar si está en pantalla
+        const handleInteraction = () => {
+          if (video && isIntersectingRef.current) {
+            video.muted = true;
+            video.play().catch(() => {});
+          }
+          window.removeEventListener("touchstart", handleInteraction);
+          window.removeEventListener("click", handleInteraction);
+        };
+        window.addEventListener("touchstart", handleInteraction, { passive: true, once: true });
+        window.addEventListener("click", handleInteraction, { passive: true, once: true });
+      });
+    }
+  }, []);
+
+  const attemptPause = useCallback(() => {
+    const video = videoRef.current;
+    if (!video || video.paused) return;
+    video.pause();
+  }, []);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    const video = videoRef.current;
+    if (!container || !video) return;
+
+    // Forzar atributos DOM explícitos requeridos por WebKit / iOS
     video.muted = true;
     video.defaultMuted = true;
     video.playsInline = true;
     video.setAttribute("playsinline", "true");
     video.setAttribute("webkit-playsinline", "true");
 
-    const attemptPlay = () => {
-      if (!video) return;
-      video.muted = true;
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // Si el navegador bloqueó el autoplay inicial (ej. Modo de bajo consumo de iOS),
-          // se desbloquea al primer toque o scroll del usuario en la pantalla.
-          const resumeOnInteraction = () => {
-            if (video) {
-              video.muted = true;
-              video.play().catch(() => {});
-            }
-            window.removeEventListener("touchstart", resumeOnInteraction);
-            window.removeEventListener("touchend", resumeOnInteraction);
-            window.removeEventListener("scroll", resumeOnInteraction, true);
-          };
-          window.addEventListener("touchstart", resumeOnInteraction, { passive: true, once: true });
-          window.addEventListener("touchend", resumeOnInteraction, { passive: true, once: true });
-          window.addEventListener("scroll", resumeOnInteraction, { passive: true, capture: true, once: true });
-        });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        isIntersectingRef.current = entry.isIntersecting;
+
+        if (entry.isIntersecting) {
+          attemptPlay();
+        } else {
+          attemptPause();
+        }
+      },
+      {
+        // 200px de margen anticipatorio para precargar e iniciar la reproducción antes de que sea visible
+        rootMargin: "200px 0px 200px 0px",
+        threshold: [0, 0.15],
+      }
+    );
+
+    observer.observe(container);
+
+    // Soporte para bfcache (retorno con botón atrás del navegador) y cambio de pestaña
+    const handlePageShow = () => {
+      if (isIntersectingRef.current) {
+        attemptPlay();
       }
     };
 
-    attemptPlay();
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible" && isIntersectingRef.current) {
+        attemptPlay();
+      } else if (document.visibilityState === "hidden") {
+        attemptPause();
+      }
+    };
 
-    // Reintentar cuando el video esté listo para reproducir
-    video.addEventListener("canplay", attemptPlay);
-    video.addEventListener("loadeddata", attemptPlay);
+    window.addEventListener("pageshow", handlePageShow);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
-      video.removeEventListener("canplay", attemptPlay);
-      video.removeEventListener("loadeddata", attemptPlay);
+      observer.disconnect();
+      window.removeEventListener("pageshow", handlePageShow);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, []);
+  }, [attemptPlay, attemptPause]);
 
   return (
-    <div className="lg:landscape:hidden relative w-full h-screen h-[100dvh] min-h-[100dvh] bg-black flex items-center justify-center overflow-hidden my-0">
+    <div
+      ref={containerRef}
+      className="lg:landscape:hidden relative w-full h-screen h-[100dvh] min-h-[100dvh] bg-black flex items-center justify-center overflow-hidden my-0"
+    >
       <video
         ref={videoRef}
         src={videoSource}
@@ -69,15 +117,34 @@ export const SingleVideoBanner = ({
         loop
         muted
         playsInline
-        poster={poster}
         // @ts-expect-error - Atributo legacy requerido para iOS Safari auto-play sin botón de play
         webkit-playsinline="true"
-        preload="metadata"
+        preload="auto"
+        onPlaying={() => setHasStartedPlaying(true)}
+        onTimeUpdate={() => {
+          if (!hasStartedPlaying && videoRef.current && videoRef.current.currentTime > 0) {
+            setHasStartedPlaying(true);
+          }
+        }}
         className="w-full h-full object-cover block"
       >
         <source src={videoSource} type="video/mp4" />
         Tu navegador no soporta video HTML5
       </video>
+
+      {/* Poster overlay con crossfade suave: 0ms de demora percibida y previene pantallas negras */}
+      {poster && (
+        <img
+          src={poster}
+          alt="Vista previa de video"
+          aria-hidden="true"
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ease-out pointer-events-none ${
+            hasStartedPlaying ? "opacity-0" : "opacity-100"
+          }`}
+          loading="eager"
+          decoding="async"
+        />
+      )}
     </div>
   );
 };
