@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import Navigation from "./Navigation";
 import { ComingSoonCategory } from "@/data/ComingSoon";
+import { getBlurDataUrl } from "@/lib/blur-placeholders";
 
 interface ComingSoonViewProps {
   category: ComingSoonCategory;
@@ -12,6 +13,7 @@ interface ComingSoonViewProps {
 const ComingSoonView: React.FC<ComingSoonViewProps> = ({ category }) => {
   const navigate = useNavigate();
   const displayImage = category.bgImage;
+  const blurPlaceholder = getBlurDataUrl(category.id);
 
   return (
     <div className="relative w-full min-h-[100svh] bg-[#121110] text-[#F7F5F0] font-serif flex flex-col justify-between overflow-x-hidden">
@@ -23,16 +25,19 @@ const ComingSoonView: React.FC<ComingSoonViewProps> = ({ category }) => {
         
         {/* Left Side: Framed Portrait Image */}
         <div className="w-full lg:w-1/2 flex flex-col items-center justify-center relative shrink-0">
-          <div className="relative w-full max-w-[280px] sm:max-w-[340px] lg:max-w-[400px] aspect-[4/5] rounded-lg overflow-hidden shadow-2xl border border-white/10 bg-[#1A1918]">
+          <div
+            className="relative w-full max-w-[280px] sm:max-w-[340px] lg:max-w-[400px] aspect-[4/5] rounded-lg overflow-hidden shadow-2xl bg-[#1A1918] transform-gpu"
+            style={blurPlaceholder ? { backgroundImage: `url(${blurPlaceholder})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined}
+          >
             <motion.img
               src={displayImage}
               alt={category.title}
               loading="lazy"
               decoding="async"
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               transition={{ duration: 0.4, ease: "easeOut" }}
-              className="w-full h-full object-cover object-center"
+              className="w-full h-full object-cover object-center block"
             />
           </div>
         </div>

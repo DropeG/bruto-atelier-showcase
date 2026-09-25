@@ -432,11 +432,11 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               <div className="text-xl font-semibold tracking-wide">
                                 {cat.title}
                               </div>
-                              <div className="relative aspect-[4/5] w-full max-w-[220px] rounded-md overflow-hidden border border-white/20 shadow-md my-2">
+                              <div className="relative aspect-[4/5] w-full max-w-[220px] rounded-md overflow-hidden shadow-lg my-2 transform-gpu">
                                 <img
                                   src={cat.bgImage}
                                   alt={cat.title}
-                                  className="w-full h-full object-cover object-center"
+                                  className="w-full h-full object-cover object-center block"
                                 />
                               </div>
                             </div>
@@ -549,11 +549,11 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                           return (
                             <div className="space-y-3 text-sm leading-relaxed font-serif max-w-sm mx-auto">
                               <div className="text-2xl font-serif font-medium tracking-wide">{cat.title}</div>
-                              <div className="relative aspect-[4/5] w-[220px] max-w-full rounded-md overflow-hidden border border-white/20 shadow-md my-3">
+                              <div className="relative aspect-[4/5] w-[220px] max-w-full rounded-md overflow-hidden shadow-lg my-3 transform-gpu">
                                 <img
                                   src={cat.bgImage}
                                   alt={cat.title}
-                                  className="w-full h-full object-cover object-center"
+                                  className="w-full h-full object-cover object-center block"
                                 />
                               </div>
                             </div>
