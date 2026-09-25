@@ -13,14 +13,14 @@ export const comingSoonCategories: Record<string, ComingSoonCategory> = {
     title: "ILUMINACIÓN",
     subtitle: "Atmósferas de luz & sombra",
     description: "Estamos curando piezas escultóricas de luz diseñadas a medida. Disponible pronto.",
-    bgImage: "/images/hero.webp",
+    bgImage: "/images/iluminacion/iluminacion.webp",
   },
   esenciales: {
     id: "esenciales",
     title: "ESENCIALES",
     subtitle: "Elementos fundamentales del habitar",
     description: "Objetos clave que definen la presencia de tus espacios. Próximamente.",
-    bgImage: "/images/home/image1.webp",
+    bgImage: "/images/esenciales/esenciales.webp",
   },
   joyeria: {
     id: "joyeria",
@@ -34,13 +34,13 @@ export const comingSoonCategories: Record<string, ComingSoonCategory> = {
     title: "VESTUARIO",
     subtitle: "Textiles & arquitectura corporal",
     description: "Diseños de vestuario atemporal en lino y fibras naturales de confección delicada. Próximamente.",
-    bgImage: "/images/vestuario/vestuario2.webp",
+    bgImage: "/images/vestuario/vestuario.webp",
   },
   accesorios: {
     id: "accesorios",
     title: "ACCESORIOS",
     subtitle: "Objetos de acento & carácter",
     description: "Detalles que transforman el ambiente y expresan singularidad. Disponible pronto.",
-    bgImage: "/images/home/image7.webp",
+    bgImage: "/images/accesorios/accesorios.webp",
   },
 };
