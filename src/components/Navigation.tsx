@@ -6,6 +6,7 @@ import CurrencyDropdown from "./CurrencyDropdown";
 import NewsletterModal from "./NewsletterModal";
 import NosotrosModal from "./NosotrosModal";
 import { comingSoonCategories } from "@/data/ComingSoon";
+import { getBlurDataUrl } from "@/lib/blur-placeholders";
 import { useAuth } from "@/contexts/AuthContext";
 
 const navLinks = [
@@ -56,6 +57,16 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isUserMenuOpen]);
+
+  // Preload coming soon images immediately when menu opens so they appear instantly on tap
+  useEffect(() => {
+    if (isMenuOpen) {
+      Object.values(comingSoonCategories).forEach((cat) => {
+        const img = new Image();
+        img.src = cat.bgImage;
+      });
+    }
+  }, [isMenuOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -432,13 +443,20 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               <div className="text-xl font-semibold tracking-wide">
                                 {cat.title}
                               </div>
-                              <div className="relative aspect-[4/5] w-full max-w-[220px] rounded-md overflow-hidden shadow-lg my-2 transform-gpu">
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setIsMenuOpen(false);
+                                  navigate(`/showcase/${cat.id}`);
+                                }}
+                                className="relative aspect-[4/5] w-full max-w-[220px] rounded-md overflow-hidden shadow-lg my-2 transform-gpu group cursor-pointer focus:outline-none transition-transform duration-300 hover:scale-[1.02]"
+                              >
                                 <img
                                   src={cat.bgImage}
                                   alt={cat.title}
-                                  className="w-full h-full object-cover object-center block"
+                                  className="w-full h-full object-cover object-center block transition-transform duration-500 group-hover:scale-105"
                                 />
-                              </div>
+                              </button>
                             </div>
                           );
                         })()
@@ -546,16 +564,30 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                       ) : activePanel && comingSoonCategories[activePanel] ? (
                         (() => {
                           const cat = comingSoonCategories[activePanel];
+                          const blurPlaceholder = getBlurDataUrl(cat.id);
                           return (
-                            <div className="space-y-3 text-sm leading-relaxed font-serif max-w-sm mx-auto">
-                              <div className="text-2xl font-serif font-medium tracking-wide">{cat.title}</div>
-                              <div className="relative aspect-[4/5] w-[220px] max-w-full rounded-md overflow-hidden shadow-lg my-3 transform-gpu">
+                            <div className="flex flex-col items-center justify-center text-center font-serif py-2 max-w-sm mx-auto">
+                              <h2 className="text-2xl sm:text-3xl font-serif font-normal tracking-[0.2em] uppercase text-white mb-4">
+                                {cat.title}
+                              </h2>
+
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setIsMenuOpen(false);
+                                  navigate(`/showcase/${cat.id}`);
+                                }}
+                                className="relative aspect-[4/5] w-full max-w-[290px] sm:max-w-[320px] rounded-lg overflow-hidden shadow-2xl my-2 transform-gpu group cursor-pointer focus:outline-none transition-transform duration-300 active:scale-[0.98]"
+                                style={blurPlaceholder ? { backgroundImage: `url(${blurPlaceholder})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined}
+                              >
                                 <img
                                   src={cat.bgImage}
                                   alt={cat.title}
-                                  className="w-full h-full object-cover object-center block"
+                                  loading="eager"
+                                  decoding="async"
+                                  className="w-full h-full object-cover object-center block transition-transform duration-500 group-hover:scale-105"
                                 />
-                              </div>
+                              </button>
                             </div>
                           );
                         })()

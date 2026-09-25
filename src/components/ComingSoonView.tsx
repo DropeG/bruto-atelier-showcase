@@ -26,7 +26,7 @@ const ComingSoonView: React.FC<ComingSoonViewProps> = ({ category }) => {
         {/* Left Side: Framed Portrait Image */}
         <div className="w-full lg:w-1/2 flex flex-col items-center justify-center relative shrink-0">
           <div
-            className="relative w-full max-w-[280px] sm:max-w-[340px] lg:max-w-[400px] aspect-[4/5] rounded-lg overflow-hidden shadow-2xl bg-[#1A1918] transform-gpu"
+            className="relative w-full max-w-[300px] sm:max-w-[360px] lg:max-w-[420px] aspect-[4/5] rounded-lg overflow-hidden shadow-2xl bg-[#1A1918] transform-gpu"
             style={blurPlaceholder ? { backgroundImage: `url(${blurPlaceholder})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined}
           >
             <motion.img
@@ -43,24 +43,16 @@ const ComingSoonView: React.FC<ComingSoonViewProps> = ({ category }) => {
         </div>
 
         {/* Right Side: Editorial Content */}
-        <div className="w-full lg:w-1/2 flex flex-col justify-center text-center lg:text-left space-y-4 sm:space-y-6 shrink-0">
+        <div className="w-full lg:w-1/2 flex flex-col justify-center text-center lg:text-left space-y-5 sm:space-y-6 shrink-0">
           <div>
             <span className="text-[10px] sm:text-xs uppercase tracking-[0.3em] text-[#F7F5F0]/60 font-sans block mb-2">
               PRÓXIMAMENTE • COMING SOON
             </span>
 
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-medium tracking-wider text-[#F7F5F0] mb-2">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-medium tracking-wider text-[#F7F5F0]">
               {category.title}
             </h1>
-
-            <p className="text-sm sm:text-xl italic text-[#F7F5F0]/85 font-light">
-              {category.subtitle}
-            </p>
           </div>
-
-          <p className="text-xs sm:text-sm font-light text-[#F7F5F0]/75 max-w-lg mx-auto lg:mx-0 leading-relaxed">
-            {category.description}
-          </p>
 
           {/* Back Button */}
           <div className="pt-2 sm:pt-4">
