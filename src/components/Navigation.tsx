@@ -366,7 +366,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               }}
                               className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] transition-colors rounded-sm focus:outline-none focus-visible:outline-none"
                             >
-                              Colección
+                              Colección WACHI
                             </button>
                             <button
                               type="button"
@@ -659,7 +659,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                     }}
                                     className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center active:bg-white/20 transition-colors focus:outline-none rounded-sm"
                                   >
-                                    Colección
+                                    Colección WACHI
                                   </button>
                                   <button
                                     type="button"

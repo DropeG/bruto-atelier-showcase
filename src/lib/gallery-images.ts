@@ -89,7 +89,7 @@ export function backgroundFor(thumbnail: string) {
   return { src: variant.src, placeholder: metadata.placeholder };
 }
 
-export type GalleryImageItem = { detailImage: string; secondaryImage?: string; thumbnail: string };
+export type GalleryImageItem = { detailImage: string; secondaryImage?: string; thumbnail: string; backgroundImage?: string };
 export function detailSources(item: GalleryImageItem) {
   return [item.detailImage, item.secondaryImage].filter((src): src is string => Boolean(src));
 }
@@ -104,7 +104,7 @@ export async function prepareGalleryIntent(item: GalleryImageItem) {
   intentPending = true;
   try {
     await prepareDetails(item, 'low');
-    await prepareImage(backgroundFor(item.thumbnail).src, 'low');
+    await prepareImage(backgroundFor(item.backgroundImage ?? item.thumbnail).src, 'low');
   } catch { /* Intent is optional. A click may retry a failed resource. */ }
   finally { intentPending = false; }
 }

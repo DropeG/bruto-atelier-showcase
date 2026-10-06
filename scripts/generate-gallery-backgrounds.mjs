@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import sharp from 'sharp';
 const data = await fs.readFile('src/data/Gallery.tsx', 'utf8');
-const sources = [...data.matchAll(/thumbnail:\s*"([^"]+)"/g)].map(match => match[1]);
+const sources = [...data.matchAll(/(?:thumbnail|backgroundImage):\s*"([^"]+)"/g)].map(match => match[1]);
 const manifest = {};
 await fs.mkdir('public/images/gallery/responsive', { recursive: true });
 for (const source of sources) {

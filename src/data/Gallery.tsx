@@ -7,8 +7,10 @@ export interface GalleryItem {
     type?: MobiliarioType;
     title: string;
     thumbnail: string;
+    backgroundImage?: string;
     detailImage: string;
     secondaryImage?: string;
+    framePhoto?: boolean;
     layout?: "single" | "double";
     subtitle?: string;
 }
@@ -28,7 +30,8 @@ export const galleryItems: GalleryItem[] = [
         type: "series",
         title: "bespoke",
         thumbnail: "/images/gallery/series-01-thumb.webp",
-        detailImage: "/images/gallery/series-01-detail1.webp",
+        detailImage: "/images/gallery/series-01-bedroom.jpeg",
+        framePhoto: true,
         subtitle: "No hay problema alguno, lo ajustamos."
     },
     {
@@ -88,6 +91,7 @@ export const galleryItems: GalleryItem[] = [
         type: "series",
         title: "bespoke",
         thumbnail: "/images/gallery/rojo.jpeg",
+        backgroundImage: "/images/gallery/series-02-background.webp",
         detailImage: "/images/gallery/series-02-detail1.webp",
         subtitle: "¿Y tú, qué pondrás sobre la mesa?"
     },

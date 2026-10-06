@@ -88,14 +88,19 @@ describe('gallery presentation with delayed resources', () => {
     release();
   });
 
-  it('reveals the selected detail while its background is still pending', async () => {
+  it('keeps the foreground hidden until the background has been visible for two seconds', async () => {
     mount();
     await load(items[0].detailImage);
     await advance(40);
+    expect(document.querySelector(`img[src="${items[0].detailImage}"]`)).toBeNull();
+    await load(items[0].thumbnail);
+    await advance(240);
+    await advance(1999);
+    expect(document.querySelector(`img[src="${items[0].detailImage}"]`)).toBeNull();
+    await advance(1);
     const image = document.querySelector(`img[src="${items[0].detailImage}"]`)!;
     expect(image).not.toBeNull();
-    expect(image.className).toContain('opacity-100');
-    expect(requests.has(items[1].detailImage)).toBe(false);
+    expect(image.closest('.animate-fade-in-up')).not.toBeNull();
   });
 
   it('does not advance autoplay before the initial photo has been presented', async () => {
@@ -104,6 +109,8 @@ describe('gallery presentation with delayed resources', () => {
     expect(active(0)).toBe(true);
     await load(items[0].detailImage);
     await load(items[0].thumbnail);
+    await advance(240);
+    await advance(2000);
     await advance(1000);
     await load(items[1].detailImage);
     await load(items[1].thumbnail);
@@ -118,7 +125,9 @@ describe('gallery presentation with delayed resources', () => {
     mount(false);
     await load(items[0].detailImage);
     await load(items[0].thumbnail);
-    await advance(1100);
+    await advance(240);
+    await advance(2000);
+    await advance(1000);
     fireEvent.click(screen.getByLabelText('Ir a imagen 2'));
     expect(active(0)).toBe(true);
     fireEvent.click(screen.getByLabelText('Ir a imagen 3'));
@@ -138,6 +147,9 @@ describe('gallery presentation with delayed resources', () => {
     requests.get(items[0].detailImage)![0].decode.mockImplementation(() => new Promise(resolve => { decode = resolve; }));
     await load(items[0].detailImage);
     expect(document.querySelector(`img[src="${items[0].detailImage}"]`)).toBeNull();
+    await load(items[0].thumbnail);
+    await advance(240);
+    await advance(2000);
     await act(async () => decode());
     expect(document.querySelector(`img[src="${items[0].detailImage}"]`)).not.toBeNull();
   });
@@ -146,7 +158,9 @@ describe('gallery presentation with delayed resources', () => {
     mount(false);
     await load(items[0].detailImage);
     await load(items[0].thumbnail);
-    await advance(1100);
+    await advance(240);
+    await advance(2000);
+    await advance(1000);
     fireEvent.click(screen.getByLabelText('Ir a imagen 2'));
     await load(items[1].detailImage);
     await advance(40);
@@ -158,6 +172,9 @@ describe('gallery presentation with delayed resources', () => {
     mount(false);
     fireEvent.click(screen.getByLabelText('Ir a imagen 2'));
     await load(items[1].detailImage);
+    await load(items[1].thumbnail);
+    await advance(240);
+    await advance(2000);
     const image = document.querySelector(`img[src="${items[1].detailImage}"]`)!;
     expect(image.closest('.animate-fade-in-up')).not.toBeNull();
     await load(items[0].detailImage);
@@ -167,7 +184,9 @@ describe('gallery presentation with delayed resources', () => {
   it('does not cancel the outgoing entrance when a user advances immediately', async () => {
     mount(false);
     await load(items[0].detailImage);
-    await advance(100);
+    await load(items[0].thumbnail);
+    await advance(240);
+    await advance(2000);
     fireEvent.click(screen.getByLabelText('Ir a imagen 2'));
     await load(items[1].detailImage);
     await advance(40);
@@ -179,7 +198,9 @@ describe('gallery presentation with delayed resources', () => {
     mount(false);
     await load(items[0].detailImage);
     await load(items[0].thumbnail);
-    await advance(1100);
+    await advance(240);
+    await advance(2000);
+    await advance(1000);
     fireEvent.click(screen.getByLabelText('Ir a imagen 2'));
     await load(items[1].detailImage, true);
     expect(active(0)).toBe(true);
@@ -194,7 +215,9 @@ describe('gallery presentation with delayed resources', () => {
     mount(false);
     await load(items[0].detailImage);
     await load(items[0].thumbnail, true);
-    await advance(1100);
+    await advance(240);
+    await advance(2000);
+    await advance(1000);
     fireEvent.click(screen.getByLabelText('Ir a imagen 2'));
     await load(items[1].detailImage);
     await load(items[1].thumbnail, true);
@@ -207,7 +230,9 @@ describe('gallery presentation with delayed resources', () => {
     mount();
     await load(items[0].detailImage);
     await load(items[0].thumbnail);
-    await advance(1100);
+    await advance(240);
+    await advance(2000);
+    await advance(1000);
     await load(items[1].detailImage);
     await load(items[1].thumbnail);
     hidden.mockReturnValue(true);
@@ -228,7 +253,9 @@ describe('gallery presentation with delayed resources', () => {
     mount();
     await load(items[0].detailImage);
     await load(items[0].thumbnail);
-    await advance(1100);
+    await advance(240);
+    await advance(2000);
+    await advance(1000);
     expect(requests.has(items[1].detailImage)).toBe(false);
     Reflect.deleteProperty(navigator, 'connection');
   });
@@ -239,7 +266,9 @@ describe('gallery presentation with delayed resources', () => {
     mount();
     await load(items[0].detailImage);
     await load(items[0].thumbnail);
-    await advance(1100);
+    await advance(240);
+    await advance(2000);
+    await advance(1000);
     await advance(5000);
     expect(requests.has(items[1].detailImage)).toBe(true);
     hidden.mockReturnValue(true);

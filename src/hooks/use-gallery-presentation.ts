@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { backgroundFor, canSpeculate, detailSources, GalleryImageItem, prepareDetails, prepareImage, retainImages } from '@/lib/gallery-images';
 
 export const GALLERY_ENTRANCE_MS = 1000;
+export const GALLERY_BACKGROUND_DWELL_MS = 2000;
 export const GALLERY_TRANSITION_MS = 2500;
 type Prepared = { detail: boolean; background: string | null; backgroundSettled: boolean };
 
@@ -11,6 +12,7 @@ export function useGalleryPresentation(items: GalleryImageItem[], autoPlay: bool
   const [staged, setStaged] = useState<number | null>(null);
   const [prepared, setPrepared] = useState<Record<number, Prepared>>({});
   const [settled, setSettled] = useState(false);
+  const [showFront, setShowFront] = useState(false);
   const [request, setRequest] = useState({ index: 0, revision: 0, automatic: false });
   const [failed, setFailed] = useState(false);
   const [visible, setVisible] = useState(!document.hidden);
@@ -45,7 +47,7 @@ export function useGalleryPresentation(items: GalleryImageItem[], autoPlay: bool
     let frame = 0;
     let secondFrame = 0;
     let backgroundTimer: ReturnType<typeof setTimeout>;
-    const background = backgroundFor(item.thumbnail).src;
+    const background = backgroundFor(item.backgroundImage ?? item.thumbnail).src;
     const release = retainImages([...detailSources(item), background]);
     const update = (value: Partial<Prepared>) => {
       if (!cancelled) setPrepared(previous => ({
@@ -99,14 +101,24 @@ export function useGalleryPresentation(items: GalleryImageItem[], autoPlay: bool
 
   const detailReady = prepared[currentIndex]?.detail;
   const backgroundSettled = prepared[currentIndex]?.backgroundSettled;
+  // Count the opening pause only after the background has finished fading in.
+  // A deliberate carousel selection bypasses the opening pause.
   useEffect(() => {
-    if (!detailReady) return;
+    if (showFront) return;
+    if (outgoing !== null) { setShowFront(true); return; }
+    if (!backgroundSettled || !visible) return;
+    const timer = window.setTimeout(() => setShowFront(true), GALLERY_BACKGROUND_DWELL_MS);
+    return () => clearTimeout(timer);
+  }, [backgroundSettled, currentIndex, outgoing, showFront, visible]);
+
+  useEffect(() => {
+    if (!detailReady || !showFront) return;
     const timer = window.setTimeout(() => { setSettled(true); setOutgoing(null); },
       reduced ? 0 : outgoing === null ? GALLERY_ENTRANCE_MS : GALLERY_TRANSITION_MS);
     return () => clearTimeout(timer);
     // outgoing is captured at the start; clearing it must not restart the timer.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentIndex, detailReady, reduced]);
+  }, [currentIndex, detailReady, reduced, showFront]);
 
   // Keep displayed layers decoded even when speculative work fills the bounded cache.
   useEffect(() => {
@@ -121,7 +133,7 @@ export function useGalleryPresentation(items: GalleryImageItem[], autoPlay: bool
     let cancelled = false;
     const next = items[(currentIndex + 1) % items.length];
     void prepareDetails(next, 'low').then(async () => {
-      if (!cancelled) await prepareImage(backgroundFor(next.thumbnail).src, 'low');
+      if (!cancelled) await prepareImage(backgroundFor(next.backgroundImage ?? next.thumbnail).src, 'low');
     }).catch(() => { /* A deliberate selection retries a failed preparation. */ });
     return () => { cancelled = true; };
   }, [currentIndex, detailReady, backgroundSettled, visible, items, request.index, failed]);
@@ -133,7 +145,7 @@ export function useGalleryPresentation(items: GalleryImageItem[], autoPlay: bool
     const resize = () => {
       clearTimeout(timer);
       timer = setTimeout(async () => {
-        const src = backgroundFor(itemsRef.current[currentIndex].thumbnail).src;
+        const src = backgroundFor(itemsRef.current[currentIndex].backgroundImage ?? itemsRef.current[currentIndex].thumbnail).src;
         try {
           await prepareImage(src);
           if (!cancelled) setPrepared(previous => ({ ...previous,
@@ -152,5 +164,5 @@ export function useGalleryPresentation(items: GalleryImageItem[], autoPlay: bool
     return () => clearTimeout(timer);
   }, [autoPlay, items.length, currentIndex, request, settled, backgroundSettled, failed, visible, interval, select]);
 
-  return { currentIndex, outgoing, staged, prepared, select, requestedIndex: request.index, reduced };
+  return { currentIndex, outgoing, staged, prepared, select, requestedIndex: request.index, reduced, showFront };
 }

@@ -12,8 +12,10 @@ export interface ShowcaseItem {
   id: string | number;
   title: string;
   thumbnail: string;
+  backgroundImage?: string;
   detailImage: string;
   secondaryImage?: string;
+  framePhoto?: boolean;
   layout?: "single" | "double";
   backgroundColor?: string;
   subtitle?: string;
@@ -28,11 +30,10 @@ interface ShowcaseViewerProps {
 const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: ShowcaseViewerProps) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { currentIndex, outgoing, staged, prepared, select, requestedIndex, reduced } = useGalleryPresentation(items, autoPlay, intervalTime);
+  const { currentIndex, outgoing, staged, prepared, select, requestedIndex, reduced, showFront } = useGalleryPresentation(items, autoPlay, intervalTime);
   const visibleLayers = new Set([currentIndex, outgoing, staged]);
   const layers = items.map((item, index) => ({ item, index })).filter(({ index }) => visibleLayers.has(index));
   const imagesLoaded = Object.fromEntries(items.map((item, index) => [item.id, prepared[index]?.detail]));
-  const showFront = true;
   const firstPresentedIndex = useRef<number | null>(null);
   if (firstPresentedIndex.current === null && prepared[currentIndex]?.detail) firstPresentedIndex.current = currentIndex;
   const hasChanged = useRef(false);
@@ -113,7 +114,7 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
             transitionDuration: reduced ? "0ms" : "2500ms",
             pointerEvents: index === currentIndex ? 'auto' : 'none',
             transform: index === currentIndex ? 'scale(1.12)' : 'scale(1.05)',
-            backgroundImage: `url(${backgroundFor(item.thumbnail).placeholder})`,
+            backgroundImage: `url(${backgroundFor(item.backgroundImage ?? item.thumbnail).placeholder})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)'
@@ -121,13 +122,13 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
         >
           <img
             key={prepared[index]?.background || 'placeholder'}
-            src={prepared[index]?.background || backgroundFor(item.thumbnail).placeholder}
+            src={prepared[index]?.background || backgroundFor(item.backgroundImage ?? item.thumbnail).placeholder}
             alt={item.title}
             draggable={false}
             className={`absolute inset-0 w-full h-full object-cover object-center select-none ${prepared[index]?.background ? 'gallery-background-ready' : ''}`}
             style={{
               minHeight: "100vh",
-              filter: index === currentIndex && showFront ? "blur(1px)" : "blur(4px)",
+              filter: !showFront ? "none" : index === currentIndex ? "blur(1px)" : "blur(4px)",
               transition: "filter 0.6s ease-out"
             }}
             loading="lazy"
@@ -191,14 +192,27 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
                     className={`relative bg-white shadow-2xl aspect-[4/5] w-[88vw] max-w-[min(88vw,390px)] md:max-w-[min(70vw,64vh)] overflow-hidden ${index === firstPresentedIndex.current && !hasChanged.current ? "animate-fade-in-up" : ""}`}
                     style={{ maxHeight: '80vh' }}
                   >
-                    <img
-                      src={item.detailImage}
-                      alt={item.title}
-                      draggable={false}
-                      className={`w-full h-full object-cover select-none transition-opacity duration-700 ease-out ${imagesLoaded[item.id] ? 'opacity-100' : 'opacity-0'}`}
-                      loading="eager"
-                      decoding="async"
-                    />
+                    {item.framePhoto ? (
+                      <div className="absolute top-[1.6%] inset-x-[2%] h-[79.6%] overflow-hidden">
+                        <img
+                          src={item.detailImage}
+                          alt="Dormitorio con cama de estructura azul, muros de hormigón y lámparas colgantes"
+                          draggable={false}
+                          className={`w-full h-full object-cover scale-[1.04] select-none transition-opacity duration-700 ease-out ${imagesLoaded[item.id] ? 'opacity-100' : 'opacity-0'}`}
+                          loading="eager"
+                          decoding="async"
+                        />
+                      </div>
+                    ) : (
+                      <img
+                        src={item.detailImage}
+                        alt={item.title}
+                        draggable={false}
+                        className={`w-full h-full object-cover select-none transition-opacity duration-700 ease-out ${imagesLoaded[item.id] ? 'opacity-100' : 'opacity-0'}`}
+                        loading="eager"
+                        decoding="async"
+                      />
+                    )}
 
                     {/* Zona inferior Passe-partout (18.8% exacto): Botón HABLEMOS + Subtítulo integrados */}
                     <div className={`absolute bottom-0 inset-x-0 h-[18.8%] flex flex-col items-center justify-center px-4 transition-opacity duration-700 delay-150 ease-out z-10 pointer-events-none ${imagesLoaded[item.id] ? 'opacity-100' : 'opacity-0'}`}>

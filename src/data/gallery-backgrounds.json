@@ -154,6 +154,21 @@
       }
     ]
   },
+  "/images/gallery/series-02-background.webp": {
+    "width": 1856,
+    "height": 2304,
+    "placeholder": "data:image/webp;base64,UklGRj4BAABXRUJQVlA4IDIBAADQBgCdASogACgAPtFYpkyoJSOiJW5hABoJZgDCjiADsBrKV/DjRKcZkFIxFGoDNDjcZL5ldq0uk7BWEV5gDsAA/u0y2FJl1PB8+Z1D5I27JxDBfN2Yh0nOD+BsEjR1hJBopFMCNeLNP9mUY9FlUXfqHpGs0/tKWu1UwQ9y8dj3oKJzsaPYRll8PGqhilXhzvhHVSkpIwkyheLS48mi2n/JoTQdHxruHMWBtHPbUhrPYf6Y/uzKwNpspkszur0AiEnQqx3AkRGwxOjQh/JDPHsFHhXpTGf6cruMKRQMwETvl7/5YVhTKfgzyFzDgjz7dFwDRTtS4FLDZhoDDDJrNH2AnL93nY8vnAYm4frvoQ/iRi1682qalYAYCd2qupj9e9Ap/2cNXnPfWj2EPdcpwPUQAAA=",
+    "variants": [
+      {
+        "width": 800,
+        "src": "/images/gallery/responsive/series-02-background-800.webp"
+      },
+      {
+        "width": 1600,
+        "src": "/images/gallery/responsive/series-02-background-1600.webp"
+      }
+    ]
+  },
   "/images/gallery/chilote.jpeg": {
     "width": 2126,
     "height": 2657,
