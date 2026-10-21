@@ -170,17 +170,13 @@
     ]
   },
   "/images/gallery/chilote.jpeg": {
-    "width": 2126,
-    "height": 2657,
-    "placeholder": "data:image/webp;base64,UklGRvgAAABXRUJQVlA4IOwAAACQBgCdASogACgAPslOokunpCMhsBqtUPAZCWQArDlBV9WIo0yw5eJLjMxlK7gX00fU+FvPs5LbaDhWFH7AAP6bEu2Boyul5jtB0XC2c2VqxmmB9eZ6/F8DK6GAu94AT7VONNLOJKGHbaIpIXebVw9vwKT8I9vYowGP1AkmmsPrYi42JEdlv0amFD2+dwnDxt0FLAhHK63O6eOHR6F+Zf0WpB6arILSLkIn8YrsXJaotQsXjFz6hjJnBZphMO3hlTlM5+yVMXUEooras5k+SotFs4NvRiqv3KhlxmakT3NGUl1OHw44QQYSSIgAAA==",
+    "width": 824,
+    "height": 1024,
+    "placeholder": "data:image/webp;base64,UklGRugAAABXRUJQVlA4INwAAABwBgCdASogACgAPtFaqE0oJSQiKqoBABoJZACl1K6h+gxtoWw+4LEmxkJcOl/z5ifOqBdoKs9yO9vhCQAA/qGUpJwizT+Ay+fUT2EcMJcvDu5vYEWujOLrGohY/iWGN9zRwj2xEoVWQ7rijA+qwQeCgiHSw8+slzgp1TWvsls8RdmvSZJdG9zbt1HFKCcAOqH5FYuGqa0RAARAhI5mO8K+lH5WRVnGtfzbrgJYRR7IPaS0Al3JM60KqV+wD/sUj2wWfVTdnmRTgMcQbI7bb2AHgFK/3QLspTHKUAAA",
     "variants": [
       {
         "width": 800,
         "src": "/images/gallery/responsive/chilote-800.webp"
-      },
-      {
-        "width": 1600,
-        "src": "/images/gallery/responsive/chilote-1600.webp"
       }
     ]
   }
