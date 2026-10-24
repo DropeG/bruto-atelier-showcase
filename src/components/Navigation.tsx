@@ -7,17 +7,13 @@ import NewsletterModal from "./NewsletterModal";
 import NosotrosModal from "./NosotrosModal";
 import { comingSoonCategories } from "@/data/ComingSoon";
 import { getBlurDataUrl } from "@/lib/blur-placeholders";
+import NextSeasonDepthCarousel from "./NextSeasonDepthCarousel";
 import { useAuth } from "@/contexts/AuthContext";
 
 const navLinks = [
-  { label: "Arquitectura", href: "/showcase/arquitectura" },
-  { label: "Interiorismo", href: "/showcase/interiorismo" },
+  { label: "Arquitectura", href: "#arquitectura" },
   { label: "Mobiliario", href: "#mobiliario" },
-  { label: "Iluminación", href: "/showcase/iluminacion" },
-  { label: "Esenciales", href: "/showcase/esenciales" },
-  { label: "Joyería", href: "/showcase/joyeria" },
-  { label: "Vestuario", href: "/showcase/vestuario" },
-  { label: "Accesorios", href: "/showcase/accesorios" },
+  { label: "Next Season", href: "#next-season" },
   { label: "Nosotros", href: "#nosotros" },
   { label: "Contacto", href: "#contacto" }
 ];
@@ -33,7 +29,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
-  const [activePanel, setActivePanel] = useState<"mobiliario" | "contacto" | "vestuario" | string | null>(null);
+  const [activePanel, setActivePanel] = useState<"arquitectura" | "mobiliario" | "contacto" | "vestuario" | string | null>(null);
   const [isNosotrosOpen, setIsNosotrosOpen] = useState(false);
   const [contactMessage, setContactMessage] = useState("");
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -234,34 +230,29 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-start gap-4 font-serif">
-                <div className="w-[260px] md:w-[300px] bg-[#9C7B66] text-white p-6">
-                  <motion.ul className="flex flex-col gap-1 text-sm tracking-wide overflow-y-auto max-h-[75vh] pr-1">
+                <div className="w-[260px] md:w-[300px] bg-[#9C7B66] text-white py-6 px-4">
+                  <motion.ul className="flex flex-col gap-1 text-sm tracking-wide overflow-y-auto overflow-x-hidden max-h-[75vh]">
                     {navLinks.map((link, index) => (
                       <motion.li
                         key={link.label}
-                        initial={{ opacity: 0, x: -10 }}
+                        initial={{ opacity: 0, x: -6 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.1 + index * 0.08 }}
+                        transition={{ delay: 0.08 + index * 0.05, duration: 0.22, ease: "easeOut" }}
+                        className="w-full"
                       >
                         {link.label === "Arquitectura" ? (
                           <button
                             type="button"
-                            onClick={() => {
-                              setIsMenuOpen(false);
-                              navigate("/showcase/arquitectura");
-                            }}
-                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm focus:outline-none focus-visible:outline-none"
-                          >
-                            {link.label}
-                          </button>
-                        ) : link.label === "Interiorismo" ? (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setIsMenuOpen(false);
-                              navigate("/showcase/interiorismo");
-                            }}
-                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm focus:outline-none focus-visible:outline-none"
+                            onClick={() =>
+                              setActivePanel((prev) =>
+                                prev === "arquitectura" ? null : "arquitectura"
+                              )
+                            }
+                            className={`block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center transition-colors rounded-sm ${
+                              activePanel === "arquitectura"
+                                ? "bg-[#EAD0B9] text-[#3D261C] font-medium"
+                                : "text-white/95 hover:bg-[#EAD0B9] hover:text-[#3D261C]"
+                            }`}
                           >
                             {link.label}
                           </button>
@@ -273,7 +264,11 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                 prev === "mobiliario" ? null : "mobiliario"
                               )
                             }
-                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm focus:outline-none focus-visible:outline-none"
+                            className={`block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center transition-colors rounded-sm ${
+                              activePanel === "mobiliario"
+                                ? "bg-[#EAD0B9] text-[#3D261C] font-medium"
+                                : "text-white/95 hover:bg-[#EAD0B9] hover:text-[#3D261C]"
+                            }`}
                           >
                             {link.label}
                           </button>
@@ -285,7 +280,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               setActivePanel(null);
                               setIsNosotrosOpen(true);
                             }}
-                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm focus:outline-none focus-visible:outline-none"
+                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center text-white/95 hover:bg-[#EAD0B9] hover:text-[#3D261C] transition-colors rounded-sm"
                           >
                             {link.label}
                           </button>
@@ -297,13 +292,34 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                 prev === "contacto" ? null : "contacto"
                               )
                             }
-                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm focus:outline-none focus-visible:outline-none"
+                            className={`block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center transition-colors rounded-sm ${
+                              activePanel === "contacto"
+                                ? "bg-[#EAD0B9] text-[#3D261C] font-medium"
+                                : "text-white/95 hover:bg-[#EAD0B9] hover:text-[#3D261C]"
+                            }`}
+                          >
+                            {link.label}
+                          </button>
+                        ) : link.href === "#next-season" ? (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setActivePanel((prev) =>
+                                prev === "next-season" ? null : "next-season"
+                              )
+                            }
+                            className={`block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center transition-colors rounded-sm ${
+                              activePanel === "next-season"
+                                ? "bg-[#EAD0B9] text-[#3D261C] font-medium"
+                                : "text-white/95 hover:bg-[#EAD0B9] hover:text-[#3D261C]"
+                            }`}
                           >
                             {link.label}
                           </button>
                         ) : (link.href.split("/").pop()?.toLowerCase() && comingSoonCategories[link.href.split("/").pop()!.toLowerCase()]) ? (
                           (() => {
                             const csKey = link.href.split("/").pop()!.toLowerCase();
+                            const isActive = activePanel === csKey;
                             return (
                               <button
                                 type="button"
@@ -312,10 +328,20 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                     prev === csKey ? null : csKey
                                   )
                                 }
-                                className="w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center justify-between hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm focus:outline-none focus-visible:outline-none"
+                                className={`group w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center justify-between transition-colors rounded-sm ${
+                                  isActive
+                                    ? "bg-[#EAD0B9] text-[#3D261C] font-medium"
+                                    : "text-white/95 hover:bg-[#EAD0B9] hover:text-[#3D261C]"
+                                }`}
                               >
                                 <span>{link.label}</span>
-                                <span className="text-[9px] uppercase tracking-wider text-white/80 bg-white/20 px-1.5 py-0.5 rounded font-sans">
+                                <span
+                                  className={`text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded font-sans transition-colors ${
+                                    isActive
+                                      ? "text-[#3D261C] bg-[#3D261C]/15 font-medium"
+                                      : "text-white/80 bg-white/20 group-hover:text-[#3D261C] group-hover:bg-[#3D261C]/15"
+                                  }`}
+                                >
                                   Next Season
                                 </span>
                               </button>
@@ -328,7 +354,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               setIsMenuOpen(false);
                               navigate(link.href);
                             }}
-                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:opacity-100 hover:bg-[#EAD0B9] transition-colors rounded-sm focus:outline-none focus-visible:outline-none"
+                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center text-white/95 hover:bg-[#EAD0B9] hover:text-[#3D261C] transition-colors rounded-sm"
                           >
                             {link.label}
                           </button>
@@ -346,16 +372,43 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                       exit={{ opacity: 0, x: -12 }}
                       transition={{ duration: 0.25, ease: "easeOut" }}
                       className={
-                        activePanel === "mobiliario"
-                          ? "w-[200px] bg-[#9C7B66] text-white py-3 px-4 self-start"
+                        activePanel === "mobiliario" || activePanel === "arquitectura"
+                          ? "w-[200px] bg-[#9C7B66] text-white py-4 px-3 self-start"
                           : activePanel === "contacto"
                             ? "w-fit bg-[#9C7B66] text-white p-6 font-serif"
-                            : activePanel && comingSoonCategories[activePanel]
-                              ? "w-[320px] bg-[#9C7B66] text-white p-6 font-serif"
-                              : "w-[800px] bg-[#9C7B66] text-white p-6 md:max-lg:bg-transparent md:max-lg:p-0"
+                            : activePanel === "next-season"
+                              ? "w-[360px] bg-[#9C7B66] text-white p-6 font-serif self-start"
+                              : activePanel && comingSoonCategories[activePanel]
+                                ? "w-[320px] bg-[#9C7B66] text-white p-6 font-serif"
+                                : "w-[800px] bg-[#9C7B66] text-white p-6 md:max-lg:bg-transparent md:max-lg:p-0"
                       }
                     >
-                      {activePanel === "mobiliario" ? (
+                      {activePanel === "arquitectura" ? (
+                        <>
+                          <div className="space-y-1 text-sm">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setIsMenuOpen(false);
+                                navigate("/showcase/arquitectura");
+                              }}
+                              className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center text-white/95 hover:bg-[#EAD0B9] hover:text-[#3D261C] transition-colors rounded-sm"
+                            >
+                              Cabinas
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setIsMenuOpen(false);
+                                navigate("/showcase/interiorismo");
+                              }}
+                              className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center text-white/95 hover:bg-[#EAD0B9] hover:text-[#3D261C] transition-colors rounded-sm"
+                            >
+                              Interiorismo
+                            </button>
+                          </div>
+                        </>
+                      ) : activePanel === "mobiliario" ? (
                         <>
                           <div className="space-y-1 text-sm">
                             <button
@@ -364,7 +417,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                 setIsMenuOpen(false);
                                 navigate("/showcase/mobiliario/coleccion");
                               }}
-                              className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] transition-colors rounded-sm focus:outline-none focus-visible:outline-none"
+                              className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center text-white/95 hover:bg-[#EAD0B9] hover:text-[#3D261C] transition-colors rounded-sm"
                             >
                               Colección WACHI
                             </button>
@@ -374,7 +427,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                 setIsMenuOpen(false);
                                 navigate("/showcase/mobiliario/series");
                               }}
-                              className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] transition-colors rounded-sm focus:outline-none focus-visible:outline-none"
+                              className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center text-white/95 hover:bg-[#EAD0B9] hover:text-[#3D261C] transition-colors rounded-sm"
                             >
                               Serie
                             </button>
@@ -384,7 +437,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                 setIsMenuOpen(false);
                                 navigate("/showcase/mobiliario/piezas");
                               }}
-                              className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] transition-colors rounded-sm focus:outline-none focus-visible:outline-none"
+                              className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center text-white/95 hover:bg-[#EAD0B9] hover:text-[#3D261C] transition-colors rounded-sm"
                             >
                               Piezas
                             </button>
@@ -432,6 +485,8 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                             </div>
                           </div>
                         </>
+                      ) : activePanel === "next-season" ? (
+                        <NextSeasonDepthCarousel />
                       ) : activePanel && comingSoonCategories[activePanel] ? (
                         (() => {
                           const cat = comingSoonCategories[activePanel];
@@ -479,11 +534,13 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
               {/* Top Header of Mobile Menu */}
               <div
                 style={{ paddingTop: "max(1.5rem, env(safe-area-inset-top, 24px))" }}
-                className="flex items-center justify-between px-6 pb-4 border-b border-white/10 flex-shrink-0"
+                className={`flex items-center justify-between px-6 flex-shrink-0 ${activePanel === "next-season" ? "pb-1" : "pb-4 border-b border-white/10"}`}
               >
-                <span className="font-serif text-base md:text-lg tracking-wide text-white select-none pointer-events-none">
-                  BRUTO Atelier
-                </span>
+                {activePanel === "next-season" ? (
+                  <button type="button" onClick={() => setActivePanel(null)} aria-label="Volver al menú" className="w-11 h-11 -ml-2 flex items-center justify-center text-white active:opacity-70">
+                    <ArrowLeft className="w-5 h-5" />
+                  </button>
+                ) : <span className="font-serif text-base md:text-lg tracking-wide text-white select-none pointer-events-none">BRUTO Atelier</span>}
                 <button
                   type="button"
                   onClick={(e) => {
@@ -496,7 +553,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                     e.stopPropagation();
                     setIsMenuOpen(false);
                   }}
-                  className="relative z-[110] w-14 h-14 min-w-[56px] min-h-[56px] -mr-3 flex items-center justify-center text-white active:bg-white/20 active:scale-95 rounded-full transition-transform cursor-pointer touch-manipulation pointer-events-auto"
+                  className={`${activePanel === "next-season" ? "hidden" : "flex"} relative z-[110] w-14 h-14 min-w-[56px] min-h-[56px] -mr-3 flex items-center justify-center text-white active:bg-white/20 active:scale-95 rounded-full transition-transform cursor-pointer touch-manipulation pointer-events-auto`}
                   aria-label="Cerrar menú"
                 >
                   <X className="w-6 h-6 pointer-events-none stroke-[2]" />
@@ -508,9 +565,9 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                 style={{ paddingBottom: user ? "1.5rem" : "max(2.5rem, env(safe-area-inset-bottom, 24px))" }}
                 className="flex-1 overflow-y-auto px-6 pt-5 font-serif overscroll-contain"
               >
-                {activePanel === "contacto" || (activePanel && comingSoonCategories[activePanel]) ? (
+                {activePanel === "contacto" || activePanel === "next-season" || (activePanel && comingSoonCategories[activePanel]) ? (
                   <div>
-                    <div className="relative flex items-center justify-center min-h-[56px]">
+                    <div className={activePanel === "next-season" ? "hidden" : "relative flex items-center justify-between min-h-[48px] mb-2"}>
                       <button
                         type="button"
                         onClick={(e) => {
@@ -524,15 +581,18 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                           setActivePanel(null);
                         }}
                         aria-label="Volver"
-                        className="absolute left-0 inline-flex items-center justify-center w-14 h-14 min-w-[56px] min-h-[56px] -ml-3 active:bg-white/20 active:scale-95 rounded-full transition-transform touch-manipulation cursor-pointer z-[110] pointer-events-auto"
+                        className="inline-flex items-center gap-1.5 p-2 -ml-2 text-white/80 active:text-white active:scale-95 transition-transform touch-manipulation cursor-pointer z-[110] pointer-events-auto"
                       >
                         <ArrowLeft className="w-5 h-5 pointer-events-none" />
+                        <span className="text-[11px] font-sans uppercase tracking-widest text-white/70">Volver</span>
                       </button>
-                      <div className="text-sm font-medium tracking-[0.15em] uppercase text-white/90">
-                        {activePanel === "contacto" ? "Contacto" : "Next Season"}
-                      </div>
+                      {activePanel === "contacto" && (
+                        <div className="text-sm font-medium tracking-[0.15em] uppercase text-white/90">
+                          Contacto
+                        </div>
+                      )}
                     </div>
-                    <div className="mt-6">
+                    <div className={activePanel === "next-season" ? "mt-0" : "mt-6"}>
                       {activePanel === "contacto" ? (
                         <div className="space-y-4 text-sm leading-relaxed max-w-sm mx-auto">
                           <div className="text-xl font-semibold">Hablemos</div>
@@ -560,6 +620,10 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               Enviar
                             </button>
                           </form>
+                        </div>
+                      ) : activePanel === "next-season" ? (
+                        <div className="flex justify-center w-full mx-auto">
+                          <NextSeasonDepthCarousel expanded />
                         </div>
                       ) : activePanel && comingSoonCategories[activePanel] ? (
                         (() => {
@@ -599,33 +663,64 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                     {navLinks.map((link, index) => (
                       <motion.li
                         key={link.label}
-                        initial={{ opacity: 0, x: -8 }}
+                        initial={{ opacity: 0, x: -6 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.04 + index * 0.03 }}
+                        transition={{ delay: 0.04 + index * 0.03, duration: 0.2, ease: "easeOut" }}
                         className="relative w-full"
                       >
                         {link.label === "Arquitectura" ? (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setIsMenuOpen(false);
-                              navigate("/showcase/arquitectura");
-                            }}
-                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center transition-colors focus:outline-none active:bg-white/10 rounded-sm"
-                          >
-                            {link.label}
-                          </button>
-                        ) : link.label === "Interiorismo" ? (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setIsMenuOpen(false);
-                              navigate("/showcase/interiorismo");
-                            }}
-                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center transition-colors focus:outline-none active:bg-white/10 rounded-sm"
-                          >
-                            {link.label}
-                          </button>
+                          <>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setActivePanel((prev) =>
+                                  prev === "arquitectura" ? null : "arquitectura"
+                                )
+                              }
+                              className={`w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center justify-between transition-colors focus:outline-none rounded-sm ${
+                                activePanel === "arquitectura"
+                                  ? "bg-[#EAD0B9] text-[#3D261C] font-medium"
+                                  : "hover:bg-[#EAD0B9] hover:text-[#3D261C] active:bg-[#EAD0B9] active:text-[#3D261C]"
+                              }`}
+                            >
+                              <span>{link.label}</span>
+                              <span className={`text-xs transition-transform duration-200 ${activePanel === "arquitectura" ? "rotate-90" : ""}`}>
+                                ‹
+                              </span>
+                            </button>
+                            <AnimatePresence>
+                              {activePanel === "arquitectura" && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: "auto", opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  transition={{ duration: 0.25, ease: "easeInOut" }}
+                                  className="overflow-hidden pl-4 border-l border-white/25 ml-1 my-1 space-y-0.5 text-sm"
+                                >
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setIsMenuOpen(false);
+                                      navigate("/showcase/arquitectura");
+                                    }}
+                                    className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] hover:text-[#3D261C] active:bg-[#EAD0B9] active:text-[#3D261C] transition-colors focus:outline-none rounded-sm"
+                                  >
+                                    Cabinas
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setIsMenuOpen(false);
+                                      navigate("/showcase/interiorismo");
+                                    }}
+                                    className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] hover:text-[#3D261C] active:bg-[#EAD0B9] active:text-[#3D261C] transition-colors focus:outline-none rounded-sm"
+                                  >
+                                    Interiorismo
+                                  </button>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </>
                         ) : link.label === "Mobiliario" ? (
                           <>
                             <button
@@ -635,7 +730,11 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                   prev === "mobiliario" ? null : "mobiliario"
                                 )
                               }
-                              className="w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center justify-between transition-colors focus:outline-none active:bg-white/10 rounded-sm"
+                              className={`w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center justify-between transition-colors focus:outline-none rounded-sm ${
+                                activePanel === "mobiliario"
+                                  ? "bg-[#EAD0B9] text-[#3D261C] font-medium"
+                                  : "hover:bg-[#EAD0B9] hover:text-[#3D261C] active:bg-[#EAD0B9] active:text-[#3D261C]"
+                              }`}
                             >
                               <span>{link.label}</span>
                               <span className={`text-xs transition-transform duration-200 ${activePanel === "mobiliario" ? "rotate-90" : ""}`}>
@@ -657,7 +756,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                       setIsMenuOpen(false);
                                       navigate("/showcase/mobiliario/coleccion");
                                     }}
-                                    className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center active:bg-white/20 transition-colors focus:outline-none rounded-sm"
+                                    className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] hover:text-[#3D261C] active:bg-[#EAD0B9] active:text-[#3D261C] transition-colors focus:outline-none rounded-sm"
                                   >
                                     Colección WACHI
                                   </button>
@@ -667,7 +766,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                       setIsMenuOpen(false);
                                       navigate("/showcase/mobiliario/series");
                                     }}
-                                    className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center active:bg-white/20 transition-colors focus:outline-none rounded-sm"
+                                    className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] hover:text-[#3D261C] active:bg-[#EAD0B9] active:text-[#3D261C] transition-colors focus:outline-none rounded-sm"
                                   >
                                     Serie
                                   </button>
@@ -677,7 +776,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                       setIsMenuOpen(false);
                                       navigate("/showcase/mobiliario/piezas");
                                     }}
-                                    className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center active:bg-white/20 transition-colors focus:outline-none rounded-sm"
+                                    className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] hover:text-[#3D261C] active:bg-[#EAD0B9] active:text-[#3D261C] transition-colors focus:outline-none rounded-sm"
                                   >
                                     Piezas
                                   </button>
@@ -693,7 +792,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               setActivePanel(null);
                               setIsNosotrosOpen(true);
                             }}
-                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center transition-colors focus:outline-none active:bg-white/10 rounded-sm"
+                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center transition-colors focus:outline-none hover:bg-[#EAD0B9] hover:text-[#3D261C] active:bg-[#EAD0B9] active:text-[#3D261C] rounded-sm"
                           >
                             {link.label}
                           </button>
@@ -701,21 +800,52 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                           <button
                             type="button"
                             onClick={() => setActivePanel("contacto")}
-                            className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center transition-colors focus:outline-none active:bg-white/10 rounded-sm"
+                            className={`block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center transition-colors focus:outline-none rounded-sm ${
+                              activePanel === "contacto"
+                                ? "bg-[#EAD0B9] text-[#3D261C] font-medium"
+                                : "hover:bg-[#EAD0B9] hover:text-[#3D261C] active:bg-[#EAD0B9] active:text-[#3D261C]"
+                            }`}
+                          >
+                            {link.label}
+                          </button>
+                        ) : link.href === "#next-season" ? (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setActivePanel((prev) =>
+                                prev === "next-season" ? null : "next-season"
+                              )
+                            }
+                            className={`block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center transition-colors rounded-sm ${
+                              activePanel === "next-season"
+                                ? "bg-[#EAD0B9] text-[#3D261C] font-medium"
+                                : "text-white/95 hover:bg-[#EAD0B9] hover:text-[#3D261C]"
+                            }`}
                           >
                             {link.label}
                           </button>
                         ) : (link.href.split("/").pop()?.toLowerCase() && comingSoonCategories[link.href.split("/").pop()!.toLowerCase()]) ? (
                           (() => {
                             const csKey = link.href.split("/").pop()!.toLowerCase();
+                            const isActive = activePanel === csKey;
                             return (
                               <button
                                 type="button"
                                 onClick={() => setActivePanel(csKey)}
-                                className="w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center justify-between transition-colors focus:outline-none active:bg-white/10 rounded-sm"
+                                className={`group w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center justify-between transition-colors focus:outline-none rounded-sm ${
+                                  isActive
+                                    ? "bg-[#EAD0B9] text-[#3D261C] font-medium"
+                                    : "hover:bg-[#EAD0B9] hover:text-[#3D261C] active:bg-[#EAD0B9] active:text-[#3D261C]"
+                                }`}
                               >
                                 <span>{link.label}</span>
-                                <span className="text-[9px] uppercase tracking-wider text-white/80 bg-white/20 px-2 py-0.5 rounded font-sans">
+                                <span
+                                  className={`text-[9px] uppercase tracking-wider px-2 py-0.5 rounded font-sans transition-colors ${
+                                    isActive
+                                      ? "text-[#3D261C] bg-[#3D261C]/15 font-medium"
+                                      : "text-white/80 bg-white/20 group-hover:text-[#3D261C] group-hover:bg-[#3D261C]/15"
+                                  }`}
+                                >
                                   Next Season
                                 </span>
                               </button>
@@ -725,7 +855,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                           <a
                             href={link.href}
                             onClick={() => setIsMenuOpen(false)}
-                            className="block px-3.5 py-2.5 min-h-[44px] flex items-center transition-colors rounded-sm"
+                            className="block px-3.5 py-2.5 min-h-[44px] flex items-center transition-colors hover:bg-[#EAD0B9] hover:text-[#3D261C] active:bg-[#EAD0B9] active:text-[#3D261C] rounded-sm"
                           >
                             {link.label}
                           </a>

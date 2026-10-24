@@ -1,0 +1,74 @@
+{
+  "/images/next-season/vestuario.webp": {
+    "width": 896,
+    "height": 1024,
+    "variants": [
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/next-season-vestuario-480.webp"
+      },
+      {
+        "width": 800,
+        "src": "/images/catalog-optimized/next-season-vestuario-800.webp"
+      },
+      {
+        "width": 896,
+        "src": "/images/catalog-optimized/next-season-vestuario-896.webp"
+      }
+    ]
+  },
+  "/images/next-season/iluminacion.webp": {
+    "width": 660,
+    "height": 906,
+    "variants": [
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/next-season-iluminacion-480.webp"
+      },
+      {
+        "width": 660,
+        "src": "/images/catalog-optimized/next-season-iluminacion-660.webp"
+      }
+    ]
+  },
+  "/images/joyeria/joyeria4.webp": {
+    "width": 1464,
+    "height": 1830,
+    "variants": [
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/joyeria-joyeria4-480.webp"
+      },
+      {
+        "width": 800,
+        "src": "/images/catalog-optimized/joyeria-joyeria4-800.webp"
+      },
+      {
+        "width": 1200,
+        "src": "/images/catalog-optimized/joyeria-joyeria4-1200.webp"
+      },
+      {
+        "width": 1464,
+        "src": "/images/catalog-optimized/joyeria-joyeria4-1464.webp"
+      }
+    ]
+  },
+  "/images/next-season/esenciales-fondo-texturado.webp": {
+    "width": 1084,
+    "height": 1451,
+    "variants": [
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/next-season-esenciales-fondo-texturado-480.webp"
+      },
+      {
+        "width": 800,
+        "src": "/images/catalog-optimized/next-season-esenciales-fondo-texturado-800.webp"
+      },
+      {
+        "width": 1084,
+        "src": "/images/catalog-optimized/next-season-esenciales-fondo-texturado-1084.webp"
+      }
+    ]
+  }
+}
