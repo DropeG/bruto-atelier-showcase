@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import { galleryDetailSource } from "@/lib/catalog-images";
 import { useLocation } from "react-router-dom";
 import { useGalleryPresentation } from "@/hooks/use-gallery-presentation";
 import { backgroundFor } from "@/lib/gallery-images";
@@ -16,6 +17,7 @@ export interface ShowcaseItem {
   detailImage: string;
   secondaryImage?: string;
   framePhoto?: boolean;
+  detailAlt?: string;
   layout?: "single" | "double";
   backgroundColor?: string;
   subtitle?: string;
@@ -128,7 +130,9 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
             className={`absolute inset-0 w-full h-full object-cover object-center select-none ${prepared[index]?.background ? 'gallery-background-ready' : ''}`}
             style={{
               minHeight: "100vh",
-              filter: !showFront ? "none" : index === currentIndex ? "blur(1px)" : "blur(4px)",
+              filter: !showFront ? "none" : index === currentIndex
+                ? item.thumbnail === "/images/gallery/chilote.jpeg" ? "blur(0.35px)" : "blur(1px)"
+                : "blur(4px)",
               transition: "filter 0.6s ease-out"
             }}
             loading="lazy"
@@ -195,8 +199,8 @@ const ShowcaseViewer = ({ items, autoPlay = true, intervalTime = 5000 }: Showcas
                     {item.framePhoto ? (
                       <div className="absolute top-[1.6%] inset-x-[2%] h-[79.6%] overflow-hidden">
                         <img
-                          src={item.detailImage}
-                          alt="Dormitorio con cama de estructura azul, muros de hormigón y lámparas colgantes"
+                          src={galleryDetailSource(item.detailImage)}
+                          alt={item.detailAlt || "Dormitorio con cama de estructura azul, muros de hormigón y lámparas colgantes"}
                           draggable={false}
                           className={`w-full h-full object-cover scale-[1.04] select-none transition-opacity duration-700 ease-out ${imagesLoaded[item.id] ? 'opacity-100' : 'opacity-0'}`}
                           loading="eager"

@@ -11,6 +11,7 @@ export interface GalleryItem {
     detailImage: string;
     secondaryImage?: string;
     framePhoto?: boolean;
+    detailAlt?: string;
     layout?: "single" | "double";
     subtitle?: string;
 }
@@ -56,7 +57,9 @@ export const galleryItems: GalleryItem[] = [
         discipline: "arquitectura",
         title: "bespoke",
         thumbnail: "/images/gallery/cabina-01-thumb.webp",
-        detailImage: "/images/gallery/cabina-01-detail1.webp",
+        detailImage: "/images/gallery/cabina-bosque-photo.webp",
+        framePhoto: true,
+        detailAlt: "Cabina elevada entre árboles, con tejuelas y estructura de madera",
         subtitle: "Mallas salmoneras despuntes de obra y tejuelas de un campanario caído, nuestra propuesta."
     },
     {

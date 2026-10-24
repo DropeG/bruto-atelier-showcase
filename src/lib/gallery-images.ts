@@ -1,4 +1,5 @@
 import backgrounds from '@/data/gallery-backgrounds.json';
+import { galleryDetailSource } from '@/lib/catalog-images';
 
 type ImagePriority = 'high' | 'low' | 'auto';
 type Entry = { image: HTMLImageElement; promise: Promise<void>; ready: boolean };
@@ -91,7 +92,7 @@ export function backgroundFor(thumbnail: string) {
 
 export type GalleryImageItem = { detailImage: string; secondaryImage?: string; thumbnail: string; backgroundImage?: string };
 export function detailSources(item: GalleryImageItem) {
-  return [item.detailImage, item.secondaryImage].filter((src): src is string => Boolean(src));
+  return [item.detailImage, item.secondaryImage].filter((src): src is string => Boolean(src)).map(galleryDetailSource);
 }
 
 export async function prepareDetails(item: GalleryImageItem, priority: ImagePriority = 'high') {

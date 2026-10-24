@@ -70,5 +70,27 @@
         "src": "/images/catalog-optimized/next-season-esenciales-fondo-texturado-1084.webp"
       }
     ]
+  },
+  "/images/gallery/cabina-bosque-photo.webp": {
+    "width": 2505,
+    "height": 3375,
+    "variants": [
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/gallery-cabina-bosque-photo-480.avif"
+      },
+      {
+        "width": 800,
+        "src": "/images/catalog-optimized/gallery-cabina-bosque-photo-800.avif"
+      },
+      {
+        "width": 1200,
+        "src": "/images/catalog-optimized/gallery-cabina-bosque-photo-1200.avif"
+      },
+      {
+        "width": 1600,
+        "src": "/images/catalog-optimized/gallery-cabina-bosque-photo-1600.avif"
+      }
+    ]
   }
 }
