@@ -1,4 +1,62 @@
 {
+  "/images/shopify-demo/coleccion/wachi-mobile-left.webp": {
+    "width": 586,
+    "height": 941,
+    "variants": [
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-wachi-mobile-left-480.webp"
+      },
+      {
+        "width": 586,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-wachi-mobile-left-586.webp"
+      }
+    ]
+  },
+  "/images/shopify-demo/accesorios-tarjetero.jpeg": {
+    "width": 2134,
+    "height": 2016,
+    "variants": [
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/shopify-demo-accesorios-tarjetero-480.webp"
+      },
+      {
+        "width": 800,
+        "src": "/images/catalog-optimized/shopify-demo-accesorios-tarjetero-800.webp"
+      },
+      {
+        "width": 1200,
+        "src": "/images/catalog-optimized/shopify-demo-accesorios-tarjetero-1200.webp"
+      },
+      {
+        "width": 1600,
+        "src": "/images/catalog-optimized/shopify-demo-accesorios-tarjetero-1600.webp"
+      }
+    ]
+  },
+  "/images/gallery/cabina-bosque-photo.webp": {
+    "width": 2505,
+    "height": 3375,
+    "variants": [
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/gallery-cabina-bosque-photo-480.avif"
+      },
+      {
+        "width": 800,
+        "src": "/images/catalog-optimized/gallery-cabina-bosque-photo-800.avif"
+      },
+      {
+        "width": 1200,
+        "src": "/images/catalog-optimized/gallery-cabina-bosque-photo-1200.avif"
+      },
+      {
+        "width": 1600,
+        "src": "/images/catalog-optimized/gallery-cabina-bosque-photo-1600.avif"
+      }
+    ]
+  },
   "/images/next-season/vestuario.webp": {
     "width": 896,
     "height": 1024,
@@ -71,25 +129,97 @@
       }
     ]
   },
-  "/images/gallery/cabina-bosque-photo.webp": {
-    "width": 2505,
-    "height": 3375,
+  "/images/shopify-demo/coleccion/banqueta-fondo-blanco.png": {
+    "width": 1122,
+    "height": 1402,
     "variants": [
       {
         "width": 480,
-        "src": "/images/catalog-optimized/gallery-cabina-bosque-photo-480.avif"
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-banqueta-fondo-blanco-480.webp"
       },
       {
         "width": 800,
-        "src": "/images/catalog-optimized/gallery-cabina-bosque-photo-800.avif"
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-banqueta-fondo-blanco-800.webp"
+      },
+      {
+        "width": 1122,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-banqueta-fondo-blanco-1122.webp"
+      }
+    ]
+  },
+  "/images/shopify-demo/coleccion/mesa-fondo-blanco.png": {
+    "width": 1187,
+    "height": 1325,
+    "variants": [
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-mesa-fondo-blanco-480.webp"
+      },
+      {
+        "width": 800,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-mesa-fondo-blanco-800.webp"
+      },
+      {
+        "width": 1187,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-mesa-fondo-blanco-1187.webp"
+      }
+    ]
+  },
+  "/images/shopify-demo/coleccion/silla-fondo-blanco.png": {
+    "width": 1187,
+    "height": 1325,
+    "variants": [
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-silla-fondo-blanco-480.webp"
+      },
+      {
+        "width": 800,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-silla-fondo-blanco-800.webp"
+      },
+      {
+        "width": 1187,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-silla-fondo-blanco-1187.webp"
+      }
+    ]
+  },
+  "/images/shopify-demo/coleccion/wachi-fondo-blanco.png": {
+    "width": 1187,
+    "height": 1325,
+    "variants": [
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-wachi-fondo-blanco-480.webp"
+      },
+      {
+        "width": 800,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-wachi-fondo-blanco-800.webp"
+      },
+      {
+        "width": 1187,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-wachi-fondo-blanco-1187.webp"
+      }
+    ]
+  },
+  "/images/shopify-demo/coleccion/wachi-hero-horizontal.png": {
+    "width": 1672,
+    "height": 941,
+    "variants": [
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-wachi-hero-horizontal-480.webp"
+      },
+      {
+        "width": 800,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-wachi-hero-horizontal-800.webp"
       },
       {
         "width": 1200,
-        "src": "/images/catalog-optimized/gallery-cabina-bosque-photo-1200.avif"
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-wachi-hero-horizontal-1200.webp"
       },
       {
         "width": 1600,
-        "src": "/images/catalog-optimized/gallery-cabina-bosque-photo-1600.avif"
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-wachi-hero-horizontal-1600.webp"
       }
     ]
   }

@@ -1,0 +1,115 @@
+.wachi-collection {
+  min-height: 100dvh;
+  background: #fff;
+  color: #171715;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.wachi-collection__header {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: clamp(4.5rem, 9vh, 6rem);
+  padding-inline: clamp(1rem, 4vw, 4rem);
+}
+
+.wachi-collection__icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.wachi-collection__bag span {
+  position: absolute;
+  top: 0;
+  right: -5px;
+  font-size: .68rem;
+}
+
+.wachi-collection__wordmark {
+  color: inherit;
+  font-family: Georgia, serif;
+  font-size: .71rem;
+  font-weight: 500;
+  letter-spacing: .22em;
+  text-decoration: none;
+}
+
+.wachi-collection__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 1560px;
+  min-height: calc(100dvh - clamp(4.5rem, 9vh, 6rem));
+  margin: auto;
+  padding: 0 clamp(1rem, 4vw, 4rem) clamp(2rem, 7vh, 5rem);
+}
+
+.wachi-collection__intro { text-align: center; }
+.wachi-collection__intro p {
+  margin: 0 0 .45rem;
+  color: #77736e;
+  font-size: .68rem;
+  letter-spacing: .17em;
+  text-transform: uppercase;
+}
+.wachi-collection__intro h1 {
+  margin: 0;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2.2rem, 3.2vw, 3.5rem);
+  font-weight: 400;
+}
+
+.wachi-collection__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(1rem, 2vw, 2.25rem);
+  align-items: end;
+  width: 100%;
+  margin: clamp(1.5rem, 5vh, 4rem) auto 0;
+}
+
+.wachi-collection__piece { min-width: 0; text-align: center; }
+.wachi-collection__image {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: min(49vh, 510px);
+}
+.wachi-collection__image img {
+  display: block;
+  width: calc(100% - 1rem);
+  height: 100%;
+  object-fit: contain;
+}
+.wachi-collection__piece--chair .wachi-collection__image img { transform: scale(.82); }
+.wachi-collection__piece h2 {
+  margin: 1.5rem 0 0;
+  font-family: Georgia, serif;
+  font-size: clamp(.84rem, 1.1vw, 1rem);
+  font-weight: 400;
+  letter-spacing: .015em;
+}
+
+@media (max-width: 850px) {
+  .wachi-collection__content { min-height: auto; padding-top: 2rem; }
+  .wachi-collection__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 2.5rem; }
+  .wachi-collection__image { height: min(39vw, 250px); }
+  .wachi-collection__piece h2 { margin-top: .7rem; }
+}
+
+@media (max-width: 450px) {
+  .wachi-collection__wordmark { font-size: .62rem; }
+  .wachi-collection__content { padding-inline: .75rem; }
+  .wachi-collection__grid { column-gap: .3rem; }
+  .wachi-collection__image { height: 42vw; }
+}

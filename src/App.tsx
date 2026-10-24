@@ -8,6 +8,9 @@ import { ShopifyProvider } from "@/contexts/ShopifyContext";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Category from "./pages/Category";
+import WachiCollection from "./pages/WachiCollection";
+import AccessoriesCollection from "./pages/AccessoriesCollection";
+import CartDrawer from "./components/CartDrawer";
 
 const queryClient = new QueryClient();
 
@@ -19,8 +22,11 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <CartDrawer />
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/coleccion/wachi" element={<WachiCollection />} />
+              <Route path="/coleccion/accesorios" element={<AccessoriesCollection />} />
               
               {/* Semantic Showcase Routes */}
               <Route path="/showcase/mobiliario/:type/:id" element={<Category />} />

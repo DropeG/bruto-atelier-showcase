@@ -1,12 +1,20 @@
 import sharp from 'sharp';
 import { mkdir, writeFile } from 'node:fs/promises';
 
+// Art-directed phone crop: the ensemble continues beyond the right edge.
+await sharp('public/images/shopify-demo/coleccion/wachi-hero-horizontal.png')
+  .extract({ left: 250, top: 0, width: 586, height: 941 })
+  .webp({ quality: 90 }).toFile('public/images/shopify-demo/coleccion/wachi-mobile-left.webp');
+
 const sources = [
+  'shopify-demo/coleccion/wachi-mobile-left.webp',
+  'shopify-demo/accesorios-tarjetero.jpeg',
   'gallery/cabina-bosque-photo.webp',
   'next-season/vestuario.webp',
   'next-season/iluminacion.webp',
   'joyeria/joyeria4.webp',
   'next-season/esenciales-fondo-texturado.webp',
+  ...['banqueta-fondo-blanco', 'mesa-fondo-blanco', 'silla-fondo-blanco', 'wachi-fondo-blanco', 'wachi-hero-horizontal'].map(name => `shopify-demo/coleccion/${name}.png`),
 ];
 const manifest = {};
 await mkdir('public/images/catalog-optimized', { recursive: true });
