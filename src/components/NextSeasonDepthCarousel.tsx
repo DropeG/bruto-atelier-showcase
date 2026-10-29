@@ -17,12 +17,12 @@ export const NEXT_SEASON_ITEMS: NextSeasonItem[] = [
   {
     id: "iluminacion",
     title: "ILUMINACIÓN",
-    image: "/images/next-season/iluminacion.webp"
+    image: "/images/next-season/iluminacion-atelier-4x5.webp"
   },
   {
     id: "joyeria",
     title: "JOYERÍA",
-    image: "/images/joyeria/joyeria4.webp"
+    image: "/images/joyeria/joyeria-atelier-4x5.webp"
   },
   {
     id: "esenciales",
@@ -118,7 +118,6 @@ export default function NextSeasonDepthCarousel({
             const isRight = offset === 1;
             const isLeft = offset === -1;
             const isVisible = isCenter || isRight || isLeft;
-
             let transform = "translate3d(0, 0, -140px) scale(0.65)";
             let opacity = 0;
             let zIndex = 10;
@@ -155,8 +154,8 @@ export default function NextSeasonDepthCarousel({
                 }`}
                 style={{
                   width: expanded ? "min(76%, 350px, 43dvh)" : "215px",
-                  height: expanded ? "auto" : "295px",
-                  aspectRatio: expanded ? "215 / 295" : undefined,
+                  height: "auto",
+                  aspectRatio: "4 / 5",
                   transform,
                   opacity,
                   zIndex,
