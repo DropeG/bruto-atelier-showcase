@@ -35,7 +35,7 @@ interface CatalogPieceProps {
 
 const CatalogPiece = ({ product, isDemo, position, onNavigate }: CatalogPieceProps) => {
   const title = product.handle === 'accesorios-cuero' ? 'Cuoro' : product.title;
-  const description = product.handle === 'accesorios-cuero' ? 'Cuero que acompaña lo cotidiano.' : product.description;
+  const description = product.handle === 'accesorios-cuero' ? 'Nuestra expresión en pelle.' : product.description;
   const image = product.featuredImage || product.images.edges[0]?.node;
   const mobileImage = product.tags.includes('ColeccionDestacada')
     ? catalogImageProps('/images/shopify-demo/coleccion/wachi-mobile-left.webp', '100vw')
