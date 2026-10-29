@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { backgroundFor, canSpeculate, detailSources, GalleryImageItem, prepareDetails, prepareImage, retainImages } from '@/lib/gallery-images';
 
 export const GALLERY_ENTRANCE_MS = 1000;
-export const GALLERY_BACKGROUND_DWELL_MS = 2000;
+export const GALLERY_BACKGROUND_DWELL_MS = 750;
 export const GALLERY_TRANSITION_MS = 2500;
 type Prepared = { detail: boolean; background: string | null; backgroundSettled: boolean };
 
