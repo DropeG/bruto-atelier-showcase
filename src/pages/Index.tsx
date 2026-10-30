@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   HeroSection,
   VideoSection,
@@ -39,17 +39,37 @@ const Index = () => {
 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
-  // Restaurar scroll a la sección guardada al montar el componente
-  useEffect(() => {
-    console.log("[Index] Componente montado, intentando restaurar sección");
-    const sectionId = getSectionId();
-    if (sectionId) {
-      scrollToSection(sectionId, scrollContainerRef.current);
+  // Restore the saved position synchronously before the first paint.
+  useLayoutEffect(() => {
+    const container = scrollContainerRef.current;
+    const savedScrollTop = sessionStorage.getItem("lastScrollTop");
+    if (container && savedScrollTop !== null) {
+      const targetScrollTop = Number(savedScrollTop);
+      container.dataset.returning = "true";
+      container.scrollTop = targetScrollTop;
+      sessionStorage.removeItem("lastScrollTop");
+      sessionStorage.removeItem("lastSectionId");
+
+      // Hold the restored position while native scroll snapping settles on mount.
+      window.requestAnimationFrame(() => {
+        container.scrollTop = targetScrollTop;
+        window.requestAnimationFrame(() => {
+          container.scrollTop = targetScrollTop;
+          delete container.dataset.returning;
+        });
+      });
+      return;
     }
+
+    const sectionId = getSectionId();
+    if (sectionId) void scrollToSection(sectionId, container);
+  }, [getSectionId, scrollToSection]);
+
+  useEffect(() => {
     // Precargar el poster del primer video en móviles para 0ms latency
     const posterImg = new Image();
     posterImg.src = "/videos/video1-poster.webp";
-  }, [getSectionId, scrollToSection]);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {

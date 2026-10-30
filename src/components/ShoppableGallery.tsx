@@ -8,6 +8,7 @@ import type { ShopifyProduct } from '@/types/shopify';
 import '@/styles/shoppable-gallery.css';
 
 const SECTION_ID = 'section-product-featured';
+const WACHI_SECTION_ID = 'catalog-piece-silla-coleccion';
 
 function formatPrice(product: ShopifyProduct): string {
   const min = product.priceRange.minVariantPrice;
@@ -30,11 +31,11 @@ interface CatalogPieceProps {
   product: ShopifyProduct;
   isDemo: boolean;
   position: 'hero' | 'reverse';
-  onNavigate: () => void;
+  onNavigate: (sectionId: string) => void;
 }
 
 const CatalogPiece = ({ product, isDemo, position, onNavigate }: CatalogPieceProps) => {
-  const title = product.handle === 'accesorios-cuero' ? 'Cuoro' : product.title;
+  const title = product.handle === 'accesorios-cuero' ? 'CUORO' : product.title;
   const description = product.handle === 'accesorios-cuero' ? 'Nuestra expresión en pelle.' : product.description;
   const image = product.featuredImage || product.images.edges[0]?.node;
   const mobileImage = product.tags.includes('ColeccionDestacada')
@@ -44,10 +45,12 @@ const CatalogPiece = ({ product, isDemo, position, onNavigate }: CatalogPiecePro
   const actionLabel = 'Ver';
 
   return (
-    <article className={`catalog-piece catalog-piece--${position}${product.tags.includes('ColeccionDestacada') ? ' catalog-piece--collection' : ''}${product.handle === 'accesorios-cuero' ? ' catalog-piece--accessories' : ''}`}>
+    <article id={`catalog-piece-${product.handle}`} className={`catalog-piece catalog-piece--${position}${product.tags.includes('ColeccionDestacada') ? ' catalog-piece--collection' : ''}${product.handle === 'accesorios-cuero' ? ' catalog-piece--accessories' : ''}`}>
       <Link
         to={productUrl(product, isDemo)}
-        onClick={onNavigate}
+        onClick={() => onNavigate(
+          product.handle === 'accesorios-cuero' ? WACHI_SECTION_ID : `catalog-piece-${product.handle}`
+        )}
         className="catalog-piece__link"
         aria-label={`${actionLabel} ${title}${showPrice ? `, ${formatPrice(product)}` : ''}`}
       >
@@ -88,7 +91,7 @@ const ShoppableGallery = () => {
   if (products.length === 0) return null;
 
   const [featured, second] = products;
-  const onNavigate = () => saveSectionId(SECTION_ID);
+  const onNavigate = (sectionId: string) => saveSectionId(sectionId);
 
   return (
     <section ref={galleryRef} id={SECTION_ID} className="shoppable-gallery" aria-label="Galería comprable">

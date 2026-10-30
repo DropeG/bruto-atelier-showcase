@@ -88,7 +88,7 @@ export const MOCK_PRODUCTS: ShopifyProduct[] = [
   createDemoProduct({
     key: 'silla-coleccion',
     handle: 'silla-coleccion',
-    title: 'Wachi',
+    title: 'WACHI',
     description: 'En Lenga, a medida.',
     productType: 'Colección',
     tags: ['Mobiliario', 'Madera', 'ColeccionDestacada', 'OcultarPrecio'],

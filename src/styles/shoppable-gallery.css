@@ -23,6 +23,19 @@
   min-height: 0;
 }
 
+/* Let a product inside the gallery be a valid landing point for the home scroller. */
+.catalog-piece { scroll-snap-align: start; scroll-snap-stop: always; }
+
+#coleccion[data-returning="true"] {
+  scroll-snap-type: none !important;
+  scroll-behavior: auto !important;
+}
+
+html:has(#coleccion[data-returning="true"]) {
+  scroll-snap-type: none !important;
+  scroll-behavior: auto !important;
+}
+
 .shoppable-gallery__bottom {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

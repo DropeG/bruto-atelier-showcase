@@ -19,7 +19,7 @@ const WachiCollection = () => {
     <main className="wachi-collection">
       <header className="wachi-collection__header">
         <Link to={galleryUrl} className="wachi-collection__icon" aria-label="Volver a la galería"><ArrowLeft size={23} strokeWidth={1.45} /></Link>
-        <Link to={galleryUrl} className="wachi-collection__wordmark">BRUTO Atelier SCL</Link>
+        <Link to={galleryUrl} className="wachi-collection__wordmark">BRUTO Atelier</Link>
         <button type="button" className="wachi-collection__icon wachi-collection__bag" onClick={openCart} aria-label={`Abrir bolsa${cart?.totalQuantity ? `, ${cart.totalQuantity} piezas` : ''}`}>
           <ShoppingBag size={22} strokeWidth={1.45} />
           {cart?.totalQuantity ? <span>{cart.totalQuantity}</span> : null}

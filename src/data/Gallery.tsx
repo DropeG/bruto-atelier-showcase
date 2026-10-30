@@ -39,7 +39,7 @@ export const galleryItems: GalleryItem[] = [
         id: 3, 
         discipline: "mobiliario",
         type: "coleccion",
-        title: "wachi",
+        title: "WACHI",
         thumbnail: "/images/gallery/colection-01-thumb.webp",
         detailImage: "/images/gallery/colection-01-detail1.webp",
         subtitle: "Nuestra colección en Lenga, la Patagonia nunca estuvo tan cerca."
