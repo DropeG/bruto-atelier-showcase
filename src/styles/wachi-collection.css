@@ -5,6 +5,21 @@
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+/* Menu entry flow: story first, then the existing WACHI collection grid. */
+html:has(.wachi-collection-flow) {
+  scroll-snap-type: y mandatory;
+}
+
+.wachi-collection-flow > section {
+  min-height: 100dvh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.wachi-collection-flow__story {
+  height: 100dvh;
+}
+
 .wachi-collection__header {
   position: relative;
   z-index: 1;

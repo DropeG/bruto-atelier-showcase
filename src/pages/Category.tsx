@@ -5,6 +5,7 @@ import ComingSoonView from "@/components/ComingSoonView";
 import { Discipline, MobiliarioType } from "@/data/Gallery";
 import { comingSoonCategories } from "@/data/ComingSoon";
 import { useIsMobile } from "@/hooks/use-mobile";
+import WachiCollection from "@/pages/WachiCollection";
 
 const Category = () => {
   const { discipline, type, id, category, title } = useParams();
@@ -77,6 +78,22 @@ const Category = () => {
       ];
       items = reorderedItems;
     }
+  }
+
+  // The menu's WACHI entry opens the editorial story first, then snaps to the
+  // existing collection grid. The separate "Ver" link still opens the grid
+  // route directly.
+  if (currentDiscipline === "mobiliario" && currentType === "coleccion") {
+    return (
+      <div className="wachi-collection-flow">
+        <section className="wachi-collection-flow__story" aria-label="Historia de la colección WACHI">
+          <ShowcaseViewer key={location.pathname} items={items} autoPlay={autoPlay} />
+        </section>
+        <section className="wachi-collection-flow__grid" aria-label="Piezas de la colección WACHI">
+          <WachiCollection />
+        </section>
+      </div>
+    );
   }
 
   return <ShowcaseViewer key={location.pathname} items={items} autoPlay={autoPlay} />;
