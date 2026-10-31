@@ -93,19 +93,40 @@
     "width": 1600,
     "height": 2000,
     "variants": [
-      { "width": 480, "src": "/images/catalog-optimized/next-season-iluminacion-atelier-480.webp" },
-      { "width": 800, "src": "/images/catalog-optimized/next-season-iluminacion-atelier-800.webp" },
-      { "width": 1200, "src": "/images/catalog-optimized/next-season-iluminacion-atelier-1200.webp" },
-      { "width": 1600, "src": "/images/catalog-optimized/next-season-iluminacion-atelier-1600.webp" }
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/next-season-iluminacion-atelier-480.webp"
+      },
+      {
+        "width": 800,
+        "src": "/images/catalog-optimized/next-season-iluminacion-atelier-800.webp"
+      },
+      {
+        "width": 1200,
+        "src": "/images/catalog-optimized/next-season-iluminacion-atelier-1200.webp"
+      },
+      {
+        "width": 1600,
+        "src": "/images/catalog-optimized/next-season-iluminacion-atelier-1600.webp"
+      }
     ]
   },
   "/images/joyeria/joyeria-atelier-4x5.webp": {
     "width": 1536,
     "height": 1920,
     "variants": [
-      { "width": 480, "src": "/images/catalog-optimized/joyeria-atelier-480.webp" },
-      { "width": 800, "src": "/images/catalog-optimized/joyeria-atelier-800.webp" },
-      { "width": 1200, "src": "/images/catalog-optimized/joyeria-atelier-1200.webp" }
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/joyeria-atelier-480.webp"
+      },
+      {
+        "width": 800,
+        "src": "/images/catalog-optimized/joyeria-atelier-800.webp"
+      },
+      {
+        "width": 1200,
+        "src": "/images/catalog-optimized/joyeria-atelier-1200.webp"
+      }
     ]
   },
   "/images/joyeria/joyeria4.webp": {
@@ -239,6 +260,150 @@
       {
         "width": 1600,
         "src": "/images/catalog-optimized/shopify-demo-coleccion-wachi-hero-horizontal-1600.webp"
+      }
+    ]
+  },
+  "/images/shopify-demo/coleccion/wachi-perspectiva-2.png": {
+    "width": 1187,
+    "height": 1325,
+    "variants": [
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-wachi-perspectiva-2-480.webp"
+      },
+      {
+        "width": 800,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-wachi-perspectiva-2-800.webp"
+      },
+      {
+        "width": 1187,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-wachi-perspectiva-2-1187.webp"
+      }
+    ]
+  },
+  "/images/shopify-demo/coleccion/wachi-perspectiva-3.png": {
+    "width": 1187,
+    "height": 1325,
+    "variants": [
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-wachi-perspectiva-3-480.webp"
+      },
+      {
+        "width": 800,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-wachi-perspectiva-3-800.webp"
+      },
+      {
+        "width": 1187,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-wachi-perspectiva-3-1187.webp"
+      }
+    ]
+  },
+  "/images/shopify-demo/coleccion/mesa-perspectiva-2.png": {
+    "width": 1187,
+    "height": 1325,
+    "variants": [
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-mesa-perspectiva-2-480.webp"
+      },
+      {
+        "width": 800,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-mesa-perspectiva-2-800.webp"
+      },
+      {
+        "width": 1187,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-mesa-perspectiva-2-1187.webp"
+      }
+    ]
+  },
+  "/images/shopify-demo/coleccion/mesa-perspectiva-3.png": {
+    "width": 1187,
+    "height": 1325,
+    "variants": [
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-mesa-perspectiva-3-480.webp"
+      },
+      {
+        "width": 800,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-mesa-perspectiva-3-800.webp"
+      },
+      {
+        "width": 1187,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-mesa-perspectiva-3-1187.webp"
+      }
+    ]
+  },
+  "/images/shopify-demo/coleccion/silla-perspectiva-2.png": {
+    "width": 1187,
+    "height": 1325,
+    "variants": [
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-silla-perspectiva-2-480.webp"
+      },
+      {
+        "width": 800,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-silla-perspectiva-2-800.webp"
+      },
+      {
+        "width": 1187,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-silla-perspectiva-2-1187.webp"
+      }
+    ]
+  },
+  "/images/shopify-demo/coleccion/silla-perspectiva-3.png": {
+    "width": 1187,
+    "height": 1325,
+    "variants": [
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-silla-perspectiva-3-480.webp"
+      },
+      {
+        "width": 800,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-silla-perspectiva-3-800.webp"
+      },
+      {
+        "width": 1187,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-silla-perspectiva-3-1187.webp"
+      }
+    ]
+  },
+  "/images/shopify-demo/coleccion/banqueta-perspectiva-2.png": {
+    "width": 1187,
+    "height": 1325,
+    "variants": [
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-banqueta-perspectiva-2-480.webp"
+      },
+      {
+        "width": 800,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-banqueta-perspectiva-2-800.webp"
+      },
+      {
+        "width": 1187,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-banqueta-perspectiva-2-1187.webp"
+      }
+    ]
+  },
+  "/images/shopify-demo/coleccion/banqueta-perspectiva-3.png": {
+    "width": 1187,
+    "height": 1325,
+    "variants": [
+      {
+        "width": 480,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-banqueta-perspectiva-3-480.webp"
+      },
+      {
+        "width": 800,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-banqueta-perspectiva-3-800.webp"
+      },
+      {
+        "width": 1187,
+        "src": "/images/catalog-optimized/shopify-demo-coleccion-banqueta-perspectiva-3-1187.webp"
       }
     ]
   }

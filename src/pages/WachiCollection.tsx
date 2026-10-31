@@ -122,6 +122,20 @@ const yeezySpring = {
   mass: 0.9,
 } as const;
 
+const STAGE_IMAGE_SIZES = '(max-width: 850px) 84vw, 44vw';
+
+function preloadPiecePerspectives(piece: WachiPiece) {
+  if (typeof window === 'undefined') return;
+  for (const perspective of piece.perspectives) {
+    const props = catalogImageProps(perspective.src, STAGE_IMAGE_SIZES);
+    const img = new window.Image();
+    if ('sizes' in props && props.sizes) img.sizes = props.sizes;
+    if ('srcSet' in props && props.srcSet) img.srcset = props.srcSet;
+    img.src = props.src;
+    img.decode?.().catch(() => {});
+  }
+}
+
 const WachiCollection = () => {
   const { cart, openCart } = useShopify();
   const [selectedKind, setSelectedKind] = useState<WachiPiece['kind'] | null>(null);
@@ -131,7 +145,17 @@ const WachiCollection = () => {
 
   const activePiece = pieces.find((piece) => piece.kind === selectedKind) ?? null;
 
+  // Preload and decode all perspectives in the background once the collection view is open
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      pieces.forEach(preloadPiecePerspectives);
+    }, 120);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   const handleOpenPiece = (kind: WachiPiece['kind']) => {
+    const target = pieces.find((piece) => piece.kind === kind);
+    if (target) preloadPiecePerspectives(target);
     setPerspectiveIndex(0);
     setSelectedKind(kind);
   };
@@ -168,10 +192,6 @@ const WachiCollection = () => {
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [activePiece]);
-
-  const currentPerspective = activePiece
-    ? activePiece.perspectives[perspectiveIndex] ?? activePiece.perspectives[0]
-    : null;
 
   return (
     <main className={`wachi-collection${activePiece ? ' wachi-collection--stage-active' : ''}`}>
@@ -236,6 +256,8 @@ const WachiCollection = () => {
                     <button
                       type="button"
                       className="wachi-collection__piece-trigger"
+                      onMouseEnter={() => preloadPiecePerspectives(piece)}
+                      onFocus={() => preloadPiecePerspectives(piece)}
                       onClick={() => handleOpenPiece(piece.kind)}
                       aria-label={`Ver ${piece.name}`}
                     >
@@ -292,15 +314,20 @@ const WachiCollection = () => {
                   transition={yeezySpring}
                   className="wachi-stage__media"
                 >
-                  {currentPerspective && (
-                    <img
-                      key={currentPerspective.src}
-                      {...catalogImageProps(currentPerspective.src, '(max-width: 850px) 84vw, 44vw')}
-                      alt={currentPerspective.alt}
-                      className={`wachi-stage__img ${currentPerspective.className ?? ''}`}
-                      decoding="async"
-                    />
-                  )}
+                  {activePiece.perspectives.map((perspective, idx) => {
+                    const isActive = idx === perspectiveIndex;
+                    return (
+                      <img
+                        key={perspective.src}
+                        {...catalogImageProps(perspective.src, STAGE_IMAGE_SIZES)}
+                        alt={perspective.alt}
+                        loading="eager"
+                        decoding="sync"
+                        aria-hidden={!isActive}
+                        className={`wachi-stage__img ${perspective.className ?? ''}${isActive ? '' : ' wachi-stage__img--hidden'}`}
+                      />
+                    );
+                  })}
                 </motion.div>
 
                 <motion.button

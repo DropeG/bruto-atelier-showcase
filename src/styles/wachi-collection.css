@@ -156,6 +156,7 @@ html:has(.wachi-collection-flow) {
 }
 
 .wachi-stage__media {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -171,6 +172,13 @@ html:has(.wachi-collection-flow) {
   transform: translateY(-7%);
   transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
   user-select: none;
+}
+
+.wachi-stage__img--hidden {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .wachi-stage__img--perspective-2 {
