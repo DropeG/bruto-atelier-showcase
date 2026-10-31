@@ -19,6 +19,8 @@ const COLLECTION_HANDLE = "homepage-featured";
 const PRODUCT_LIMIT = 2;
 const COLLECTION_HANDLES = ["silla-coleccion", "accesorios-cuero"];
 
+let cachedCollectionProducts: ShopifyProduct[] | null = null;
+
 function selectHomepageCollections(products: ShopifyProduct[]) {
   return COLLECTION_HANDLES.flatMap(handle => {
     const product = products.find(item => item.handle === handle);
@@ -33,7 +35,9 @@ function selectHomepageCollections(products: ShopifyProduct[]) {
  */
 export function useHomepageProducts(): HomepageProductsResult {
   const { products: contextProducts, status, isLoading: contextIsLoading } = useShopify();
-  const [collectionProducts, setCollectionProducts] = useState<ShopifyProduct[] | null>(null);
+  const [collectionProducts, setCollectionProducts] = useState<ShopifyProduct[] | null>(
+    () => cachedCollectionProducts,
+  );
   const [collectionLoading, setCollectionLoading] = useState(false);
 
   const forcedDemo = useMemo(() => {
@@ -50,7 +54,14 @@ export function useHomepageProducts(): HomepageProductsResult {
 
   useEffect(() => {
     if (isDemo) {
+      cachedCollectionProducts = null;
       setCollectionProducts(null);
+      setCollectionLoading(false);
+      return;
+    }
+
+    if (cachedCollectionProducts !== null) {
+      setCollectionProducts(cachedCollectionProducts);
       setCollectionLoading(false);
       return;
     }
@@ -69,7 +80,9 @@ export function useHomepageProducts(): HomepageProductsResult {
     loader(COLLECTION_HANDLE, 12)
       .then((result) => {
         if (!active) return;
-        setCollectionProducts(selectHomepageCollections(result.products).slice(0, PRODUCT_LIMIT));
+        const selected = selectHomepageCollections(result.products).slice(0, PRODUCT_LIMIT);
+        cachedCollectionProducts = selected;
+        setCollectionProducts(selected);
       })
       .catch(() => {
         if (active) setCollectionProducts([]);

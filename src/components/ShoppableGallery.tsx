@@ -57,7 +57,7 @@ const CatalogPiece = ({ product, isDemo, position, onNavigate }: CatalogPiecePro
         <div className="catalog-piece__media">
           {image?.url && <picture>
             {mobileImage && <source media="(max-width: 600px)" srcSet={mobileImage.srcSet || mobileImage.src} sizes="100vw" />}
-            <img {...catalogImageProps(image.url, position === 'hero' ? '(max-width: 850px) 100vw, 60vw' : '(max-width: 850px) 100vw, 50vw')} alt={image.altText || title} loading={position === 'hero' ? 'eager' : 'lazy'} decoding="async" />
+            <img {...catalogImageProps(image.url, position === 'hero' ? '(max-width: 850px) 100vw, 60vw' : '(max-width: 850px) 100vw, 50vw')} alt={image.altText || title} loading="eager" decoding="sync" />
           </picture>}
         </div>
         <div className="catalog-piece__information">
