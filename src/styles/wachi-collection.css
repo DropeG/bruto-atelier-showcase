@@ -57,6 +57,12 @@ html:has(.wachi-collection-flow) {
   font-weight: 500;
   letter-spacing: .22em;
   text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.wachi-collection__wordmark--hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .wachi-collection__content {
@@ -94,9 +100,23 @@ html:has(.wachi-collection-flow) {
 }
 
 .wachi-collection__piece { min-width: 0; text-align: center; }
+
+.wachi-collection__piece-trigger {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+
 .wachi-collection__image {
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: min(49vh, 510px);
 }
@@ -115,11 +135,186 @@ html:has(.wachi-collection-flow) {
   letter-spacing: .015em;
 }
 
+/* Yeezy-inspired Single Product Stage */
+.wachi-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100dvh - clamp(4.5rem, 9vh, 6rem));
+  padding: 0 clamp(1rem, 4vw, 4rem) clamp(2rem, 6vh, 4rem);
+  overflow: hidden;
+}
+
+.wachi-stage__viewport {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 1120px;
+}
+
+.wachi-stage__media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(74vw, 560px);
+  height: min(54vh, 500px);
+}
+
+.wachi-stage__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transform: translateY(-7%);
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+  user-select: none;
+}
+
+.wachi-stage__img--perspective-2 {
+  transform: translateY(-5%) scale(0.92);
+}
+
+.wachi-stage__img--perspective-3 {
+  transform: translateY(-5%) scale(0.9);
+}
+
+.wachi-stage__img--ensemble {
+  transform: translateY(-10%);
+}
+
+.wachi-stage__img--ensemble-2 {
+  transform: translateY(-5%) scale(0.95);
+}
+
+.wachi-stage__img--ensemble-3 {
+  transform: translateY(-7%) scale(0.92);
+}
+
+.wachi-stage__img--chair {
+  transform: translateY(-4%) scale(0.84);
+}
+
+.wachi-stage__img--bench {
+  transform: translateY(-6%);
+}
+
+.wachi-stage__img--bench-2 {
+  transform: translateY(-5%) scale(0.92);
+}
+
+.wachi-stage__img--bench-3 {
+  transform: translateY(-6%) scale(0.88);
+}
+
+.wachi-stage__arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #171715;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.wachi-stage__arrow:hover {
+  opacity: 0.6;
+}
+
+.wachi-stage__arrow--prev {
+  left: clamp(0.25rem, 8vw, 6.5rem);
+}
+
+.wachi-stage__arrow--next {
+  right: clamp(0.25rem, 8vw, 6.5rem);
+}
+
+.wachi-stage__info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: clamp(0.5rem, 2vh, 1.25rem);
+  text-align: center;
+}
+
+.wachi-stage__dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin-bottom: 0.65rem;
+}
+
+.wachi-stage__dot {
+  width: 5px;
+  height: 5px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: #d8d6d2;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.wachi-stage__dot--active {
+  background: #171715;
+}
+
+.wachi-stage__title {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: clamp(0.88rem, 1.05vw, 1rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+.wachi-stage__price {
+  margin: 1.15rem 0 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  color: #171715;
+}
+
+.wachi-stage__add {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-top: 0.9rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #171715;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.wachi-stage__add:hover {
+  opacity: 0.6;
+}
+
 @media (max-width: 850px) {
   .wachi-collection__content { min-height: auto; padding-top: 2rem; }
   .wachi-collection__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 2.5rem; }
   .wachi-collection__image { height: min(39vw, 250px); }
   .wachi-collection__piece h2 { margin-top: .7rem; }
+  .wachi-stage__media {
+    width: min(76vw, 400px);
+    height: min(44vh, 360px);
+  }
+  .wachi-stage__arrow--prev { left: 0; }
+  .wachi-stage__arrow--next { right: 0; }
 }
 
 @media (max-width: 450px) {
