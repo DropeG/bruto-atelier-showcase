@@ -540,7 +540,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                   <button type="button" onClick={() => setActivePanel(null)} aria-label="Volver al menú" className="w-11 h-11 -ml-2 flex items-center justify-center text-white active:opacity-70">
                     <ArrowLeft className="w-5 h-5" />
                   </button>
-                ) : <span className="font-serif text-base md:text-lg tracking-wide text-white select-none pointer-events-none">BRUTO Atelier</span>}
+                ) : <span className="font-serif text-base md:text-lg tracking-wide text-white select-none pointer-events-none notranslate" translate="no">BRUTO Atelier</span>}
                 <button
                   type="button"
                   onClick={(e) => {

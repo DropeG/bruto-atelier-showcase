@@ -43,13 +43,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onOpenNosotros }) => {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.5 }}
-          className="text-center hero-title transition-all duration-300 hover:scale-105 active:scale-95 focus:outline-none group cursor-pointer"
+          className="text-center hero-title transition-all duration-300 hover:scale-105 active:scale-95 focus:outline-none group cursor-pointer notranslate"
           aria-label="Ver sobre Nosotros - BRUTO Atelier"
+          translate="no"
         >
-          <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl text-primary-foreground font-medium tracking-wide mb-4 group-hover:text-white transition-colors">
+          <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl text-primary-foreground font-medium tracking-wide mb-4 group-hover:text-white transition-colors notranslate" translate="no">
             BRUTO
           </h2>
-          <p className="font-serif text-2xl md:text-3xl lg:text-4xl text-primary-foreground/90 italic font-normal group-hover:text-white transition-colors">
+          <p className="font-serif text-2xl md:text-3xl lg:text-4xl text-primary-foreground/90 italic font-normal group-hover:text-white transition-colors notranslate" translate="no">
             Atelier
           </p>
         </motion.button>

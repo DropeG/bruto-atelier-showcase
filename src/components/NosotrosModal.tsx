@@ -176,7 +176,7 @@ const NosotrosModal: React.FC<NosotrosModalProps> = ({ isOpen, onClose }) => {
                 Manifiesto & Visión
               </span>
               
-              <h2 className="text-2xl sm:text-3xl md:text-4xl font-medium tracking-wide mb-4 sm:mb-6 text-balance text-[#F7F5F0]">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-medium tracking-wide mb-4 sm:mb-6 text-balance text-[#F7F5F0] notranslate" translate="no">
                 BRUTO Atelier
               </h2>
 
