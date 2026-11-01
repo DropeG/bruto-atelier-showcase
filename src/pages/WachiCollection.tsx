@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ArrowLeft, ChevronLeft, ChevronRight, Plus, ShoppingBag } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight, Plus, ShoppingBag, X } from 'lucide-react';
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 import { catalogImageProps } from '@/lib/catalog-images';
 import { Link } from 'react-router-dom';
@@ -17,6 +17,7 @@ interface WachiPiece {
   image: string;
   kind: 'ensemble' | 'table' | 'chair' | 'bench';
   price: string;
+  sizes?: readonly string[];
   perspectives: readonly PiecePerspective[];
 }
 
@@ -25,7 +26,7 @@ const pieces: readonly WachiPiece[] = [
     name: 'Set',
     image: '/images/shopify-demo/coleccion/wachi-fondo-blanco.png',
     kind: 'ensemble',
-    price: '$1.190.000',
+    price: '$4.990.000',
     perspectives: [
       {
         src: '/images/shopify-demo/coleccion/wachi-fondo-blanco.png',
@@ -48,7 +49,12 @@ const pieces: readonly WachiPiece[] = [
     name: 'Mesa',
     image: '/images/shopify-demo/coleccion/mesa-fondo-blanco.png',
     kind: 'table',
-    price: '$890.000',
+    price: '$3.290.000',
+    sizes: [
+      'Largo entre 140-156 cm Ancho entre 80-120 cm',
+      'Largo entre 157-189 cm Ancho entre 80-120 cm',
+      'Largo entre 190-220 cm Ancho entre 80-120 cm',
+    ],
     perspectives: [
       {
         src: '/images/shopify-demo/coleccion/mesa-fondo-blanco.png',
@@ -71,7 +77,7 @@ const pieces: readonly WachiPiece[] = [
     name: 'Silla',
     image: '/images/shopify-demo/coleccion/silla-fondo-blanco.png',
     kind: 'chair',
-    price: '$290.000',
+    price: '$620.000',
     perspectives: [
       {
         src: '/images/shopify-demo/coleccion/silla-fondo-blanco.png',
@@ -94,7 +100,7 @@ const pieces: readonly WachiPiece[] = [
     name: 'Banqueta',
     image: '/images/shopify-demo/coleccion/banqueta-fondo-blanco.png',
     kind: 'bench',
-    price: '$390.000',
+    price: '$890.000',
     perspectives: [
       {
         src: '/images/shopify-demo/coleccion/banqueta-fondo-blanco.png',
@@ -140,6 +146,8 @@ const WachiCollection = () => {
   const { cart, openCart } = useShopify();
   const [selectedKind, setSelectedKind] = useState<WachiPiece['kind'] | null>(null);
   const [perspectiveIndex, setPerspectiveIndex] = useState(0);
+  const [isSizePickerOpen, setIsSizePickerOpen] = useState(false);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
 
   const galleryUrl = new URLSearchParams(window.location.search).get('demoMode') === 'true' ? '/?demoMode=true' : '/';
 
@@ -157,11 +165,15 @@ const WachiCollection = () => {
     const target = pieces.find((piece) => piece.kind === kind);
     if (target) preloadPiecePerspectives(target);
     setPerspectiveIndex(0);
+    setIsSizePickerOpen(false);
+    setSelectedSize(null);
     setSelectedKind(kind);
   };
 
   const handleClosePiece = () => {
     setPerspectiveIndex(0);
+    setIsSizePickerOpen(false);
+    setSelectedSize(null);
     setSelectedKind(null);
   };
 
@@ -182,7 +194,11 @@ const WachiCollection = () => {
     const total = activePiece.perspectives.length;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        handleClosePiece();
+        if (isSizePickerOpen) {
+          setIsSizePickerOpen(false);
+        } else {
+          handleClosePiece();
+        }
       } else if (event.key === 'ArrowLeft') {
         setPerspectiveIndex((prev) => (prev - 1 + total) % total);
       } else if (event.key === 'ArrowRight') {
@@ -191,7 +207,7 @@ const WachiCollection = () => {
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [activePiece]);
+  }, [activePiece, isSizePickerOpen]);
 
   return (
     <main className={`wachi-collection${activePiece ? ' wachi-collection--stage-active' : ''}`}>
@@ -367,13 +383,33 @@ const WachiCollection = () => {
                   ))}
                 </motion.div>
 
-                <motion.h2
-                  layoutId={`wachi-piece-title-${activePiece.kind}`}
-                  transition={yeezySpring}
-                  className="wachi-stage__title"
-                >
-                  {activePiece.name}
-                </motion.h2>
+                <div className="wachi-stage__title-row">
+                  <motion.h2
+                    layoutId={`wachi-piece-title-${activePiece.kind}`}
+                    transition={yeezySpring}
+                    className="wachi-stage__title"
+                  >
+                    {activePiece.sizes && isSizePickerOpen ? 'Medida:' : activePiece.name}
+                  </motion.h2>
+
+                  <AnimatePresence>
+                    {activePiece.sizes && isSizePickerOpen && (
+                      <motion.button
+                        key="close-sizes"
+                        type="button"
+                        className="wachi-stage__close-sizes"
+                        onClick={() => setIsSizePickerOpen(false)}
+                        aria-label="Cerrar selector de medidas"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.16, ease: 'easeOut' }}
+                      >
+                        <X size={18} strokeWidth={1.6} />
+                      </motion.button>
+                    )}
+                  </AnimatePresence>
+                </div>
 
                 <motion.p
                   className="wachi-stage__price"
@@ -385,17 +421,57 @@ const WachiCollection = () => {
                   {activePiece.price}
                 </motion.p>
 
-                <motion.button
-                  type="button"
-                  className="wachi-stage__add"
-                  aria-label={`Agregar ${activePiece.name}`}
-                  initial={{ opacity: 0, y: 4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ delay: 0.18, duration: 0.2 }}
-                >
-                  <Plus size={20} strokeWidth={1.5} />
-                </motion.button>
+                <AnimatePresence mode="wait" initial={false}>
+                  {activePiece.sizes && isSizePickerOpen ? (
+                    <motion.div
+                      key="size-picker"
+                      className="wachi-stage__sizes"
+                      role="radiogroup"
+                      aria-label="Seleccionar dimensiones"
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      transition={{ duration: 0.18, ease: 'easeOut' }}
+                    >
+                      {activePiece.sizes.map((size) => {
+                        const isSelected = selectedSize === size;
+                        return (
+                          <button
+                            key={size}
+                            type="button"
+                            role="radio"
+                            aria-checked={isSelected}
+                            className={`wachi-stage__size-option${isSelected ? ' wachi-stage__size-option--selected' : ''}`}
+                            onClick={() => {
+                              setSelectedSize(size);
+                              setIsSizePickerOpen(false);
+                            }}
+                          >
+                            {size}
+                          </button>
+                        );
+                      })}
+                    </motion.div>
+                  ) : (
+                    <motion.button
+                      key="add-trigger"
+                      type="button"
+                      className="wachi-stage__add"
+                      aria-label={`Agregar ${activePiece.name}`}
+                      onClick={() => {
+                        if (activePiece.sizes?.length) {
+                          setIsSizePickerOpen(true);
+                        }
+                      }}
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -4 }}
+                      transition={{ duration: 0.18, ease: 'easeOut' }}
+                    >
+                      <Plus size={20} strokeWidth={1.5} />
+                    </motion.button>
+                  )}
+                </AnimatePresence>
               </div>
             </motion.section>
           )}

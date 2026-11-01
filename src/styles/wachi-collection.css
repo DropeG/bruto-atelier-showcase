@@ -277,12 +277,43 @@ html:has(.wachi-collection-flow) {
   background: #171715;
 }
 
+.wachi-stage__title-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(90vw, 420px);
+}
+
 .wachi-stage__title {
   margin: 0;
   font-family: Georgia, serif;
   font-size: clamp(0.88rem, 1.05vw, 1rem);
   font-weight: 400;
   letter-spacing: 0.04em;
+}
+
+.wachi-stage__close-sizes {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin-block: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #171715;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.wachi-stage__close-sizes:hover {
+  opacity: 0.6;
 }
 
 .wachi-stage__price {
@@ -310,6 +341,37 @@ html:has(.wachi-collection-flow) {
 
 .wachi-stage__add:hover {
   opacity: 0.6;
+}
+
+.wachi-stage__sizes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.95rem;
+  width: min(90vw, 390px);
+}
+
+.wachi-stage__size-option {
+  width: 100%;
+  padding: 0.62rem 1rem;
+  border: 1px solid #171715;
+  background: #fff;
+  color: #171715;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+.wachi-stage__size-option:hover,
+.wachi-stage__size-option--selected {
+  background: #171715;
+  color: #fff;
 }
 
 @media (max-width: 850px) {

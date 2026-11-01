@@ -92,7 +92,7 @@ export const MOCK_PRODUCTS: ShopifyProduct[] = [
     description: 'En Lenga, a medida.',
     productType: 'Colección',
     tags: ['Mobiliario', 'Madera', 'ColeccionDestacada', 'OcultarPrecio'],
-    price: '1190000',
+    price: '4990000',
     optionName: 'Terminación',
     variants: [
       { title: 'Madera natural' },
@@ -125,7 +125,7 @@ export const MOCK_PRODUCTS: ShopifyProduct[] = [
     description: 'Mesa de madera clara con cubierta de extremos redondeados y dos apoyos macizos.',
     productType: 'Mesas',
     tags: ['Mobiliario', 'Madera'],
-    price: '890000',
+    price: '3290000',
     optionName: 'Terminación',
     variants: [
       { title: 'Madera natural' },
