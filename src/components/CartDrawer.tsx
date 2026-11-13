@@ -1,8 +1,52 @@
-import { Minus, Plus, Trash2 } from 'lucide-react';
+import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { ChevronLeft, ShoppingBag } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useShopify } from '@/contexts/ShopifyContext';
 import { formatShopifyMoney } from '@/lib/shopify/money';
-import { Sheet, SheetContent, SheetDescription, SheetTitle } from '@/components/ui/sheet';
+import '@/styles/wachi-collection.css';
+
+function buildPrefilledCheckoutUrl(
+  baseUrl: string,
+  fields: {
+    email: string;
+    phone: string;
+    firstName: string;
+    lastName: string;
+    address1: string;
+    address2: string;
+    city: string;
+    country: string;
+  },
+): string {
+  try {
+    const url = new URL(baseUrl);
+    if (fields.email.trim()) url.searchParams.set('checkout[email]', fields.email.trim());
+    if (fields.firstName.trim()) {
+      url.searchParams.set('checkout[shipping_address][first_name]', fields.firstName.trim());
+    }
+    if (fields.lastName.trim()) {
+      url.searchParams.set('checkout[shipping_address][last_name]', fields.lastName.trim());
+    }
+    if (fields.address1.trim()) {
+      url.searchParams.set('checkout[shipping_address][address1]', fields.address1.trim());
+    }
+    if (fields.address2.trim()) {
+      url.searchParams.set('checkout[shipping_address][address2]', fields.address2.trim());
+    }
+    if (fields.city.trim()) {
+      url.searchParams.set('checkout[shipping_address][city]', fields.city.trim());
+    }
+    if (fields.country.trim()) {
+      url.searchParams.set('checkout[shipping_address][country]', fields.country.trim());
+    }
+    if (fields.phone.trim()) {
+      url.searchParams.set('checkout[shipping_address][phone]', fields.phone.trim());
+    }
+    return url.toString();
+  } catch {
+    return baseUrl;
+  }
+}
 
 const CartDrawer = () => {
   const {
@@ -16,140 +60,371 @@ const CartDrawer = () => {
     updateCartItem,
   } = useShopify();
 
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [address1, setAddress1] = useState('');
+  const [address2, setAddress2] = useState('');
+  const [city, setCity] = useState('');
+  const [country, setCountry] = useState('CHILE');
+
   const lines = cart?.lines.edges || [];
   const isBusy = cartState === 'mutating' || cartState === 'restoring';
+  const prevLineCountRef = useRef(lines.length);
 
-  const startCheckout = async () => {
+  // Close automatically when the user removes the last item from an active cart view
+  useEffect(() => {
+    const prevCount = prevLineCountRef.current;
+    prevLineCountRef.current = lines.length;
+    if (isCartOpen && prevCount > 0 && lines.length === 0) {
+      closeCart();
+    }
+  }, [isCartOpen, lines.length, closeCart]);
+
+  useEffect(() => {
+    if (!isCartOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeCart();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isCartOpen, closeCart]);
+
+  if (!isCartOpen) return null;
+
+  const handleCheckout = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     const fresh = await refreshCart();
     const checkoutUrl = fresh.data?.checkoutUrl || cart?.checkoutUrl;
-    if (checkoutUrl) window.location.assign(checkoutUrl);
+    if (!checkoutUrl) return;
+
+    const targetUrl = buildPrefilledCheckoutUrl(checkoutUrl, {
+      email,
+      phone,
+      firstName,
+      lastName,
+      address1,
+      address2,
+      city,
+      country,
+    });
+    window.location.assign(targetUrl);
   };
 
   return (
-    <Sheet open={isCartOpen} onOpenChange={(open) => (open ? undefined : closeCart())}>
-      <SheetContent
-        side="right"
-        className="cart-drawer flex h-full w-full max-w-none flex-col border-0 bg-[#F7F5F0] p-0 text-[#141412] sm:w-[min(31rem,100vw)]"
-      >
-        <header className="flex items-start justify-between border-b border-[#3D261C]/20 px-6 py-7 sm:px-8">
-          <div>
-            <SheetTitle className="font-serif text-[2rem] font-normal leading-none tracking-[-0.02em] text-[#141412]">
-              Bolsa
-            </SheetTitle>
-            <SheetDescription className="mt-2 font-sans text-sm text-[#3D261C]">
-              {cart?.totalQuantity
-                ? String(cart.totalQuantity) + ' ' + (cart.totalQuantity === 1 ? 'objeto' : 'objetos')
-                : 'Aún no has añadido objetos'}
-            </SheetDescription>
-          </div>
-        </header>
+    <div
+      className="fixed inset-0 z-50 overflow-y-auto bg-white text-[#171715]"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Resumen de compra"
+    >
+      <header className="wachi-collection__header">
+        <button
+          type="button"
+          className="wachi-collection__icon"
+          onClick={closeCart}
+          aria-label="Volver"
+        >
+          <ChevronLeft size={22} strokeWidth={1.5} />
+        </button>
 
-        <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
-          {cartError && (
-            <p role="alert" className="mx-6 mt-5 bg-[#EAD0B9] px-4 py-3 font-sans text-sm leading-5 text-[#3D261C] sm:mx-8">
-              {cartError.message}
+        <Link
+          to="/"
+          onClick={closeCart}
+          className="wachi-collection__wordmark wachi-collection__wordmark--hidden"
+          tabIndex={-1}
+        >
+          BRUTO Atelier
+        </Link>
+
+        <button
+          type="button"
+          className="wachi-collection__icon wachi-collection__bag"
+          onClick={closeCart}
+          aria-label={`Cerrar bolsa${cart?.totalQuantity ? `, ${cart.totalQuantity} piezas` : ''}`}
+        >
+          {cart?.totalQuantity ? (
+            <span className="wachi-collection__bag-count">{cart.totalQuantity}</span>
+          ) : null}
+          <ShoppingBag size={20} strokeWidth={1.45} />
+        </button>
+      </header>
+
+      <section className="wachi-checkout" aria-label="Bolsa de compra">
+        {lines.length === 0 ? (
+          <div className="wachi-checkout__confirmation">
+            <p className="wachi-checkout__kicker">BOLSA</p>
+            <h2 className="wachi-checkout__confirmation-title">Aún no has añadido piezas</h2>
+            <p className="wachi-checkout__confirmation-copy">
+              Tu bolsa está vacía. Explora la colección para añadir una pieza.
             </p>
-          )}
-
-          {lines.length === 0 ? (
-            <div className="flex flex-1 flex-col justify-between px-6 py-8 sm:px-8">
-              <p className="max-w-[27ch] font-serif text-2xl leading-tight text-[#3D261C]">
-                La bolsa está vacía. Vuelve a la galería para descubrir una pieza.
-              </p>
-              <Link to="/" onClick={closeCart} className="cart-drawer__text-link mt-8 self-start">
-                Explorar el atelier <span>↗</span>
-              </Link>
-            </div>
-          ) : (
-            <>
-              <ul className="divide-y divide-[#3D261C]/15 px-6 sm:px-8">
-                {lines.map(({ node: line }) => (
-                  <li key={line.id} className="grid grid-cols-[6.25rem_1fr] gap-4 py-6">
-                    <div className="aspect-[4/5] overflow-hidden bg-[#EAD0B9]">
-                      {line.merchandise.image?.url && (
-                        <img
-                          src={line.merchandise.image.url}
-                          alt=""
-                          className="h-full w-full object-cover"
-                          loading="lazy"
-                        />
-                      )}
-                    </div>
-                    <div className="min-w-0">
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <h3 className="font-serif text-xl leading-tight tracking-[-0.01em]">
-                            {line.merchandise.product.title}
-                          </h3>
-                          {line.merchandise.title !== 'Default Title' && (
-                            <p className="mt-1 font-sans text-sm text-[#3D261C]">{line.merchandise.title}</p>
-                          )}
-                        </div>
-                        <button
-                          type="button"
-                          className="min-h-11 min-w-11 -mr-3 -mt-2 inline-flex items-center justify-center text-[#3D261C] transition-colors hover:bg-[#EAD0B9] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3D261C]"
-                          onClick={() => void removeFromCart(line.id)}
-                          disabled={isBusy}
-                          aria-label={'Eliminar ' + line.merchandise.product.title}
-                        >
-                          <Trash2 size={17} strokeWidth={1.5} />
-                        </button>
-                      </div>
-                      <p className="mt-4 font-sans text-sm font-medium tabular-nums">
-                        {formatShopifyMoney(line.merchandise.price)}
-                      </p>
-                      <div className="mt-5 flex items-center justify-between">
-                        <div className="inline-flex min-h-11 items-center border border-[#3D261C]/35">
-                          <button
-                            type="button"
-                            className="inline-flex min-h-11 min-w-11 items-center justify-center hover:bg-[#EAD0B9] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3D261C]"
-                            onClick={() => void updateCartItem(line.id, line.quantity - 1)}
-                            disabled={line.quantity <= 1 || isBusy}
-                            aria-label={'Reducir cantidad de ' + line.merchandise.product.title}
-                          >
-                            <Minus size={14} />
-                          </button>
-                          <span className="min-w-8 text-center font-sans text-sm tabular-nums" aria-live="polite">{line.quantity}</span>
-                          <button
-                            type="button"
-                            className="inline-flex min-h-11 min-w-11 items-center justify-center hover:bg-[#EAD0B9] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3D261C]"
-                            onClick={() => void updateCartItem(line.id, line.quantity + 1)}
-                            disabled={isBusy}
-                            aria-label={'Aumentar cantidad de ' + line.merchandise.product.title}
-                          >
-                            <Plus size={14} />
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-
-              <footer className="mt-auto border-t border-[#3D261C]/20 bg-[#9C7B66] px-6 py-7 text-[#141412] sm:px-8">
-                <div className="flex items-end justify-between gap-4">
-                  <span className="font-sans text-sm font-medium">Subtotal</span>
-                  <strong className="font-serif text-2xl font-normal tracking-[-0.01em]">
-                    {cart ? formatShopifyMoney(cart.cost.subtotalAmount) : ''}
-                  </strong>
-                </div>
-                <button
-                  type="button"
-                  className="mt-6 min-h-12 w-full bg-[#141412] px-5 py-3 font-sans text-sm font-medium tracking-[0.03em] text-[#F7F5F0] transition-colors hover:bg-[#3D261C] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#141412] disabled:cursor-not-allowed disabled:opacity-60"
-                  onClick={() => void startCheckout()}
-                  disabled={isBusy || !cart?.checkoutUrl}
-                >
-                  {isBusy ? 'Actualizando bolsa…' : 'Finalizar compra'}
-                </button>
-                <p className="mt-3 font-sans text-xs leading-5 text-[#3D261C]">
-                  El pago y despacho se completan de forma segura en Shopify.
+            <button
+              type="button"
+              onClick={closeCart}
+              className="wachi-checkout__submit"
+            >
+              VOLVER A LA COLECCIÓN
+            </button>
+          </div>
+        ) : (
+          <div className="wachi-checkout__grid">
+            <form onSubmit={handleCheckout} noValidate className="wachi-checkout__form">
+              {cartError && (
+                <p role="alert" className="wachi-checkout__alert">
+                  {cartError.message}
                 </p>
-              </footer>
-            </>
-          )}
-        </div>
-      </SheetContent>
-    </Sheet>
+              )}
+
+              <div className="wachi-checkout__section">
+                <h2 className="wachi-checkout__heading">INFORMACIÓN DE CONTACTO</h2>
+
+                <div className="wachi-checkout__field">
+                  <label htmlFor="cart-checkout-email" className="wachi-checkout__label">
+                    CORREO ELECTRÓNICO
+                  </label>
+                  <input
+                    id="cart-checkout-email"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
+                    disabled={isBusy}
+                    placeholder="CORREO@DOMINIO.CL"
+                    className="wachi-checkout__input"
+                  />
+                </div>
+
+                <div className="wachi-checkout__field">
+                  <label htmlFor="cart-checkout-phone" className="wachi-checkout__label">
+                    TELÉFONO
+                  </label>
+                  <input
+                    id="cart-checkout-phone"
+                    name="phone"
+                    type="tel"
+                    autoComplete="tel"
+                    value={phone}
+                    onChange={(event) => setPhone(event.target.value)}
+                    disabled={isBusy}
+                    placeholder="+56 9 1234 5678"
+                    className="wachi-checkout__input"
+                  />
+                </div>
+              </div>
+
+              <div className="wachi-checkout__section">
+                <h2 className="wachi-checkout__heading">DIRECCIÓN DE DESPACHO</h2>
+
+                <div className="wachi-checkout__row-2">
+                  <div className="wachi-checkout__field">
+                    <label htmlFor="cart-checkout-first-name" className="wachi-checkout__label">
+                      NOMBRE
+                    </label>
+                    <input
+                      id="cart-checkout-first-name"
+                      name="firstName"
+                      type="text"
+                      autoComplete="given-name"
+                      value={firstName}
+                      onChange={(event) => setFirstName(event.target.value)}
+                      disabled={isBusy}
+                      className="wachi-checkout__input"
+                    />
+                  </div>
+
+                  <div className="wachi-checkout__field">
+                    <label htmlFor="cart-checkout-last-name" className="wachi-checkout__label">
+                      APELLIDO
+                    </label>
+                    <input
+                      id="cart-checkout-last-name"
+                      name="lastName"
+                      type="text"
+                      autoComplete="family-name"
+                      value={lastName}
+                      onChange={(event) => setLastName(event.target.value)}
+                      disabled={isBusy}
+                      className="wachi-checkout__input"
+                    />
+                  </div>
+                </div>
+
+                <div className="wachi-checkout__field">
+                  <label htmlFor="cart-checkout-address1" className="wachi-checkout__label">
+                    DIRECCIÓN
+                  </label>
+                  <input
+                    id="cart-checkout-address1"
+                    name="address1"
+                    type="text"
+                    autoComplete="address-line1"
+                    value={address1}
+                    onChange={(event) => setAddress1(event.target.value)}
+                    disabled={isBusy}
+                    placeholder="ESCRIBE TU DIRECCIÓN..."
+                    className="wachi-checkout__input"
+                  />
+                </div>
+
+                <div className="wachi-checkout__field">
+                  <label htmlFor="cart-checkout-address2" className="wachi-checkout__label">
+                    DEPARTAMENTO, CASA, OFICINA, ETC. (OPCIONAL)
+                  </label>
+                  <input
+                    id="cart-checkout-address2"
+                    name="address2"
+                    type="text"
+                    autoComplete="address-line2"
+                    value={address2}
+                    onChange={(event) => setAddress2(event.target.value)}
+                    disabled={isBusy}
+                    placeholder="DEPARTAMENTO, CASA, PISO, ETC."
+                    className="wachi-checkout__input"
+                  />
+                </div>
+
+                <div className="wachi-checkout__row-2">
+                  <div className="wachi-checkout__field">
+                    <label htmlFor="cart-checkout-city" className="wachi-checkout__label">
+                      CIUDAD / COMUNA
+                    </label>
+                    <input
+                      id="cart-checkout-city"
+                      name="city"
+                      type="text"
+                      autoComplete="address-level2"
+                      value={city}
+                      onChange={(event) => setCity(event.target.value)}
+                      disabled={isBusy}
+                      className="wachi-checkout__input"
+                    />
+                  </div>
+
+                  <div className="wachi-checkout__field">
+                    <label htmlFor="cart-checkout-country" className="wachi-checkout__label">
+                      PAÍS
+                    </label>
+                    <input
+                      id="cart-checkout-country"
+                      name="country"
+                      type="text"
+                      autoComplete="country-name"
+                      value={country}
+                      onChange={(event) => setCountry(event.target.value)}
+                      disabled={isBusy}
+                      className="wachi-checkout__input"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={isBusy || !cart?.checkoutUrl}
+                className="wachi-checkout__submit"
+              >
+                {isBusy ? 'ACTUALIZANDO BOLSA…' : 'FINALIZAR COMPRA'}
+              </button>
+            </form>
+
+            <aside className="wachi-checkout__summary" aria-label="Resumen de compra">
+              <h2 className="wachi-checkout__heading">RESUMEN DE COMPRA</h2>
+
+              <div className="wachi-checkout__items">
+                {lines.map(({ node: line }) => {
+                  const lineTotalAmount = String(Number(line.merchandise.price.amount) * line.quantity);
+                  const hasOptionTitle = line.merchandise.title !== 'Default Title';
+                  return (
+                    <div key={line.id} className="wachi-checkout__item">
+                      <div className="wachi-checkout__item-thumb">
+                        {line.merchandise.image?.url && (
+                          <img
+                            src={line.merchandise.image.url}
+                            alt={line.merchandise.product.title}
+                            loading="lazy"
+                          />
+                        )}
+                      </div>
+
+                      <div className="wachi-checkout__item-details">
+                        <div className="wachi-checkout__item-line">
+                          <span>{line.merchandise.product.title.toUpperCase()}</span>
+                          <span>
+                            {formatShopifyMoney({
+                              amount: lineTotalAmount,
+                              currencyCode: line.merchandise.price.currencyCode,
+                            })}
+                          </span>
+                        </div>
+
+                        <div className="wachi-checkout__item-line">
+                          <span>{hasOptionTitle ? 'OPCIÓN' : 'COLECCIÓN'}</span>
+                          <span className="wachi-checkout__item-meta-value">
+                            {hasOptionTitle ? line.merchandise.title.toUpperCase() : 'CUORO'}
+                          </span>
+                        </div>
+
+                        <div className="wachi-checkout__item-line">
+                          <span>CANTIDAD</span>
+                          <div className="wachi-checkout__qty" aria-label={`Cantidad de ${line.merchandise.product.title}`}>
+                            <button
+                              type="button"
+                              className="wachi-checkout__qty-btn"
+                              onClick={() => void updateCartItem(line.id, line.quantity + 1)}
+                              disabled={isBusy}
+                              aria-label={`Aumentar cantidad de ${line.merchandise.product.title}`}
+                            >
+                              +
+                            </button>
+                            <span className="wachi-checkout__qty-value" aria-live="polite">
+                              {line.quantity}
+                            </span>
+                            <button
+                              type="button"
+                              className="wachi-checkout__qty-btn"
+                              onClick={() => {
+                                if (line.quantity <= 1) {
+                                  void removeFromCart(line.id);
+                                } else {
+                                  void updateCartItem(line.id, line.quantity - 1);
+                                }
+                              }}
+                              disabled={isBusy}
+                              aria-label={`Disminuir cantidad de ${line.merchandise.product.title}`}
+                            >
+                              −
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="wachi-checkout__totals">
+                <div className="wachi-checkout__total-row">
+                  <span>SUBTOTAL</span>
+                  <span>{cart ? formatShopifyMoney(cart.cost.subtotalAmount) : ''}</span>
+                </div>
+                <div className="wachi-checkout__total-row">
+                  <span>DESPACHO</span>
+                  <span>CALCULADO EN EL SIGUIENTE PASO</span>
+                </div>
+                <div className="wachi-checkout__total-row wachi-checkout__total-row--final">
+                  <span>TOTAL</span>
+                  <span>{cart ? formatShopifyMoney(cart.cost.totalAmount) : ''}</span>
+                </div>
+              </div>
+            </aside>
+          </div>
+        )}
+      </section>
+    </div>
   );
 };
 

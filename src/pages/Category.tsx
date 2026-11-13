@@ -1,3 +1,4 @@
+import { useLayoutEffect, useRef } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import { GalleryService } from "@/lib/gallery";
 import ShowcaseViewer from "@/components/ShowcaseViewer";
@@ -11,6 +12,78 @@ const Category = () => {
   const { discipline, type, id, category, title } = useParams();
   const location = useLocation();
   const isMobile = useIsMobile();
+  const flowRef = useRef<HTMLDivElement | null>(null);
+
+  useLayoutEffect(() => {
+    const flow = flowRef.current;
+    if (!flow) return;
+
+    const resetWindowScroll = () => {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    };
+
+    const previousScrollRestoration =
+      "scrollRestoration" in window.history ? window.history.scrollRestoration : null;
+    if (previousScrollRestoration !== null) {
+      window.history.scrollRestoration = "manual";
+    }
+
+    document.body.classList.remove("menu-open");
+    document.documentElement.classList.remove("menu-open");
+    delete flow.dataset.snapReady;
+    resetWindowScroll();
+
+    let settled = false;
+    let settleTimer = 0;
+    let frame2 = 0;
+
+    const enableSnap = () => {
+      if (settled) return;
+      settled = true;
+      window.clearTimeout(settleTimer);
+      window.removeEventListener("touchstart", onUserIntent);
+      window.removeEventListener("wheel", onUserIntent);
+      window.removeEventListener("keydown", onUserIntent);
+      if (flowRef.current) {
+        flowRef.current.dataset.snapReady = "true";
+      }
+    };
+
+    const onUserIntent = () => {
+      enableSnap();
+    };
+
+    window.addEventListener("touchstart", onUserIntent, { passive: true, once: true });
+    window.addEventListener("wheel", onUserIntent, { passive: true, once: true });
+    window.addEventListener("keydown", onUserIntent, { passive: true, once: true });
+
+    const frame1 = window.requestAnimationFrame(() => {
+      resetWindowScroll();
+      frame2 = window.requestAnimationFrame(() => {
+        resetWindowScroll();
+      });
+    });
+
+    settleTimer = window.setTimeout(() => {
+      resetWindowScroll();
+      enableSnap();
+    }, 350);
+
+    return () => {
+      window.cancelAnimationFrame(frame1);
+      if (frame2) window.cancelAnimationFrame(frame2);
+      window.clearTimeout(settleTimer);
+      window.removeEventListener("touchstart", onUserIntent);
+      window.removeEventListener("wheel", onUserIntent);
+      window.removeEventListener("keydown", onUserIntent);
+      resetWindowScroll();
+      if (previousScrollRestoration !== null) {
+        window.history.scrollRestoration = previousScrollRestoration;
+      }
+    };
+  }, [location.pathname, location.key]);
   
   // 1. Resolve current context from parameters or URL path
   let currentDiscipline = discipline as Discipline | undefined;
@@ -85,7 +158,7 @@ const Category = () => {
   // route directly.
   if (currentDiscipline === "mobiliario" && currentType === "coleccion") {
     return (
-      <div className="wachi-collection-flow">
+      <div key={location.key} ref={flowRef} className="wachi-collection-flow">
         <section className="wachi-collection-flow__story" aria-label="Historia de la colección WACHI">
           <ShowcaseViewer key={location.pathname} items={items} autoPlay={autoPlay} />
         </section>

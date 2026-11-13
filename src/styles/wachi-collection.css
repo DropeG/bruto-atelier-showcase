@@ -1,23 +1,52 @@
 .wachi-collection {
-  min-height: 100dvh;
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  min-height: 100lvh;
   background: #fff;
   color: #171715;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* Menu entry flow: story first, then the existing WACHI collection grid. */
+/* Menu entry flow: story first, then the existing WACHI collection grid.
+   Keep scroll-snap disabled on initial mount until menu exit/layout settles. */
 html:has(.wachi-collection-flow) {
-  scroll-snap-type: y mandatory;
+  scroll-snap-type: none !important;
+  scroll-behavior: auto !important;
+}
+
+html:has(.wachi-collection-flow[data-snap-ready="true"]) {
+  scroll-snap-type: y mandatory !important;
+  scroll-behavior: smooth !important;
 }
 
 .wachi-collection-flow > section {
-  min-height: 100dvh;
+  min-height: 100vh;
+  min-height: 100lvh;
   scroll-snap-align: start;
   scroll-snap-stop: always;
 }
 
 .wachi-collection-flow__story {
-  height: 100dvh;
+  position: relative;
+  z-index: 0;
+  height: 100vh;
+  height: 100lvh;
+  overflow: hidden;
+}
+
+.wachi-collection-flow__story > div {
+  height: 100%;
+  min-height: 100%;
+  max-height: 100%;
+}
+
+.wachi-collection-flow__grid {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  min-height: 100lvh;
+  background: #fff;
 }
 
 .wachi-collection__header {
@@ -43,7 +72,26 @@ html:has(.wachi-collection-flow) {
   cursor: pointer;
 }
 
-.wachi-collection__bag span {
+.wachi-collection__bag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  width: auto;
+  min-width: 44px;
+  padding-inline: 0.25rem;
+}
+
+.wachi-collection__bag-count {
+  position: static;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.wachi-collection__bag span:not(.wachi-collection__bag-count) {
   position: absolute;
   top: 0;
   right: -5px;
@@ -316,8 +364,20 @@ html:has(.wachi-collection-flow) {
   opacity: 0.6;
 }
 
+.wachi-stage__description {
+  max-width: 34ch;
+  margin: 0.55rem 0 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: clamp(0.76rem, 0.9vw, 0.82rem);
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: 0.015em;
+  color: #77736e;
+  text-wrap: balance;
+}
+
 .wachi-stage__price {
-  margin: 1.15rem 0 0;
+  margin: 0.95rem 0 0;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   font-size: 0.85rem;
   font-weight: 400;
@@ -341,6 +401,27 @@ html:has(.wachi-collection-flow) {
 
 .wachi-stage__add:hover {
   opacity: 0.6;
+}
+
+.wachi-stage__inquire-btn {
+  margin-top: 1.05rem;
+  min-height: 42px;
+  padding: 0.68rem 1.75rem;
+  border: 1px solid #171715;
+  background: #171715;
+  color: #fff;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease, opacity 0.18s ease;
+}
+
+.wachi-stage__inquire-btn:hover {
+  background: #fff;
+  color: #171715;
 }
 
 .wachi-stage__sizes {
@@ -374,7 +455,379 @@ html:has(.wachi-collection-flow) {
   color: #fff;
 }
 
+/* Yeezy-structured 2-Column Request / Checkout View with Bruto Atelier Typography */
+.wachi-checkout {
+  max-width: 1220px;
+  min-height: calc(100dvh - clamp(4.5rem, 9vh, 6rem));
+  margin: 0 auto;
+  padding: clamp(1rem, 3.5vh, 2.5rem) clamp(1.25rem, 4.5vw, 4.5rem) clamp(3rem, 7vh, 5rem);
+}
+
+.wachi-checkout__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  gap: clamp(2.5rem, 7vw, 6.5rem);
+  align-items: start;
+}
+
+.wachi-checkout__form {
+  display: flex;
+  flex-direction: column;
+  gap: 2.1rem;
+}
+
+.wachi-checkout__section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.05rem;
+}
+
+.wachi-checkout__heading {
+  margin: 0 0 0.25rem;
+  font-family: Georgia, serif;
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #171715;
+}
+
+.wachi-checkout__row-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.wachi-checkout__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.42rem;
+}
+
+.wachi-checkout__label {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #171715;
+}
+
+.wachi-checkout__profile-group {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.wachi-checkout__profile-btn {
+  min-height: 40px;
+  padding: 0.55rem 0.6rem;
+  border: 1px solid #171715;
+  background: #fff;
+  color: #171715;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.64rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.16s ease, color 0.16s ease;
+}
+
+.wachi-checkout__profile-btn--active,
+.wachi-checkout__profile-btn:hover:not(:disabled) {
+  background: #171715;
+  color: #fff;
+}
+
+.wachi-checkout__profile-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .wachi-checkout__profile-group {
+    grid-template-columns: 1fr;
+  }
+}
+
+.wachi-checkout__input,
+.wachi-checkout__textarea {
+  width: 100%;
+  border: 1px solid #171715;
+  border-radius: 0;
+  background: #fff;
+  color: #171715;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  padding: 0.72rem 0.85rem;
+  outline: none;
+  transition: border-color 0.18s ease, background-color 0.18s ease;
+}
+
+.wachi-checkout__input {
+  height: 44px;
+}
+
+.wachi-checkout__textarea {
+  resize: vertical;
+  min-height: 84px;
+  line-height: 1.45;
+}
+
+.wachi-checkout__input::placeholder,
+.wachi-checkout__textarea::placeholder {
+  color: #9b9892;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.wachi-checkout__input:focus,
+.wachi-checkout__textarea:focus {
+  background: #faf9f6;
+}
+
+.wachi-checkout__alert {
+  margin: 0;
+  padding: 0.75rem 0.95rem;
+  border: 1px solid #171715;
+  background: #f7f5f0;
+  color: #171715;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.76rem;
+  letter-spacing: 0.02em;
+}
+
+.wachi-checkout__submit {
+  width: 100%;
+  min-height: 46px;
+  padding: 0.85rem 1.25rem;
+  border: 1px solid #171715;
+  background: #171715;
+  color: #fff;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.18s ease, background-color 0.18s ease, color 0.18s ease;
+}
+
+.wachi-checkout__submit:hover:not(:disabled) {
+  background: #2c2b28;
+}
+
+.wachi-checkout__submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.wachi-checkout__summary {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.wachi-checkout__items {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.wachi-checkout__item {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: 1.35rem;
+  align-items: center;
+}
+
+.wachi-checkout__item-thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 88px;
+  background: #fff;
+}
+
+.wachi-checkout__item-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.wachi-checkout__item-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.42rem;
+}
+
+.wachi-checkout__item-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #171715;
+  font-variant-numeric: tabular-nums;
+}
+
+.wachi-checkout__item-meta-value {
+  text-align: right;
+  color: #77736e;
+  font-size: 0.68rem;
+}
+
+.wachi-checkout__qty {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.wachi-checkout__qty-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #171715;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: opacity 0.16s ease;
+}
+
+.wachi-checkout__qty-btn:hover {
+  opacity: 0.55;
+}
+
+.wachi-checkout__qty-value {
+  min-width: 1ch;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.wachi-checkout__totals {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid #e6e4e0;
+}
+
+.wachi-checkout__total-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #171715;
+  font-variant-numeric: tabular-nums;
+}
+
+.wachi-checkout__total-row--final {
+  margin-top: 0.45rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e6e4e0;
+  font-weight: 600;
+}
+
+.wachi-checkout__confirmation {
+  max-width: 520px;
+  margin: clamp(2rem, 6vh, 4rem) auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.1rem;
+}
+
+.wachi-checkout__confirmation-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid #171715;
+  color: #171715;
+}
+
+.wachi-checkout__kicker {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #77736e;
+}
+
+.wachi-checkout__confirmation-title {
+  margin: 0;
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(1.75rem, 2.5vw, 2.25rem);
+  font-weight: 400;
+  color: #171715;
+}
+
+.wachi-checkout__confirmation-copy {
+  margin: 0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.84rem;
+  line-height: 1.6;
+  color: #45433f;
+}
+
+.wachi-checkout__confirmation-summary {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  padding: 1.1rem 0;
+  border-top: 1px solid #e6e4e0;
+  border-bottom: 1px solid #e6e4e0;
+}
+
+.wachi-checkout__confirmation-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+}
+
+.wachi-checkout__confirmation-row--total {
+  margin-top: 0.35rem;
+  padding-top: 0.55rem;
+  border-top: 1px solid #e6e4e0;
+  font-weight: 600;
+}
+
 @media (max-width: 850px) {
+  .wachi-collection-flow > .wachi-collection-flow__grid {
+    padding-top: 88px;
+    scroll-snap-align: none;
+    scroll-snap-stop: normal;
+  }
+  .wachi-collection-flow .wachi-collection {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
   .wachi-collection__content { min-height: auto; padding-top: 2rem; }
   .wachi-collection__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 2.5rem; }
   .wachi-collection__image { height: min(39vw, 250px); }
@@ -385,6 +838,13 @@ html:has(.wachi-collection-flow) {
   }
   .wachi-stage__arrow--prev { left: 0; }
   .wachi-stage__arrow--next { right: 0; }
+  .wachi-checkout__grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .wachi-checkout__summary {
+    order: -1;
+  }
 }
 
 @media (max-width: 450px) {
@@ -392,4 +852,7 @@ html:has(.wachi-collection-flow) {
   .wachi-collection__content { padding-inline: .75rem; }
   .wachi-collection__grid { column-gap: .3rem; }
   .wachi-collection__image { height: 42vw; }
+  .wachi-checkout__row-2 {
+    grid-template-columns: 1fr;
+  }
 }

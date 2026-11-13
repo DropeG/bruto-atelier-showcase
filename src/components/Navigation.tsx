@@ -415,6 +415,12 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               type="button"
                               onClick={() => {
                                 setIsMenuOpen(false);
+                                setActivePanel(null);
+                                document.body.classList.remove("menu-open");
+                                document.documentElement.classList.remove("menu-open");
+                                document.documentElement.scrollTop = 0;
+                                document.body.scrollTop = 0;
+                                window.scrollTo({ top: 0, left: 0, behavior: "instant" });
                                 navigate("/showcase/mobiliario/coleccion");
                               }}
                               className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center text-white/95 hover:bg-[#EAD0B9] hover:text-[#3D261C] transition-colors rounded-sm"
@@ -754,6 +760,12 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                     type="button"
                                     onClick={() => {
                                       setIsMenuOpen(false);
+                                      setActivePanel(null);
+                                      document.body.classList.remove("menu-open");
+                                      document.documentElement.classList.remove("menu-open");
+                                      document.documentElement.scrollTop = 0;
+                                      document.body.scrollTop = 0;
+                                      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
                                       navigate("/showcase/mobiliario/coleccion");
                                     }}
                                     className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] hover:text-[#3D261C] active:bg-[#EAD0B9] active:text-[#3D261C] transition-colors focus:outline-none rounded-sm"
