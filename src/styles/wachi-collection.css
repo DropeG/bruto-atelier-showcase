@@ -907,6 +907,63 @@ html:has(.wachi-collection-flow[data-snap-ready="true"]) {
   font-weight: 600;
 }
 
+@media (min-width: 851px) {
+  .wachi-collection__header--compact {
+    height: clamp(3.25rem, 6.5vh, 4.25rem);
+  }
+
+  .wachi-checkout--compact {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 1360px;
+    min-height: calc(100dvh - clamp(3.25rem, 6.5vh, 4.25rem));
+    padding: clamp(0.4rem, 1.4vh, 1rem) clamp(1.5rem, 3.5vw, 3.25rem) clamp(1rem, 2.5vh, 1.75rem);
+  }
+
+  .wachi-checkout--compact .wachi-checkout__grid {
+    width: 100%;
+    gap: clamp(2.5rem, 5vw, 4.75rem);
+  }
+
+  .wachi-checkout--compact .wachi-checkout__form {
+    gap: clamp(1.3rem, 2.8vh, 1.95rem);
+  }
+
+  .wachi-checkout--compact .wachi-checkout__section {
+    gap: clamp(0.7rem, 1.6vh, 1.02rem);
+  }
+
+  .wachi-checkout--compact .wachi-checkout__heading {
+    margin-bottom: 0.2rem;
+  }
+
+  .wachi-checkout--compact .wachi-checkout__field {
+    gap: 0.36rem;
+  }
+
+  .wachi-checkout--compact .wachi-checkout__input {
+    height: 42px;
+    padding: 0.58rem 0.82rem;
+  }
+
+  .wachi-checkout--compact .wachi-checkout__submit {
+    min-height: 46px;
+    padding: 0.8rem 1.25rem;
+  }
+
+  .wachi-checkout--compact .wachi-checkout__summary {
+    gap: 1.6rem;
+  }
+
+  .wachi-checkout--compact .wachi-checkout__items {
+    gap: 1.35rem;
+    max-height: calc(100dvh - 16.5rem);
+    overflow-y: auto;
+    padding-right: 0.25rem;
+  }
+}
+
 @media (max-width: 850px) {
   .wachi-collection-flow > .wachi-collection-flow__grid {
     padding-top: 88px;

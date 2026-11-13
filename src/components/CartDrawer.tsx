@@ -121,7 +121,7 @@ const CartDrawer = () => {
       aria-modal="true"
       aria-label="Resumen de compra"
     >
-      <header className="wachi-collection__header">
+      <header className="wachi-collection__header wachi-collection__header--compact">
         <button
           type="button"
           className="wachi-collection__icon"
@@ -153,7 +153,7 @@ const CartDrawer = () => {
         </button>
       </header>
 
-      <section className="wachi-checkout" aria-label="Bolsa de compra">
+      <section className="wachi-checkout wachi-checkout--compact" aria-label="Bolsa de compra">
         {lines.length === 0 ? (
           <div className="wachi-checkout__confirmation">
             <p className="wachi-checkout__kicker">BOLSA</p>
