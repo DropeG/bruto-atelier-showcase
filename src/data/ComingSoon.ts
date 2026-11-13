@@ -22,13 +22,6 @@ export const comingSoonCategories: Record<string, ComingSoonCategory> = {
     description: "Objetos clave que definen la presencia de tus espacios. Próximamente.",
     bgImage: "/images/esenciales/esenciales.webp",
   },
-  joyeria: {
-    id: "joyeria",
-    title: "JOYERÍA",
-    subtitle: "Esculturas portables & piedras orgánicas",
-    description: "Piezas de autor elaboradas con ámbar, hueso y metales nobles de confección artesanal. Próximamente.",
-    bgImage: "/images/joyeria/joyeria4.webp",
-  },
   vestuario: {
     id: "vestuario",
     title: "VESTUARIO",

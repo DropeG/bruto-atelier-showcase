@@ -172,6 +172,24 @@ export const MOCK_PRODUCTS: ShopifyProduct[] = [
       { url: '/images/shopify-demo/objeto-cuero-02.webp', alt: 'Detalle de las costuras artesanales de Objeto Cuero', width: 1280, height: 1600 },
     ],
   }),
+  createDemoProduct({
+    key: 'anillo-cosmos',
+    handle: 'anillo-cosmos',
+    title: 'Anillo Cosmos',
+    description: 'Plata 950 cepillada con piedra mineral blanca y constelación de engastes a ras.',
+    productType: 'Joyería',
+    tags: ['Cosmos', 'Joyería', 'Plata'],
+    price: '240000',
+    optionName: 'Material',
+    variants: [
+      { title: 'Plata 950 / Piedra blanca' },
+    ],
+    images: [
+      { url: '/images/shopify-demo/joyeria/anillo-fondo-blanco.webp', alt: 'Anillo Cosmos en plata cepillada y piedra blanca', width: 896, height: 896 },
+      { url: '/images/shopify-demo/joyeria/anillo-perspectiva-2.webp', alt: 'Anillo Cosmos — Vista frontal macro de la constelación', width: 896, height: 896 },
+      { url: '/images/shopify-demo/joyeria/anillo-perspectiva-3.webp', alt: 'Anillo Cosmos — Vista de perfil en plata 950', width: 896, height: 896 },
+    ],
+  }),
 ];
 
 export const MOCK_COLLECTIONS: ShopifyCollection[] = [
@@ -197,6 +215,18 @@ export const MOCK_COLLECTIONS: ShopifyCollection[] = [
       altText: 'Tarjetero de cuero azul Bruto Atelier sobre un bloque de mármol',
       width: 2134,
       height: 2016,
+    },
+  },
+  {
+    id: `${MOCK_ID_MARKER}collection-cosmos`,
+    handle: 'cosmos',
+    title: 'COSMOS',
+    description: 'Joyería en plata y piedra.',
+    image: {
+      url: '/images/shopify-demo/joyeria/cosmos-hero.webp',
+      altText: 'Anillo Cosmos en plata cepillada y piedra mineral blanca',
+      width: 819,
+      height: 1024,
     },
   },
 ];

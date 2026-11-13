@@ -1,11 +1,11 @@
 ## ADDED Requirements
 
 ### Requirement: Variantes responsivas optimizadas para todas las colecciones
-Todas las imágenes de grilla y perspectivas de las colecciones activas (`WACHI`, `CUORO` y futuras colecciones registradas) SHALL contar con variantes optimizadas (`480w`, `800w`, `1200w`, `1600w`) en `src/data/catalog-images.json` y servirse mediante `catalogImageProps`.
+Todas las imágenes de grilla y perspectivas de las colecciones activas (`WACHI`, `CUORO`, `COSMOS` y futuras colecciones registradas) SHALL contar con variantes optimizadas (`480w`, `800w`, `1200w`, `1600w`) en `src/data/catalog-images.json` y servirse mediante `catalogImageProps`.
 
-#### Scenario: Renderizado de la grilla de CUORO con `srcSet` optimizado
-- **WHEN** el usuario navega a `/coleccion/accesorios` (Colección CUORO)
-- **THEN** cada pieza de la grilla (`Tabaquera`, `Sleeve`, `Tarjetero`) y sus perspectivas en el escenario detallado se renderizan usando `catalogImageProps`, entregando variantes responsivas livianas en lugar del archivo maestro sin redimensionar
+#### Scenario: Renderizado de la grilla de COSMOS con `srcSet` optimizado
+- **WHEN** el usuario navega a `/coleccion/cosmos` (Colección COSMOS)
+- **THEN** la pieza del anillo y sus perspectivas en el escenario detallado se renderizan usando `catalogImageProps` o variantes `.webp` optimizadas sin penalizar la carga inicial
 
 ### Requirement: Precarga especulativa y decodificación en RAM antes de navegar
 Cuando una tarjeta de colección en `ShoppableGallery` se aproxime al viewport o reciba interacción (`mouseenter`, `focus`, `touchstart`), el sistema SHALL descargar y ejecutar `img.decode()` de las imágenes principales de la grilla de esa colección utilizando las mismas reglas de `srcSet` y `sizes` que usará la vista de destino.
@@ -31,3 +31,10 @@ El sistema SHALL proveer un registro y hook reutilizables (`src/lib/collection-i
 #### Scenario: Registro de una nueva colección en el futuro
 - **WHEN** se agrega una nueva colección al mapa central `COLLECTION_REGISTRY` y su página usa `useCollectionGridReady` junto con `catalogImageProps`
 - **THEN** `ShoppableGallery` precarga automáticamente sus imágenes de grilla al entrar en pantalla/hover y su vista de colección aplica el mismo gate sincronizado y cola diferida de perspectivas sin duplicar lógica
+
+### Requirement: Registro de COSMOS en `COLLECTION_REGISTRY`
+El sistema SHALL registrar `cosmos` en `COLLECTION_REGISTRY` (`src/lib/collection-images.ts`) para habilitar la precarga especulativa desde `ShoppableGallery` y el pintado sincronizado de la grilla en `/coleccion/cosmos`.
+
+#### Scenario: Precarga especulativa de COSMOS desde el Home
+- **WHEN** la tarjeta de `COSMOS` entra cerca del viewport en `ShoppableGallery` o recibe hover/focus/touch
+- **THEN** el sistema precarga y decodifica la imagen principal de la grilla de `COSMOS` antes de navegar a `/coleccion/cosmos`

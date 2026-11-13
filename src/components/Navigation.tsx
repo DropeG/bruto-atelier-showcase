@@ -13,6 +13,8 @@ import { useAuth } from "@/contexts/AuthContext";
 const navLinks = [
   { label: "Arquitectura", href: "#arquitectura" },
   { label: "Mobiliario", href: "#mobiliario" },
+  { label: "Joyería", href: "#joyeria" },
+  { label: "Accesorios", href: "#accesorios" },
   { label: "Next Season", href: "#next-season" },
   { label: "Nosotros", href: "#nosotros" },
   { label: "Contacto", href: "#contacto" }
@@ -272,6 +274,38 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                           >
                             {link.label}
                           </button>
+                        ) : link.label === "Joyería" ? (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setActivePanel((prev) =>
+                                prev === "joyeria" ? null : "joyeria"
+                              )
+                            }
+                            className={`block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center transition-colors rounded-sm ${
+                              activePanel === "joyeria"
+                                ? "bg-[#EAD0B9] text-[#3D261C] font-medium"
+                                : "text-white/95 hover:bg-[#EAD0B9] hover:text-[#3D261C]"
+                            }`}
+                          >
+                            {link.label}
+                          </button>
+                        ) : link.label === "Accesorios" ? (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setActivePanel((prev) =>
+                                prev === "accesorios" ? null : "accesorios"
+                              )
+                            }
+                            className={`block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center transition-colors rounded-sm ${
+                              activePanel === "accesorios"
+                                ? "bg-[#EAD0B9] text-[#3D261C] font-medium"
+                                : "text-white/95 hover:bg-[#EAD0B9] hover:text-[#3D261C]"
+                            }`}
+                          >
+                            {link.label}
+                          </button>
                         ) : link.label === "Nosotros" ? (
                           <button
                             type="button"
@@ -372,7 +406,7 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                       exit={{ opacity: 0, x: -12 }}
                       transition={{ duration: 0.25, ease: "easeOut" }}
                       className={
-                        activePanel === "mobiliario" || activePanel === "arquitectura"
+                        activePanel === "mobiliario" || activePanel === "arquitectura" || activePanel === "joyeria" || activePanel === "accesorios"
                           ? "w-[200px] bg-[#9C7B66] text-white py-4 px-3 self-start"
                           : activePanel === "contacto"
                             ? "w-fit bg-[#9C7B66] text-white p-6 font-serif"
@@ -446,6 +480,44 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                               className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center text-white/95 hover:bg-[#EAD0B9] hover:text-[#3D261C] transition-colors rounded-sm"
                             >
                               Piezas
+                            </button>
+                          </div>
+                        </>
+                      ) : activePanel === "joyeria" ? (
+                        <>
+                          <div className="space-y-1 text-sm">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setIsMenuOpen(false);
+                                setActivePanel(null);
+                                document.body.classList.remove("menu-open");
+                                document.documentElement.classList.remove("menu-open");
+                                const isDemo = new URLSearchParams(window.location.search).get("demoMode") === "true";
+                                navigate(isDemo ? "/coleccion/cosmos?demoMode=true" : "/coleccion/cosmos");
+                              }}
+                              className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center text-white/95 hover:bg-[#EAD0B9] hover:text-[#3D261C] transition-colors rounded-sm"
+                            >
+                              COSMOS
+                            </button>
+                          </div>
+                        </>
+                      ) : activePanel === "accesorios" ? (
+                        <>
+                          <div className="space-y-1 text-sm">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setIsMenuOpen(false);
+                                setActivePanel(null);
+                                document.body.classList.remove("menu-open");
+                                document.documentElement.classList.remove("menu-open");
+                                const isDemo = new URLSearchParams(window.location.search).get("demoMode") === "true";
+                                navigate(isDemo ? "/coleccion/accesorios?demoMode=true" : "/coleccion/accesorios");
+                              }}
+                              className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center text-white/95 hover:bg-[#EAD0B9] hover:text-[#3D261C] transition-colors rounded-sm"
+                            >
+                              CUORO
                             </button>
                           </div>
                         </>
@@ -791,6 +863,100 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
                                     className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] hover:text-[#3D261C] active:bg-[#EAD0B9] active:text-[#3D261C] transition-colors focus:outline-none rounded-sm"
                                   >
                                     Piezas
+                                  </button>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </>
+                        ) : link.label === "Joyería" ? (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setActivePanel((prev) =>
+                                  prev === "joyeria" ? null : "joyeria"
+                                )
+                              }
+                              className={`w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center justify-between transition-colors focus:outline-none rounded-sm ${
+                                activePanel === "joyeria"
+                                  ? "bg-[#EAD0B9] text-[#3D261C] font-medium"
+                                  : "hover:bg-[#EAD0B9] hover:text-[#3D261C] active:bg-[#EAD0B9] active:text-[#3D261C]"
+                              }`}
+                            >
+                              <span>{link.label}</span>
+                              <span className={`text-xs transition-transform duration-200 ${activePanel === "joyeria" ? "rotate-90" : ""}`}>
+                                ‹
+                              </span>
+                            </button>
+                            <AnimatePresence>
+                              {activePanel === "joyeria" && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: "auto", opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  transition={{ duration: 0.25, ease: "easeInOut" }}
+                                  className="overflow-hidden pl-4 border-l border-white/25 ml-1 my-1 space-y-0.5 text-sm"
+                                >
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setIsMenuOpen(false);
+                                      setActivePanel(null);
+                                      document.body.classList.remove("menu-open");
+                                      document.documentElement.classList.remove("menu-open");
+                                      const isDemo = new URLSearchParams(window.location.search).get("demoMode") === "true";
+                                      navigate(isDemo ? "/coleccion/cosmos?demoMode=true" : "/coleccion/cosmos");
+                                    }}
+                                    className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] hover:text-[#3D261C] active:bg-[#EAD0B9] active:text-[#3D261C] transition-colors focus:outline-none rounded-sm"
+                                  >
+                                    COSMOS
+                                  </button>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </>
+                        ) : link.label === "Accesorios" ? (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                setActivePanel((prev) =>
+                                  prev === "accesorios" ? null : "accesorios"
+                                )
+                              }
+                              className={`w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center justify-between transition-colors focus:outline-none rounded-sm ${
+                                activePanel === "accesorios"
+                                  ? "bg-[#EAD0B9] text-[#3D261C] font-medium"
+                                  : "hover:bg-[#EAD0B9] hover:text-[#3D261C] active:bg-[#EAD0B9] active:text-[#3D261C]"
+                              }`}
+                            >
+                              <span>{link.label}</span>
+                              <span className={`text-xs transition-transform duration-200 ${activePanel === "accesorios" ? "rotate-90" : ""}`}>
+                                ‹
+                              </span>
+                            </button>
+                            <AnimatePresence>
+                              {activePanel === "accesorios" && (
+                                <motion.div
+                                  initial={{ height: 0, opacity: 0 }}
+                                  animate={{ height: "auto", opacity: 1 }}
+                                  exit={{ height: 0, opacity: 0 }}
+                                  transition={{ duration: 0.25, ease: "easeInOut" }}
+                                  className="overflow-hidden pl-4 border-l border-white/25 ml-1 my-1 space-y-0.5 text-sm"
+                                >
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setIsMenuOpen(false);
+                                      setActivePanel(null);
+                                      document.body.classList.remove("menu-open");
+                                      document.documentElement.classList.remove("menu-open");
+                                      const isDemo = new URLSearchParams(window.location.search).get("demoMode") === "true";
+                                      navigate(isDemo ? "/coleccion/accesorios?demoMode=true" : "/coleccion/accesorios");
+                                    }}
+                                    className="block w-full text-left px-3.5 py-2.5 min-h-[44px] flex items-center hover:bg-[#EAD0B9] hover:text-[#3D261C] active:bg-[#EAD0B9] active:text-[#3D261C] transition-colors focus:outline-none rounded-sm"
+                                  >
+                                    CUORO
                                   </button>
                                 </motion.div>
                               )}

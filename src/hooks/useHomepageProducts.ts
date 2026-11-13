@@ -10,16 +10,18 @@ type HomepageCollectionsResult = {
   isDemo: boolean;
 };
 
-const PREFERRED_HANDLES = ["wachi", "cuoro"];
+const PREFERRED_HANDLES = ["wachi", "cuoro", "cosmos"];
 const EXCLUDED_HANDLES = new Set(["frontpage", "homepage-featured"]);
-const COLLECTION_LIMIT = 2;
+const COLLECTION_LIMIT = 3;
 
 let cachedCollections: ShopifyCollection[] | null = null;
 
 function selectHomepageCollections(collections: ShopifyCollection[]): ShopifyCollection[] {
   const visible = collections.filter((item) => !EXCLUDED_HANDLES.has(item.handle));
   const prioritized = PREFERRED_HANDLES.flatMap((handle) => {
-    const match = visible.find((item) => item.handle === handle);
+    const match =
+      visible.find((item) => item.handle === handle) ??
+      MOCK_COLLECTIONS.find((item) => item.handle === handle);
     return match ? [match] : [];
   });
   const remaining = visible.filter((item) => !PREFERRED_HANDLES.includes(item.handle));

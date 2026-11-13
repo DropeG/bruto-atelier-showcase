@@ -20,11 +20,6 @@ export const NEXT_SEASON_ITEMS: NextSeasonItem[] = [
     image: "/images/next-season/iluminacion-atelier-4x5.webp"
   },
   {
-    id: "joyeria",
-    title: "JOYERÍA",
-    image: "/images/joyeria/joyeria-atelier-4x5.webp"
-  },
-  {
     id: "esenciales",
     title: "ESENCIALES",
     image: "/images/next-season/esenciales-fondo-texturado.webp"

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { catalogImageProps } from '@/lib/catalog-images';
 
-export type CollectionId = 'wachi' | 'cuoro';
+export type CollectionId = 'wachi' | 'cuoro' | 'cosmos';
 
 interface CollectionImageConfig {
   gridSizes: string;
@@ -29,6 +29,12 @@ export const COLLECTION_REGISTRY: Record<CollectionId, CollectionImageConfig> = 
       '/images/shopify-demo/accesorios/tabaquera-fondo-blanco.webp',
       '/images/shopify-demo/accesorios/sleev-fondo-blanco.webp',
       '/images/shopify-demo/accesorios/tarjetero-fondo-blanco.webp',
+    ],
+  },
+  cosmos: {
+    gridSizes: '(max-width: 700px) 62vw, 28vw',
+    gridSources: [
+      '/images/shopify-demo/joyeria/anillo-fondo-blanco.webp',
     ],
   },
 };

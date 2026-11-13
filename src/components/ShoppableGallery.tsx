@@ -21,19 +21,21 @@ function collectionUrl(collection: ShopifyCollection, isDemo: boolean): string {
 function collectionIdForHandle(handle: string): CollectionId | null {
   if (handle === 'wachi') return 'wachi';
   if (handle === 'cuoro') return 'cuoro';
+  if (handle === 'cosmos') return 'cosmos';
   return null;
 }
 
 interface CatalogCollectionCardProps {
   collection: ShopifyCollection;
   isDemo: boolean;
-  position: 'hero' | 'reverse';
+  position: 'hero' | 'tile' | 'reverse';
   onNavigate: (sectionId: string) => void;
 }
 
 const CatalogCollectionCard = ({ collection, isDemo, position, onNavigate }: CatalogCollectionCardProps) => {
   const isWachi = collection.handle === 'wachi';
   const isCuoro = collection.handle === 'cuoro';
+  const isCosmos = collection.handle === 'cosmos';
   const image = collection.image;
   const mobileImage = isWachi
     ? catalogImageProps('/images/shopify-demo/coleccion/wachi-mobile-left.webp', '100vw')
@@ -42,7 +44,9 @@ const CatalogCollectionCard = ({ collection, isDemo, position, onNavigate }: Cat
     ? '/images/shopify-demo/coleccion/wachi-hero-horizontal.png'
     : isCuoro
       ? '/images/shopify-demo/accesorios-tarjetero.jpeg'
-      : undefined;
+      : isCosmos
+        ? '/images/shopify-demo/joyeria/cosmos-hero.webp'
+        : undefined;
   const imageUrl = localHeroFallback || image?.url;
   const actionLabel = 'Ver';
   const collectionId = collectionIdForHandle(collection.handle);
@@ -74,7 +78,7 @@ const CatalogCollectionCard = ({ collection, isDemo, position, onNavigate }: Cat
     <article
       ref={articleRef}
       id={`catalog-piece-${collection.handle}`}
-      className={`catalog-piece catalog-piece--${position}${isWachi ? ' catalog-piece--collection' : ''}${isCuoro ? ' catalog-piece--accessories' : ''}`}
+      className={`catalog-piece catalog-piece--${position}${isWachi ? ' catalog-piece--collection' : ''}${isCuoro ? ' catalog-piece--accessories' : ''}${isCosmos ? ' catalog-piece--cosmos' : ''}`}
     >
       <Link
         to={collectionUrl(collection, isDemo)}
@@ -106,9 +110,12 @@ const CatalogCollectionCard = ({ collection, isDemo, position, onNavigate }: Cat
           <p className="catalog-piece__description">{collection.description}</p>
           <span className="catalog-piece__action">{actionLabel} <span aria-hidden="true">→</span></span>
         </div>
-        {position === 'reverse' && (
+        {(position === 'reverse' || position === 'tile') && (
           <div className="catalog-piece__tile-label">
-            <h2>{collection.title}</h2>
+            <div>
+              <span className="catalog-piece__type">Colección</span>
+              <h2>{collection.title}</h2>
+            </div>
             <span aria-hidden="true">↗</span>
           </div>
         )}
@@ -129,13 +136,25 @@ const ShoppableGallery = () => {
   }
   if (collections.length === 0) return null;
 
-  const [featured, second] = collections;
+  const [featured, ...bottomCollections] = collections;
   const onNavigate = (sectionId: string) => saveSectionId(sectionId);
 
   return (
     <section ref={galleryRef} id={SECTION_ID} className="shoppable-gallery" aria-label="Galería comprable">
       <CatalogCollectionCard collection={featured} isDemo={isDemo} position="hero" onNavigate={onNavigate} />
-      {second && <CatalogCollectionCard collection={second} isDemo={isDemo} position="reverse" onNavigate={onNavigate} />}
+      {bottomCollections.length > 0 && (
+        <div className="shoppable-gallery__bottom">
+          {bottomCollections.slice(0, 2).map((collection) => (
+            <CatalogCollectionCard
+              key={collection.handle}
+              collection={collection}
+              isDemo={isDemo}
+              position="tile"
+              onNavigate={onNavigate}
+            />
+          ))}
+        </div>
+      )}
       <div className="shoppable-gallery__exit" aria-hidden="true" />
     </section>
   );

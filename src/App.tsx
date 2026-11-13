@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ScrollProvider } from "@/contexts/ScrollContext";
 import { ShopifyProvider } from "@/contexts/ShopifyContext";
 import Index from "./pages/Index";
@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import Category from "./pages/Category";
 import WachiCollection from "./pages/WachiCollection";
 import AccessoriesCollection from "./pages/AccessoriesCollection";
+import CosmosCollection from "./pages/CosmosCollection";
 import CartDrawer from "./components/CartDrawer";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/coleccion/wachi" element={<WachiCollection />} />
               <Route path="/coleccion/accesorios" element={<AccessoriesCollection />} />
+              <Route path="/coleccion/cosmos" element={<CosmosCollection />} />
               
               {/* Semantic Showcase Routes */}
               <Route path="/showcase/mobiliario/:type/:id" element={<Category />} />
@@ -43,7 +45,8 @@ const App = () => (
               <Route path="/vestuario" element={<Category />} />
               <Route path="/iluminacion" element={<Category />} />
               <Route path="/esenciales" element={<Category />} />
-              <Route path="/joyeria" element={<Category />} />
+              <Route path="/joyeria" element={<Navigate to="/coleccion/cosmos" replace />} />
+              <Route path="/showcase/joyeria" element={<Navigate to="/coleccion/cosmos" replace />} />
               <Route path="/accesorios" element={<Category />} />
               <Route path="/categoria/:category/:title/:id" element={<Category />} />
               

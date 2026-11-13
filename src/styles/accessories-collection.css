@@ -20,6 +20,15 @@
   transform: translateY(0) scale(0.86);
 }
 
+.cosmos-stage__img--anillo {
+  transform: translateY(0) scale(0.86);
+}
+
+.accessories-collection .wachi-collection__grid--single {
+  grid-template-columns: minmax(0, 420px);
+  justify-content: center;
+}
+
 @media (max-width: 700px) {
   .accessories-collection .wachi-collection__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -34,5 +43,13 @@
     grid-column: 1 / -1;
     width: calc(50% - .75rem);
     justify-self: center;
+  }
+
+  .accessories-collection .wachi-collection__grid--single {
+    grid-template-columns: minmax(0, 260px);
+  }
+
+  .accessories-collection .wachi-collection__grid--single .wachi-collection__piece:last-child {
+    width: 100%;
   }
 }
