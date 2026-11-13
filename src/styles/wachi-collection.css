@@ -544,6 +544,39 @@ html:has(.wachi-collection-flow[data-snap-ready="true"]) {
   color: #fff;
 }
 
+.wachi-stage__colors {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.15rem;
+  margin-top: 1.05rem;
+}
+
+.wachi-stage__color-swatch {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid #c9c6bf;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.wachi-stage__color-swatch:hover {
+  transform: scale(1.08);
+}
+
+.wachi-stage__color-swatch:focus-visible {
+  outline: 1.5px solid #171715;
+  outline-offset: 4px;
+}
+
+.wachi-stage__color-swatch--selected {
+  border-color: #171715;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 4.5px #171715;
+}
+
 /* Yeezy-structured 2-Column Request / Checkout View with Bruto Atelier Typography */
 .wachi-checkout {
   max-width: 1220px;

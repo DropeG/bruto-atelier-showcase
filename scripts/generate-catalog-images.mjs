@@ -16,7 +16,7 @@ const sources = [
   'next-season/esenciales-fondo-texturado.webp',
   ...['banqueta-fondo-blanco', 'mesa-fondo-blanco', 'silla-fondo-blanco', 'wachi-fondo-blanco', 'wachi-hero-horizontal', 'wachi-perspectiva-2', 'wachi-perspectiva-3', 'mesa-perspectiva-2', 'mesa-perspectiva-3', 'silla-perspectiva-2', 'silla-perspectiva-3', 'banqueta-perspectiva-2', 'banqueta-perspectiva-3'].map(name => `shopify-demo/coleccion/${name}.png`),
   ...['tabaquera-fondo-blanco', 'tabaquera-perspectiva-2', 'tabaquera-perspectiva-3', 'sleev-fondo-blanco', 'sleev-perspectiva-2', 'sleev-perspectiva-3', 'tarjetero-fondo-blanco', 'tarjetero-perspectiva-2', 'tarjetero-perspectiva-3'].map(name => `shopify-demo/accesorios/${name}.webp`),
-  ...['cosmos-hero', 'anillo-fondo-blanco', 'anillo-perspectiva-2', 'anillo-perspectiva-3'].map(name => `shopify-demo/joyeria/${name}.webp`),
+  ...['cosmos-hero', 'anillo-fondo-blanco', 'anillo-negro-fondo-blanco', 'anillo-perspectiva-2', 'anillo-perspectiva-3', 'anillo-negro-perspectiva-2', 'anillo-negro-perspectiva-3'].map(name => `shopify-demo/joyeria/${name}.webp`),
 ];
 const manifest = {};
 await mkdir('public/images/catalog-optimized', { recursive: true });

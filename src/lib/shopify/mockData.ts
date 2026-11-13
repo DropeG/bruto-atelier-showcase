@@ -180,12 +180,14 @@ export const MOCK_PRODUCTS: ShopifyProduct[] = [
     productType: 'Joyería',
     tags: ['Cosmos', 'Joyería', 'Plata'],
     price: '240000',
-    optionName: 'Material',
+    optionName: 'Color',
     variants: [
-      { title: 'Plata 950 / Piedra blanca' },
+      { title: 'Blanco' },
+      { title: 'Negro' },
     ],
     images: [
       { url: '/images/shopify-demo/joyeria/anillo-fondo-blanco.webp', alt: 'Anillo Cosmos en plata cepillada y piedra blanca', width: 896, height: 896 },
+      { url: '/images/shopify-demo/joyeria/anillo-negro-fondo-blanco.webp', alt: 'Anillo Cosmos en plata cepillada y piedra negra', width: 896, height: 896 },
       { url: '/images/shopify-demo/joyeria/anillo-perspectiva-2.webp', alt: 'Anillo Cosmos — Vista frontal macro de la constelación', width: 896, height: 896 },
       { url: '/images/shopify-demo/joyeria/anillo-perspectiva-3.webp', alt: 'Anillo Cosmos — Vista de perfil en plata 950', width: 896, height: 896 },
     ],
