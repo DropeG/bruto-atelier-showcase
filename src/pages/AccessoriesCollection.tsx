@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { ArrowLeft, ChevronLeft, ChevronRight, Plus, ShoppingBag } from 'lucide-react';
-import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowLeft, Check, ChevronLeft, ChevronRight, Loader2, Plus, ShoppingBag } from 'lucide-react';
+import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion';
 import { catalogImageProps } from '@/lib/catalog-images';
 import {
   COLLECTION_REGISTRY,
@@ -167,6 +167,11 @@ const AccessoriesCollection = () => {
   const { cart, isCartOpen, openCart, products, addToCart, isCartLoading } = useShopify();
   const [selectedId, setSelectedId] = useState<AccessoryPiece['id'] | null>(null);
   const [perspectiveIndex, setPerspectiveIndex] = useState(0);
+  const [addStatus, setAddStatus] = useState<'idle' | 'adding' | 'added' | 'error'>('idle');
+  const [bagPulseKey, setBagPulseKey] = useState(0);
+  const [liveAnnouncement, setLiveAnnouncement] = useState('');
+  const feedbackTimerRef = useRef<number | null>(null);
+  const shouldReduceMotion = useReducedMotion();
 
   const galleryUrl = new URLSearchParams(window.location.search).get('demoMode') === 'true' ? '/?demoMode=true' : '/';
 
@@ -189,7 +194,18 @@ const AccessoriesCollection = () => {
     perspectiveSizes: CUORO_STAGE_SIZES,
   });
 
+  const clearFeedbackTimer = () => {
+    if (feedbackTimerRef.current !== null) {
+      window.clearTimeout(feedbackTimerRef.current);
+      feedbackTimerRef.current = null;
+    }
+  };
+
+  useEffect(() => () => clearFeedbackTimer(), []);
+
   const handleOpenPiece = (id: AccessoryPiece['id']) => {
+    clearFeedbackTimer();
+    setAddStatus('idle');
     const target = pieces.find((piece) => piece.id === id);
     if (target) preloadAccessoryPerspectives(target);
     setPerspectiveIndex(0);
@@ -197,8 +213,36 @@ const AccessoriesCollection = () => {
   };
 
   const handleClosePiece = () => {
+    clearFeedbackTimer();
+    setAddStatus('idle');
     setPerspectiveIndex(0);
     setSelectedId(null);
+  };
+
+  const handleAddToCart = async () => {
+    if (!activeVariantId || addStatus === 'adding' || isCartLoading) return;
+    clearFeedbackTimer();
+    setAddStatus('adding');
+    const result = await addToCart(activeVariantId, 1);
+
+    if (result.ok) {
+      const nextCount = result.data?.totalQuantity ?? (cart?.totalQuantity ?? 0) + 1;
+      setAddStatus('added');
+      setBagPulseKey((prev) => prev + 1);
+      setLiveAnnouncement(`${activeDisplayTitle} agregado a la bolsa. Total: ${nextCount}.`);
+      feedbackTimerRef.current = window.setTimeout(() => {
+        setAddStatus('idle');
+        feedbackTimerRef.current = null;
+      }, 1400);
+      return;
+    }
+
+    setAddStatus('error');
+    setLiveAnnouncement('No fue posible agregar la pieza a la bolsa.');
+    feedbackTimerRef.current = window.setTimeout(() => {
+      setAddStatus('idle');
+      feedbackTimerRef.current = null;
+    }, 2200);
   };
 
   const handlePrevPerspective = () => {
@@ -261,10 +305,35 @@ const AccessoriesCollection = () => {
           onClick={openCart}
           aria-label={`Abrir bolsa${cart?.totalQuantity ? `, ${cart.totalQuantity} piezas` : ''}`}
         >
-          {cart?.totalQuantity ? (
-            <span className="wachi-collection__bag-count">{cart.totalQuantity}</span>
+          {bagPulseKey > 0 && !shouldReduceMotion ? (
+            <motion.div
+              key={`bag-pulse-${bagPulseKey}`}
+              className="wachi-collection__bag-pulse"
+              initial={{ scale: 0.7, opacity: 0.55 }}
+              animate={{ scale: 1.85, opacity: 0 }}
+              transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
+              aria-hidden="true"
+            />
           ) : null}
-          <ShoppingBag size={20} strokeWidth={1.45} />
+          {cart?.totalQuantity ? (
+            <motion.span
+              key={`bag-count-${bagPulseKey}-${cart.totalQuantity}`}
+              className="wachi-collection__bag-count"
+              initial={bagPulseKey > 0 && !shouldReduceMotion ? { scale: 0.65, opacity: 0.6 } : false}
+              animate={bagPulseKey > 0 && !shouldReduceMotion ? { scale: [0.65, 1.38, 0.94, 1], opacity: 1 } : { scale: 1, opacity: 1 }}
+              transition={{ duration: 0.48, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {cart.totalQuantity}
+            </motion.span>
+          ) : null}
+          <motion.div
+            key={`bag-icon-${bagPulseKey}`}
+            className="wachi-collection__bag-icon"
+            animate={bagPulseKey > 0 && !shouldReduceMotion ? { y: [0, -4, 0], scale: [1, 1.15, 1] } : undefined}
+            transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <ShoppingBag size={20} strokeWidth={1.45} />
+          </motion.div>
         </button>
       </header>
 
@@ -437,23 +506,106 @@ const AccessoriesCollection = () => {
                   {activeDisplayPrice}
                 </motion.p>
 
-                <motion.button
-                  type="button"
-                  className="wachi-stage__add"
-                  aria-label={`Agregar ${activePiece.name}`}
-                  disabled={isCartLoading}
-                  onClick={() => {
-                    if (activeVariantId) {
-                      void addToCart(activeVariantId, 1);
+                <div className="wachi-stage__add-wrap">
+                  <motion.button
+                    type="button"
+                    className={`wachi-stage__add${
+                      addStatus === 'adding'
+                        ? ' wachi-stage__add--adding'
+                        : addStatus === 'added'
+                          ? ' wachi-stage__add--added'
+                          : addStatus === 'error'
+                            ? ' wachi-stage__add--error'
+                            : ''
+                    }`}
+                    aria-label={
+                      addStatus === 'added'
+                        ? `${activeDisplayTitle} agregado a la bolsa`
+                        : `Agregar ${activeDisplayTitle}`
                     }
-                  }}
-                  initial={{ opacity: 0, y: 4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ delay: 0.18, duration: 0.2 }}
-                >
-                  <Plus size={20} strokeWidth={1.5} />
-                </motion.button>
+                    disabled={addStatus === 'adding' || isCartLoading || !activeVariantId}
+                    onClick={() => void handleAddToCart()}
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={
+                      addStatus === 'added' && !shouldReduceMotion
+                        ? { opacity: 1, y: 0, scale: [1, 1.12, 1] }
+                        : { opacity: 1, y: 0, scale: 1 }
+                    }
+                    exit={{ opacity: 0 }}
+                    transition={
+                      addStatus === 'added'
+                        ? { duration: 0.35, ease: [0.22, 1, 0.36, 1] }
+                        : { delay: 0.18, duration: 0.2 }
+                    }
+                  >
+                    <AnimatePresence mode="wait" initial={false}>
+                      {addStatus === 'adding' ? (
+                        <motion.span
+                          key="adding"
+                          className="wachi-stage__add-glyph"
+                          initial={{ opacity: 0, scale: 0.75 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.75 }}
+                          transition={{ duration: 0.15 }}
+                        >
+                          <Loader2 size={18} strokeWidth={1.6} className="wachi-stage__add-spinner" />
+                        </motion.span>
+                      ) : addStatus === 'added' ? (
+                        <motion.span
+                          key="added"
+                          className="wachi-stage__add-glyph"
+                          initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.55 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.7 }}
+                          transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                        >
+                          <Check size={18} strokeWidth={2} />
+                        </motion.span>
+                      ) : (
+                        <motion.span
+                          key="idle"
+                          className="wachi-stage__add-glyph"
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.8 }}
+                          transition={{ duration: 0.15 }}
+                        >
+                          <Plus size={20} strokeWidth={1.5} />
+                        </motion.span>
+                      )}
+                    </AnimatePresence>
+                  </motion.button>
+
+                  <AnimatePresence>
+                    {addStatus === 'added' ? (
+                      <motion.span
+                        key="status-added"
+                        className="wachi-stage__add-status"
+                        initial={{ opacity: 0, y: 4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -2 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        Agregado
+                      </motion.span>
+                    ) : addStatus === 'error' ? (
+                      <motion.span
+                        key="status-error"
+                        className="wachi-stage__add-status wachi-stage__add-status--error"
+                        initial={{ opacity: 0, y: 4 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        No se pudo agregar
+                      </motion.span>
+                    ) : null}
+                  </AnimatePresence>
+                </div>
+
+                <span className="sr-only" aria-live="polite">
+                  {liveAnnouncement}
+                </span>
               </div>
             </motion.section>
           )}

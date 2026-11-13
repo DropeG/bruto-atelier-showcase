@@ -37,7 +37,11 @@ interface ShopifyContextType {
   refetchStatus: () => Promise<void>;
   refetchProducts: () => Promise<void>;
   refreshCart: () => Promise<CartActionResult>;
-  addToCart: (merchandiseId: string, quantity?: number) => Promise<CartActionResult>;
+  addToCart: (
+    merchandiseId: string,
+    quantity?: number,
+    options?: { openDrawer?: boolean },
+  ) => Promise<CartActionResult>;
   updateCartItem: (lineId: string, quantity: number) => Promise<CartActionResult>;
   removeFromCart: (lineId: string) => Promise<CartActionResult>;
 }
@@ -150,7 +154,11 @@ export const ShopifyProvider: React.FC<{ children: React.ReactNode }> = ({ child
     return next;
   }, []);
 
-  const addToCart = useCallback(async (merchandiseId: string, quantity = 1): Promise<CartActionResult> => {
+  const addToCart = useCallback(async (
+    merchandiseId: string,
+    quantity = 1,
+    options?: { openDrawer?: boolean },
+  ): Promise<CartActionResult> => {
     if (!merchandiseId || quantity < 1) return emptyAction('add', 'Selecciona una variante disponible para continuar.');
     return runMutation(async () => {
       setCartState('mutating');
@@ -165,7 +173,7 @@ export const ShopifyProvider: React.FC<{ children: React.ReactNode }> = ({ child
       }
 
       const saved = saveResult(result);
-      if (saved.ok) setIsCartOpen(true);
+      if (saved.ok && options?.openDrawer) setIsCartOpen(true);
       return saved;
     });
   }, [cartId, persistCart, runMutation, saveResult]);

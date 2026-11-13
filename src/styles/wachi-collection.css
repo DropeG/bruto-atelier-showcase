@@ -73,6 +73,7 @@ html:has(.wachi-collection-flow[data-snap-ready="true"]) {
 }
 
 .wachi-collection__bag {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: flex-end;
@@ -80,6 +81,24 @@ html:has(.wachi-collection-flow[data-snap-ready="true"]) {
   width: auto;
   min-width: 44px;
   padding-inline: 0.25rem;
+}
+
+.wachi-collection__bag-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wachi-collection__bag-pulse {
+  position: absolute;
+  right: 1px;
+  top: 50%;
+  width: 28px;
+  height: 28px;
+  margin-top: -14px;
+  border-radius: 999px;
+  border: 1.5px solid #171715;
+  pointer-events: none;
 }
 
 .wachi-collection__bag-count {
@@ -385,22 +404,92 @@ html:has(.wachi-collection-flow[data-snap-ready="true"]) {
   color: #171715;
 }
 
+.wachi-stage__add-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0.9rem;
+}
+
 .wachi-stage__add {
   display: grid;
   place-items: center;
   width: 40px;
   height: 40px;
-  margin-top: 0.9rem;
   padding: 0;
-  border: 0;
+  border: 1px solid transparent;
+  border-radius: 999px;
   background: transparent;
   color: #171715;
   cursor: pointer;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.24s ease, color 0.24s ease, border-color 0.24s ease;
 }
 
-.wachi-stage__add:hover {
+.wachi-stage__add:hover:not(:disabled) {
   opacity: 0.6;
+}
+
+.wachi-stage__add--adding {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.wachi-stage__add--added {
+  background: #171715;
+  border-color: #171715;
+  color: #fff;
+}
+
+.wachi-stage__add--added:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.wachi-stage__add--error {
+  border-color: #8b2e2e;
+  color: #8b2e2e;
+}
+
+.wachi-stage__add-glyph {
+  display: grid;
+  place-items: center;
+}
+
+.wachi-stage__add-spinner {
+  animation: wachi-add-spin 0.8s linear infinite;
+}
+
+.wachi-stage__add-status {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  white-space: nowrap;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 0.64rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #171715;
+  pointer-events: none;
+}
+
+.wachi-stage__add-status--error {
+  color: #8b2e2e;
+}
+
+@keyframes wachi-add-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wachi-stage__add {
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .wachi-stage__add-spinner {
+    animation: none;
+  }
 }
 
 .wachi-stage__inquire-btn {
