@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import { ArrowLeft, ChevronLeft, ChevronRight, Plus, ShoppingBag } from 'lucide-react';
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
+import { catalogImageProps } from '@/lib/catalog-images';
+import {
+  COLLECTION_REGISTRY,
+  preloadResponsiveSources,
+  useCollectionGridReady,
+} from '@/lib/collection-images';
 import { Link } from 'react-router-dom';
 import { useShopify } from '@/contexts/ShopifyContext';
 import '@/styles/wachi-collection.css';
@@ -17,6 +23,7 @@ interface AccessoryPerspective {
 interface AccessoryPiece {
   id: 'tabaquera' | 'sleeve' | 'tarjetero';
   name: string;
+  description: string;
   image: string;
   width: number;
   height: number;
@@ -28,6 +35,7 @@ const pieces: readonly AccessoryPiece[] = [
   {
     id: 'tabaquera',
     name: 'Tabaquera',
+    description: 'Estuche flexible en cuero vacuno granulado con cierre envolvente.',
     image: '/images/shopify-demo/accesorios/tabaquera-fondo-blanco.webp',
     width: 1326,
     height: 1187,
@@ -59,6 +67,7 @@ const pieces: readonly AccessoryPiece[] = [
   {
     id: 'sleeve',
     name: 'Sleeve',
+    description: 'Funda protectora en cuero coñac de grano natural cosida a mano.',
     image: '/images/shopify-demo/accesorios/sleev-fondo-blanco.webp',
     width: 1668,
     height: 943,
@@ -90,6 +99,7 @@ const pieces: readonly AccessoryPiece[] = [
   {
     id: 'tarjetero',
     name: 'Tarjetero',
+    description: 'Pieza compacta de perfil delgado en cuero graneado con corte preciso.',
     image: '/images/shopify-demo/accesorios/tarjetero-fondo-blanco.webp',
     width: 1290,
     height: 1219,
@@ -127,30 +137,57 @@ const yeezySpring = {
   mass: 0.9,
 } as const;
 
+const CUORO_GRID_SIZES = COLLECTION_REGISTRY.cuoro.gridSizes;
+const CUORO_GRID_SOURCES = COLLECTION_REGISTRY.cuoro.gridSources;
+const CUORO_STAGE_SIZES = '(max-width: 850px) 84vw, 44vw';
+const CUORO_PERSPECTIVE_SOURCES = pieces.flatMap((piece) =>
+  piece.perspectives.slice(1).map((perspective) => perspective.src),
+);
+
 function preloadAccessoryPerspectives(piece: AccessoryPiece) {
-  if (typeof window === 'undefined') return;
-  for (const perspective of piece.perspectives) {
-    const img = new window.Image();
-    img.src = perspective.src;
-    img.decode?.().catch(() => {});
-  }
+  void preloadResponsiveSources(
+    piece.perspectives.map((perspective) => perspective.src),
+    CUORO_STAGE_SIZES,
+    'high',
+  );
+}
+
+function formatClpPrice(amount?: string, fallback?: string): string {
+  if (!amount) return fallback ?? '';
+  const num = Number(amount);
+  if (Number.isNaN(num)) return fallback ?? '';
+  return new Intl.NumberFormat('es-CL', {
+    style: 'currency',
+    currency: 'CLP',
+    maximumFractionDigits: 0,
+  }).format(num);
 }
 
 const AccessoriesCollection = () => {
-  const { cart, openCart } = useShopify();
+  const { cart, isCartOpen, openCart, products, addToCart, isCartLoading } = useShopify();
   const [selectedId, setSelectedId] = useState<AccessoryPiece['id'] | null>(null);
   const [perspectiveIndex, setPerspectiveIndex] = useState(0);
 
   const galleryUrl = new URLSearchParams(window.location.search).get('demoMode') === 'true' ? '/?demoMode=true' : '/';
 
   const activePiece = pieces.find((piece) => piece.id === selectedId) ?? null;
+  const activeShopifyProduct = activePiece
+    ? products.find((product) => product.handle === activePiece.id)
+    : undefined;
+  const activeVariant = activeShopifyProduct?.variants.edges[0]?.node;
+  const activeVariantId = activeVariant?.id;
+  const activeDisplayTitle = activeShopifyProduct?.title || activePiece?.name || '';
+  const activeDisplayPrice = formatClpPrice(
+    activeVariant?.price.amount ?? activeShopifyProduct?.priceRange.minVariantPrice.amount,
+    activePiece?.price,
+  );
 
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      pieces.forEach(preloadAccessoryPerspectives);
-    }, 120);
-    return () => window.clearTimeout(timer);
-  }, []);
+  const isGridReady = useCollectionGridReady({
+    gridSources: CUORO_GRID_SOURCES,
+    gridSizes: CUORO_GRID_SIZES,
+    perspectiveSources: CUORO_PERSPECTIVE_SOURCES,
+    perspectiveSizes: CUORO_STAGE_SIZES,
+  });
 
   const handleOpenPiece = (id: AccessoryPiece['id']) => {
     const target = pieces.find((piece) => piece.id === id);
@@ -177,7 +214,7 @@ const AccessoriesCollection = () => {
   };
 
   useEffect(() => {
-    if (!activePiece) return;
+    if (!activePiece || isCartOpen) return;
     const total = activePiece.perspectives.length;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -190,7 +227,7 @@ const AccessoriesCollection = () => {
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [activePiece]);
+  }, [activePiece, isCartOpen]);
 
   return (
     <main className={`wachi-collection accessories-collection${activePiece ? ' wachi-collection--stage-active' : ''}`}>
@@ -224,8 +261,10 @@ const AccessoriesCollection = () => {
           onClick={openCart}
           aria-label={`Abrir bolsa${cart?.totalQuantity ? `, ${cart.totalQuantity} piezas` : ''}`}
         >
-          <ShoppingBag size={22} strokeWidth={1.45} />
-          {cart?.totalQuantity ? <span>{cart.totalQuantity}</span> : null}
+          {cart?.totalQuantity ? (
+            <span className="wachi-collection__bag-count">{cart.totalQuantity}</span>
+          ) : null}
+          <ShoppingBag size={20} strokeWidth={1.45} />
         </button>
       </header>
 
@@ -236,8 +275,8 @@ const AccessoriesCollection = () => {
               key="cuoro-grid"
               className="wachi-collection__content"
               aria-labelledby="accessories-collection-title"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              initial={{ opacity: isGridReady ? 1 : 0 }}
+              animate={{ opacity: isGridReady ? 1 : 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.22, ease: 'easeOut' }}
             >
@@ -247,42 +286,45 @@ const AccessoriesCollection = () => {
               </div>
 
               <div className="wachi-collection__grid">
-                {pieces.map((piece, index) => (
-                  <article
-                    key={piece.id}
-                    className={`wachi-collection__piece wachi-collection__piece--${piece.id} wachi-collection__piece--interactive`}
-                  >
-                    <button
-                      type="button"
-                      className="wachi-collection__piece-trigger"
-                      onMouseEnter={() => preloadAccessoryPerspectives(piece)}
-                      onFocus={() => preloadAccessoryPerspectives(piece)}
-                      onClick={() => handleOpenPiece(piece.id)}
-                      aria-label={`Ver ${piece.name}`}
+                {pieces.map((piece) => {
+                  const shopifyPiece = products.find((product) => product.handle === piece.id);
+                  const displayTitle = shopifyPiece?.title || piece.name;
+                  return (
+                    <article
+                      key={piece.id}
+                      className={`wachi-collection__piece wachi-collection__piece--${piece.id} wachi-collection__piece--interactive`}
                     >
-                      <motion.div
-                        layoutId={`cuoro-piece-image-${piece.id}`}
-                        transition={yeezySpring}
-                        className="wachi-collection__image"
+                      <button
+                        type="button"
+                        className="wachi-collection__piece-trigger"
+                        onMouseEnter={() => preloadAccessoryPerspectives(piece)}
+                        onFocus={() => preloadAccessoryPerspectives(piece)}
+                        onClick={() => handleOpenPiece(piece.id)}
+                        aria-label={`Ver ${displayTitle}`}
                       >
-                        <img
-                          src={piece.image}
-                          alt={piece.name}
-                          width={piece.width}
-                          height={piece.height}
-                          decoding="async"
-                          fetchPriority={index === 0 ? 'high' : undefined}
-                        />
-                      </motion.div>
-                      <motion.h2
-                        layoutId={`cuoro-piece-title-${piece.id}`}
-                        transition={yeezySpring}
-                      >
-                        {piece.name}
-                      </motion.h2>
-                    </button>
-                  </article>
-                ))}
+                        <motion.div
+                          layoutId={`cuoro-piece-image-${piece.id}`}
+                          transition={yeezySpring}
+                          className="wachi-collection__image"
+                        >
+                          <img
+                            {...catalogImageProps(piece.image, CUORO_GRID_SIZES)}
+                            alt={displayTitle}
+                            loading="eager"
+                            decoding="sync"
+                            fetchPriority="high"
+                          />
+                        </motion.div>
+                        <motion.h2
+                          layoutId={`cuoro-piece-title-${piece.id}`}
+                          transition={yeezySpring}
+                        >
+                          {displayTitle}
+                        </motion.h2>
+                      </button>
+                    </article>
+                  );
+                })}
               </div>
             </motion.section>
           ) : (
@@ -319,10 +361,8 @@ const AccessoriesCollection = () => {
                     return (
                       <img
                         key={perspective.src}
-                        src={perspective.src}
+                        {...catalogImageProps(perspective.src, CUORO_STAGE_SIZES)}
                         alt={perspective.alt}
-                        width={perspective.width}
-                        height={perspective.height}
                         loading="eager"
                         decoding="sync"
                         aria-hidden={!isActive}
@@ -374,8 +414,18 @@ const AccessoriesCollection = () => {
                   transition={yeezySpring}
                   className="wachi-stage__title"
                 >
-                  {activePiece.name}
+                  {activeDisplayTitle}
                 </motion.h2>
+
+                <motion.p
+                  className="wachi-stage__description"
+                  initial={{ opacity: 0, y: 4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ delay: 0.12, duration: 0.2 }}
+                >
+                  {activePiece.description}
+                </motion.p>
 
                 <motion.p
                   className="wachi-stage__price"
@@ -384,13 +434,19 @@ const AccessoriesCollection = () => {
                   exit={{ opacity: 0 }}
                   transition={{ delay: 0.14, duration: 0.2 }}
                 >
-                  {activePiece.price}
+                  {activeDisplayPrice}
                 </motion.p>
 
                 <motion.button
                   type="button"
                   className="wachi-stage__add"
                   aria-label={`Agregar ${activePiece.name}`}
+                  disabled={isCartLoading}
+                  onClick={() => {
+                    if (activeVariantId) {
+                      void addToCart(activeVariantId, 1);
+                    }
+                  }}
                   initial={{ opacity: 0, y: 4 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}

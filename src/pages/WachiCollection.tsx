@@ -1,9 +1,15 @@
 import { useEffect, useState } from 'react';
-import { ArrowLeft, ChevronLeft, ChevronRight, Plus, ShoppingBag, X } from 'lucide-react';
+import { ArrowLeft, ChevronLeft, ChevronRight, ShoppingBag, X } from 'lucide-react';
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
 import { catalogImageProps } from '@/lib/catalog-images';
+import {
+  COLLECTION_REGISTRY,
+  preloadResponsiveSources,
+  useCollectionGridReady,
+} from '@/lib/collection-images';
 import { Link } from 'react-router-dom';
 import { useShopify } from '@/contexts/ShopifyContext';
+import WachiRequestDrawer, { type WachiRequestLineItem } from '@/components/WachiRequestDrawer';
 import '@/styles/wachi-collection.css';
 
 interface PiecePerspective {
@@ -14,6 +20,7 @@ interface PiecePerspective {
 
 interface WachiPiece {
   name: string;
+  description: string;
   image: string;
   kind: 'ensemble' | 'table' | 'chair' | 'bench';
   price: string;
@@ -24,6 +31,7 @@ interface WachiPiece {
 const pieces: readonly WachiPiece[] = [
   {
     name: 'Set',
+    description: 'Comedor completo tallado en lenga maciza de origen austral.',
     image: '/images/shopify-demo/coleccion/wachi-fondo-blanco.png',
     kind: 'ensemble',
     price: '$4.990.000',
@@ -47,6 +55,7 @@ const pieces: readonly WachiPiece[] = [
   },
   {
     name: 'Mesa',
+    description: 'Cubierta de bordes orgánicos sobre dos apoyos escultóricos en lenga.',
     image: '/images/shopify-demo/coleccion/mesa-fondo-blanco.png',
     kind: 'table',
     price: '$3.290.000',
@@ -75,6 +84,7 @@ const pieces: readonly WachiPiece[] = [
   },
   {
     name: 'Silla',
+    description: 'Estructura de lenga ensamblada a mano con respaldo curvo envolvente.',
     image: '/images/shopify-demo/coleccion/silla-fondo-blanco.png',
     kind: 'chair',
     price: '$620.000',
@@ -98,6 +108,7 @@ const pieces: readonly WachiPiece[] = [
   },
   {
     name: 'Banqueta',
+    description: 'Asiento continuo de perfil limpio en madera de lenga natural.',
     image: '/images/shopify-demo/coleccion/banqueta-fondo-blanco.png',
     kind: 'bench',
     price: '$890.000',
@@ -128,18 +139,19 @@ const yeezySpring = {
   mass: 0.9,
 } as const;
 
+const WACHI_GRID_SIZES = COLLECTION_REGISTRY.wachi.gridSizes;
+const WACHI_GRID_SOURCES = COLLECTION_REGISTRY.wachi.gridSources;
 const STAGE_IMAGE_SIZES = '(max-width: 850px) 84vw, 44vw';
+const WACHI_PERSPECTIVE_SOURCES = pieces.flatMap((piece) =>
+  piece.perspectives.slice(1).map((perspective) => perspective.src),
+);
 
 function preloadPiecePerspectives(piece: WachiPiece) {
-  if (typeof window === 'undefined') return;
-  for (const perspective of piece.perspectives) {
-    const props = catalogImageProps(perspective.src, STAGE_IMAGE_SIZES);
-    const img = new window.Image();
-    if ('sizes' in props && props.sizes) img.sizes = props.sizes;
-    if ('srcSet' in props && props.srcSet) img.srcset = props.srcSet;
-    img.src = props.src;
-    img.decode?.().catch(() => {});
-  }
+  void preloadResponsiveSources(
+    piece.perspectives.map((perspective) => perspective.src),
+    STAGE_IMAGE_SIZES,
+    'high',
+  );
 }
 
 const WachiCollection = () => {
@@ -148,18 +160,53 @@ const WachiCollection = () => {
   const [perspectiveIndex, setPerspectiveIndex] = useState(0);
   const [isSizePickerOpen, setIsSizePickerOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [isRequestDrawerOpen, setIsRequestDrawerOpen] = useState(false);
+  const [requestItems, setRequestItems] = useState<WachiRequestLineItem[]>([]);
+
+  const stockBagCount = cart?.totalQuantity || 0;
+
+  const handleAddPieceToRequest = (piece: WachiPiece, size: string | null) => {
+    const key = `${piece.kind}::${size ?? 'default'}`;
+    setRequestItems((prev) => {
+      const existingIndex = prev.findIndex((item) => item.key === key);
+      if (existingIndex === -1) {
+        return [...prev, { key, piece, selectedSize: size, quantity: 1 }];
+      }
+      return prev.map((item, idx) =>
+        idx === existingIndex ? { ...item, quantity: item.quantity + 1 } : item,
+      );
+    });
+    setIsRequestDrawerOpen(true);
+  };
+
+  const handleUpdateRequestItemQuantity = (key: string, delta: number) => {
+    setRequestItems((prev) => {
+      const next = prev
+        .map((item) => (item.key === key ? { ...item, quantity: item.quantity + delta } : item))
+        .filter((item) => item.quantity > 0);
+      if (next.length === 0) {
+        setIsRequestDrawerOpen(false);
+      }
+      return next;
+    });
+  };
 
   const galleryUrl = new URLSearchParams(window.location.search).get('demoMode') === 'true' ? '/?demoMode=true' : '/';
 
+  const handleExitToGallery = () => {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  };
+
   const activePiece = pieces.find((piece) => piece.kind === selectedKind) ?? null;
 
-  // Preload and decode all perspectives in the background once the collection view is open
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      pieces.forEach(preloadPiecePerspectives);
-    }, 120);
-    return () => window.clearTimeout(timer);
-  }, []);
+  const isGridReady = useCollectionGridReady({
+    gridSources: WACHI_GRID_SOURCES,
+    gridSizes: WACHI_GRID_SIZES,
+    perspectiveSources: WACHI_PERSPECTIVE_SOURCES,
+    perspectiveSizes: STAGE_IMAGE_SIZES,
+  });
 
   const handleOpenPiece = (kind: WachiPiece['kind']) => {
     const target = pieces.find((piece) => piece.kind === kind);
@@ -167,6 +214,7 @@ const WachiCollection = () => {
     setPerspectiveIndex(0);
     setIsSizePickerOpen(false);
     setSelectedSize(null);
+    setIsRequestDrawerOpen(false);
     setSelectedKind(kind);
   };
 
@@ -174,6 +222,7 @@ const WachiCollection = () => {
     setPerspectiveIndex(0);
     setIsSizePickerOpen(false);
     setSelectedSize(null);
+    setIsRequestDrawerOpen(false);
     setSelectedKind(null);
   };
 
@@ -190,29 +239,42 @@ const WachiCollection = () => {
   };
 
   useEffect(() => {
-    if (!activePiece) return;
-    const total = activePiece.perspectives.length;
+    if (!activePiece && !isRequestDrawerOpen) return;
+    const total = activePiece?.perspectives.length ?? 1;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
-        if (isSizePickerOpen) {
+        if (isRequestDrawerOpen) {
+          setIsRequestDrawerOpen(false);
+        } else if (isSizePickerOpen) {
           setIsSizePickerOpen(false);
         } else {
           handleClosePiece();
         }
-      } else if (event.key === 'ArrowLeft') {
+      } else if (!isRequestDrawerOpen && activePiece && event.key === 'ArrowLeft') {
         setPerspectiveIndex((prev) => (prev - 1 + total) % total);
-      } else if (event.key === 'ArrowRight') {
+      } else if (!isRequestDrawerOpen && activePiece && event.key === 'ArrowRight') {
         setPerspectiveIndex((prev) => (prev + 1) % total);
       }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [activePiece, isSizePickerOpen]);
+  }, [activePiece, isSizePickerOpen, isRequestDrawerOpen]);
+
+  const showPieceOrCheckoutHeader = Boolean(activePiece || isRequestDrawerOpen);
 
   return (
-    <main className={`wachi-collection${activePiece ? ' wachi-collection--stage-active' : ''}`}>
+    <main className={`wachi-collection${showPieceOrCheckoutHeader ? ' wachi-collection--stage-active' : ''}`}>
       <header className="wachi-collection__header">
-        {activePiece ? (
+        {isRequestDrawerOpen ? (
+          <button
+            type="button"
+            className="wachi-collection__icon"
+            onClick={() => setIsRequestDrawerOpen(false)}
+            aria-label="Volver a la pieza WACHI"
+          >
+            <ChevronLeft size={22} strokeWidth={1.5} />
+          </button>
+        ) : activePiece ? (
           <button
             type="button"
             className="wachi-collection__icon"
@@ -222,15 +284,16 @@ const WachiCollection = () => {
             <ChevronLeft size={22} strokeWidth={1.5} />
           </button>
         ) : (
-          <Link to={galleryUrl} className="wachi-collection__icon" aria-label="Volver a la galería">
+          <Link to={galleryUrl} onClick={handleExitToGallery} className="wachi-collection__icon" aria-label="Volver a la galería">
             <ArrowLeft size={23} strokeWidth={1.45} />
           </Link>
         )}
 
         <Link
           to={galleryUrl}
-          className={`wachi-collection__wordmark${activePiece ? ' wachi-collection__wordmark--hidden' : ''}`}
-          tabIndex={activePiece ? -1 : undefined}
+          onClick={handleExitToGallery}
+          className={`wachi-collection__wordmark${showPieceOrCheckoutHeader ? ' wachi-collection__wordmark--hidden' : ''}`}
+          tabIndex={showPieceOrCheckoutHeader ? -1 : undefined}
         >
           BRUTO Atelier
         </Link>
@@ -239,22 +302,41 @@ const WachiCollection = () => {
           type="button"
           className="wachi-collection__icon wachi-collection__bag"
           onClick={openCart}
-          aria-label={`Abrir bolsa${cart?.totalQuantity ? `, ${cart.totalQuantity} piezas` : ''}`}
+          aria-label={`Abrir bolsa${stockBagCount ? `, ${stockBagCount} piezas` : ''}`}
         >
-          <ShoppingBag size={22} strokeWidth={1.45} />
-          {cart?.totalQuantity ? <span>{cart.totalQuantity}</span> : null}
+          {stockBagCount ? <span className="wachi-collection__bag-count">{stockBagCount}</span> : null}
+          <ShoppingBag size={20} strokeWidth={1.45} />
         </button>
       </header>
 
       <LayoutGroup>
         <AnimatePresence mode="popLayout">
-          {!activePiece ? (
+          {isRequestDrawerOpen ? (
+            <motion.div
+              key="wachi-checkout-stage"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.22, ease: 'easeOut' }}
+            >
+              <WachiRequestDrawer
+                open={isRequestDrawerOpen}
+                onOpenChange={setIsRequestDrawerOpen}
+                piece={activePiece}
+                selectedSize={selectedSize}
+                onSelectSize={setSelectedSize}
+                items={requestItems}
+                onUpdateItemQuantity={handleUpdateRequestItemQuantity}
+                onClearItems={() => setRequestItems([])}
+              />
+            </motion.div>
+          ) : !activePiece ? (
             <motion.section
               key="wachi-grid"
               className="wachi-collection__content"
               aria-labelledby="wachi-collection-title"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              initial={{ opacity: isGridReady ? 1 : 0 }}
+              animate={{ opacity: isGridReady ? 1 : 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.22, ease: 'easeOut' }}
             >
@@ -283,11 +365,11 @@ const WachiCollection = () => {
                         className="wachi-collection__image"
                       >
                         <img
-                          {...catalogImageProps(piece.image, '(max-width: 850px) 44vw, 22vw')}
+                          {...catalogImageProps(piece.image, WACHI_GRID_SIZES)}
                           alt={piece.name}
-                          loading={piece.kind === 'ensemble' ? 'eager' : 'lazy'}
-                          decoding="async"
-                          fetchPriority={piece.kind === 'ensemble' ? 'high' : undefined}
+                          loading="eager"
+                          decoding="sync"
+                          fetchPriority="high"
                         />
                       </motion.div>
                       <motion.h2
@@ -411,6 +493,18 @@ const WachiCollection = () => {
                   </AnimatePresence>
                 </div>
 
+                {!isSizePickerOpen && (
+                  <motion.p
+                    className="wachi-stage__description"
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ delay: 0.12, duration: 0.2 }}
+                  >
+                    {activePiece.description}
+                  </motion.p>
+                )}
+
                 <motion.p
                   className="wachi-stage__price"
                   initial={{ opacity: 0, y: 4 }}
@@ -445,6 +539,7 @@ const WachiCollection = () => {
                             onClick={() => {
                               setSelectedSize(size);
                               setIsSizePickerOpen(false);
+                              handleAddPieceToRequest(activePiece, size);
                             }}
                           >
                             {size}
@@ -456,11 +551,13 @@ const WachiCollection = () => {
                     <motion.button
                       key="add-trigger"
                       type="button"
-                      className="wachi-stage__add"
-                      aria-label={`Agregar ${activePiece.name}`}
+                      className="wachi-stage__inquire-btn"
+                      aria-label={`Solicitar ${activePiece.name}`}
                       onClick={() => {
                         if (activePiece.sizes?.length) {
                           setIsSizePickerOpen(true);
+                        } else {
+                          handleAddPieceToRequest(activePiece, null);
                         }
                       }}
                       initial={{ opacity: 0, y: 4 }}
@@ -468,7 +565,7 @@ const WachiCollection = () => {
                       exit={{ opacity: 0, y: -4 }}
                       transition={{ duration: 0.18, ease: 'easeOut' }}
                     >
-                      <Plus size={20} strokeWidth={1.5} />
+                      {activePiece.sizes?.length ? 'ELEGIR MEDIDAS Y SOLICITAR' : 'SOLICITAR PIEZA'}
                     </motion.button>
                   )}
                 </AnimatePresence>

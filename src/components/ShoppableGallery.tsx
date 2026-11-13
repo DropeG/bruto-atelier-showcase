@@ -1,5 +1,6 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { catalogImageProps } from '@/lib/catalog-images';
+import { preloadCollectionGrid, type CollectionId } from '@/lib/collection-images';
 import { Link } from 'react-router-dom';
 import { useCollectionSnap } from '@/hooks/useCollectionSnap';
 import { useHomepageProducts } from '@/hooks/useHomepageProducts';
@@ -34,6 +35,12 @@ interface CatalogPieceProps {
   onNavigate: (sectionId: string) => void;
 }
 
+function collectionIdForProduct(product: ShopifyProduct): CollectionId | null {
+  if (product.tags.includes('ColeccionDestacada')) return 'wachi';
+  if (product.handle === 'accesorios-cuero') return 'cuoro';
+  return null;
+}
+
 const CatalogPiece = ({ product, isDemo, position, onNavigate }: CatalogPieceProps) => {
   const title = product.handle === 'accesorios-cuero' ? 'CUORO' : product.title;
   const description = product.handle === 'accesorios-cuero' ? 'Nuestra expresión en pelle.' : product.description;
@@ -43,11 +50,38 @@ const CatalogPiece = ({ product, isDemo, position, onNavigate }: CatalogPiecePro
     : undefined;
   const showPrice = !product.tags.includes('OcultarPrecio');
   const actionLabel = 'Ver';
+  const collectionId = collectionIdForProduct(product);
+  const articleRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const node = articleRef.current;
+    if (!node || !collectionId || typeof IntersectionObserver === 'undefined') return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          void preloadCollectionGrid(collectionId);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '250px' },
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [collectionId]);
+
+  const handleIntentPreload = () => {
+    if (collectionId) {
+      void preloadCollectionGrid(collectionId);
+    }
+  };
 
   return (
-    <article id={`catalog-piece-${product.handle}`} className={`catalog-piece catalog-piece--${position}${product.tags.includes('ColeccionDestacada') ? ' catalog-piece--collection' : ''}${product.handle === 'accesorios-cuero' ? ' catalog-piece--accessories' : ''}`}>
+    <article ref={articleRef} id={`catalog-piece-${product.handle}`} className={`catalog-piece catalog-piece--${position}${product.tags.includes('ColeccionDestacada') ? ' catalog-piece--collection' : ''}${product.handle === 'accesorios-cuero' ? ' catalog-piece--accessories' : ''}`}>
       <Link
         to={productUrl(product, isDemo)}
+        onMouseEnter={handleIntentPreload}
+        onFocus={handleIntentPreload}
+        onTouchStart={handleIntentPreload}
         onClick={() => onNavigate(
           product.handle === 'accesorios-cuero' ? WACHI_SECTION_ID : `catalog-piece-${product.handle}`
         )}
