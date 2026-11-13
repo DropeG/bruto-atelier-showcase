@@ -4,6 +4,7 @@ import {
   CommerceResult,
   ShopInfo,
   ShopifyCart,
+  ShopifyCollection,
   ShopifyConnectionStatus,
   ShopifyCustomer,
   ShopifyCustomerAccessTokenCreatePayload,
@@ -20,13 +21,14 @@ import {
   CUSTOMER_ACCESS_TOKEN_CREATE_MUTATION,
   CUSTOMER_CREATE_MUTATION,
   GET_CART_QUERY,
+  GET_COLLECTIONS_QUERY,
   GET_COLLECTION_BY_HANDLE_QUERY,
   GET_CUSTOMER_QUERY,
   GET_PRODUCT_BY_HANDLE_QUERY,
   GET_PRODUCTS_QUERY,
   GET_SHOP_INFO_QUERY,
 } from './queries';
-import { isDemoShopifyId, MOCK_PRODUCTS, MOCK_SHOP_INFO } from './mockData';
+import { isDemoShopifyId, MOCK_COLLECTIONS, MOCK_PRODUCTS, MOCK_SHOP_INFO } from './mockData';
 
 const SHOPIFY_DOMAIN = import.meta.env.VITE_SHOPIFY_STORE_DOMAIN || '';
 const SHOPIFY_TOKEN = import.meta.env.VITE_SHOPIFY_STOREFRONT_TOKEN || '';
@@ -182,6 +184,26 @@ export async function getShopifyProducts(first = 20): Promise<{ products: Shopif
   } catch {
     // A configured store must never degrade into fictitious purchasable products.
     return { products: [], isLive: false };
+  }
+}
+
+export async function getHomepageCollections(
+  first = 10,
+): Promise<{ collections: ShopifyCollection[]; isLive: boolean }> {
+  if (!isShopifyConfigured()) {
+    return { collections: MOCK_COLLECTIONS, isLive: false };
+  }
+  try {
+    const data = await shopifyFetch<{
+      collections: { edges: Array<{ node: ShopifyCollection }> };
+    }>({ query: GET_COLLECTIONS_QUERY, variables: { first } });
+    const collections = data.collections.edges.map((edge) => edge.node);
+    if (import.meta.env.DEV && collections.length === 0) {
+      return { collections: MOCK_COLLECTIONS, isLive: false };
+    }
+    return { collections, isLive: true };
+  } catch {
+    return { collections: [], isLive: false };
   }
 }
 

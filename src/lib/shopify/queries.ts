@@ -103,6 +103,22 @@ export const GET_PRODUCTS_QUERY = `
   }
 `;
 
+export const GET_COLLECTIONS_QUERY = `
+  query GetCollections($first: Int = 10) {
+    collections(first: $first) {
+      edges {
+        node {
+          id
+          handle
+          title
+          description
+          image { ${IMAGE_FIELDS} }
+        }
+      }
+    }
+  }
+`;
+
 /** Uses the collection's merchant-defined/default ordering. */
 export const GET_COLLECTION_BY_HANDLE_QUERY = `
   ${PRODUCT_FIELDS}

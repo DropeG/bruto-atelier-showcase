@@ -1,4 +1,4 @@
-import { ShopifyImage, ShopifyProduct, ShopifyProductVariant, ShopInfo } from '@/types/shopify';
+import { ShopifyCollection, ShopifyImage, ShopifyProduct, ShopifyProductVariant, ShopInfo } from '@/types/shopify';
 
 export const MOCK_ID_MARKER = 'demo-bruto-';
 
@@ -172,4 +172,31 @@ export const MOCK_PRODUCTS: ShopifyProduct[] = [
       { url: '/images/shopify-demo/objeto-cuero-02.webp', alt: 'Detalle de las costuras artesanales de Objeto Cuero', width: 1280, height: 1600 },
     ],
   }),
+];
+
+export const MOCK_COLLECTIONS: ShopifyCollection[] = [
+  {
+    id: `${MOCK_ID_MARKER}collection-wachi`,
+    handle: 'wachi',
+    title: 'WACHI',
+    description: 'En Lenga, a medida.',
+    image: {
+      url: '/images/shopify-demo/coleccion/wachi-hero-horizontal.png',
+      altText: 'Conjunto Wachi en Lenga: mesa, banco y sillas',
+      width: 1672,
+      height: 941,
+    },
+  },
+  {
+    id: `${MOCK_ID_MARKER}collection-cuoro`,
+    handle: 'cuoro',
+    title: 'CUORO',
+    description: 'Nuestra expresión en pelle.',
+    image: {
+      url: '/images/shopify-demo/accesorios-tarjetero.jpeg',
+      altText: 'Tarjetero de cuero azul Bruto Atelier sobre un bloque de mármol',
+      width: 2134,
+      height: 2016,
+    },
+  },
 ];
