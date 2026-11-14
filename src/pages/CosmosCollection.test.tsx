@@ -59,6 +59,19 @@ describe('CosmosCollection — Selector de Color Estilo Yeezy', () => {
     const whiteImg = screen.getByAltText('Anillo Cosmos — Vista 3/4 en plata cepillada y piedra blanca');
     expect(whiteImg.getAttribute('src')).toContain('anillo-fondo-blanco');
 
+    fireEvent.click(screen.getByRole('button', { name: 'Siguiente perspectiva' }));
+    const whiteP2Img = screen.getByAltText('Anillo Cosmos — Vista frontal macro de la constelación');
+    expect(whiteP2Img.getAttribute('aria-hidden')).toBe('false');
+
+    fireEvent.click(blackSwatch);
+    const blackP2Img = screen.getByAltText('Anillo Cosmos — Vista frontal macro de la constelación en piedra negra');
+    expect(blackP2Img.getAttribute('aria-hidden')).toBe('false');
+
+    fireEvent.click(whiteSwatch);
+    expect(
+      screen.getByAltText('Anillo Cosmos — Vista frontal macro de la constelación').getAttribute('aria-hidden'),
+    ).toBe('false');
+
     fireEvent.click(screen.getByRole('button', { name: 'Cerrar selector de color' }));
     expect(screen.queryByText('SELECCIONAR COLOR')).toBeNull();
     expect(screen.getAllByText('Anillo Cosmos').length).toBeGreaterThan(0);

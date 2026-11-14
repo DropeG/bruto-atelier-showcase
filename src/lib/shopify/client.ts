@@ -29,6 +29,14 @@ import {
   GET_SHOP_INFO_QUERY,
 } from './queries';
 import { isDemoShopifyId, MOCK_COLLECTIONS, MOCK_PRODUCTS, MOCK_SHOP_INFO } from './mockData';
+import {
+  addLinesToDemoCart,
+  createDemoCart,
+  getDemoCart,
+  isDemoCartId,
+  removeDemoCartLines,
+  updateDemoCartLines,
+} from './mockCart';
 
 const SHOPIFY_DOMAIN = import.meta.env.VITE_SHOPIFY_STORE_DOMAIN || '';
 const SHOPIFY_TOKEN = import.meta.env.VITE_SHOPIFY_STOREFRONT_TOKEN || '';
@@ -255,6 +263,9 @@ export async function getShopifyProductByHandle(
 }
 
 export async function getCart(cartId: string): Promise<CartActionResult> {
+  if (isDemoCartId(cartId)) {
+    return getDemoCart();
+  }
   if (!isShopifyConfigured()) {
     return cartFailure('restore', 'DEMO_MODE', 'El carrito no está disponible en modo demostración.');
   }
@@ -271,11 +282,8 @@ export async function getCart(cartId: string): Promise<CartActionResult> {
 }
 
 export async function createCart(lines: Array<{ merchandiseId: string; quantity: number }> = []): Promise<CartActionResult> {
-  if (!isShopifyConfigured()) {
-    return cartFailure('create', 'DEMO_MODE', 'Producto de demostración. Conecta Shopify para habilitar compras.');
-  }
-  if (lines.some((line) => isDemoShopifyId(line.merchandiseId))) {
-    return cartFailure('create', 'DEMO_MODE', 'Los productos de demostración no se pueden añadir a Shopify.');
+  if (!isShopifyConfigured() || lines.some((line) => isDemoShopifyId(line.merchandiseId))) {
+    return createDemoCart(lines);
   }
   try {
     const data = await shopifyFetch<{ cartCreate: CartPayload }>({
@@ -292,11 +300,12 @@ export async function addLinesToCart(
   cartId: string,
   lines: Array<{ merchandiseId: string; quantity: number }>,
 ): Promise<CartActionResult> {
-  if (!isShopifyConfigured()) {
-    return cartFailure('add', 'DEMO_MODE', 'Producto de demostración. Conecta Shopify para habilitar compras.');
+  const hasDemoLine = lines.some((line) => isDemoShopifyId(line.merchandiseId));
+  if (!isShopifyConfigured() || hasDemoLine) {
+    return addLinesToDemoCart(lines);
   }
-  if (lines.some((line) => isDemoShopifyId(line.merchandiseId))) {
-    return cartFailure('add', 'DEMO_MODE', 'Los productos de demostración no se pueden añadir a Shopify.');
+  if (isDemoCartId(cartId)) {
+    return createCart(lines);
   }
   try {
     const data = await shopifyFetch<{ cartLinesAdd: CartPayload }>({
@@ -313,6 +322,9 @@ export async function updateCartLines(
   cartId: string,
   lines: Array<{ id: string; quantity: number }>,
 ): Promise<CartActionResult> {
+  if (isDemoCartId(cartId)) {
+    return updateDemoCartLines(lines);
+  }
   if (!isShopifyConfigured()) return cartFailure('update', 'DEMO_MODE', 'El carrito no está disponible en modo demostración.');
   try {
     const data = await shopifyFetch<{ cartLinesUpdate: CartPayload }>({
@@ -326,6 +338,9 @@ export async function updateCartLines(
 }
 
 export async function removeCartLines(cartId: string, lineIds: string[]): Promise<CartActionResult> {
+  if (isDemoCartId(cartId)) {
+    return removeDemoCartLines(lineIds);
+  }
   if (!isShopifyConfigured()) return cartFailure('remove', 'DEMO_MODE', 'El carrito no está disponible en modo demostración.');
   try {
     const data = await shopifyFetch<{ cartLinesRemove: CartPayload }>({
@@ -339,6 +354,9 @@ export async function removeCartLines(cartId: string, lineIds: string[]): Promis
 }
 
 export async function applyCartDiscountCode(cartId: string, discountCodes: string[]): Promise<CartActionResult> {
+  if (isDemoCartId(cartId)) {
+    return getDemoCart();
+  }
   if (!isShopifyConfigured()) {
     return cartFailure('discount', 'DEMO_MODE', 'El descuento se aplicará cuando Shopify esté conectado.');
   }

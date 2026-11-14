@@ -10,6 +10,7 @@ import {
 } from '@/lib/collection-images';
 import { Link } from 'react-router-dom';
 import { useShopify } from '@/contexts/ShopifyContext';
+import { MOCK_PRODUCTS } from '@/lib/shopify/mockData';
 import '@/styles/wachi-collection.css';
 import '@/styles/accessories-collection.css';
 
@@ -126,7 +127,8 @@ const CollectionShowcase = ({
   const activeDescription = activeColor?.description ?? activePiece?.description ?? '';
 
   const activeShopifyProduct = activePiece
-    ? products.find((product) => product.handle === activePiece.id)
+    ? products.find((product) => product.handle === activePiece.id) ??
+      MOCK_PRODUCTS.find((product) => product.handle === activePiece.id)
     : undefined;
   const activeVariant = (() => {
     if (!activeShopifyProduct) return undefined;
@@ -328,7 +330,9 @@ const CollectionShowcase = ({
 
               <div className={`wachi-collection__grid${isSinglePiece ? ' wachi-collection__grid--single' : ''}`}>
                 {pieces.map((piece) => {
-                  const shopifyPiece = products.find((product) => product.handle === piece.id);
+                  const shopifyPiece =
+                    products.find((product) => product.handle === piece.id) ??
+                    MOCK_PRODUCTS.find((product) => product.handle === piece.id);
                   const displayTitle = shopifyPiece?.title || piece.name;
                   return (
                     <article
@@ -532,7 +536,9 @@ const CollectionShowcase = ({
                             style={{ backgroundColor: color.swatch }}
                             onClick={() => {
                               setSelectedColorId(color.id);
-                              setPerspectiveIndex(0);
+                              setPerspectiveIndex((prev) =>
+                                Math.min(prev, Math.max(0, color.perspectives.length - 1)),
+                              );
                             }}
                           />
                         );
