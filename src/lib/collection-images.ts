@@ -113,6 +113,19 @@ export function preloadCollectionGrid(collectionId: CollectionId): Promise<void[
   return preloadResponsiveSources(config.gridSources, config.gridSizes, 'high');
 }
 
+const GALLERY_COVER_SOURCES: readonly { src: string; sizes: string }[] = [
+  { src: '/images/shopify-demo/coleccion/wachi-hero-horizontal.png', sizes: '(max-width: 850px) 100vw, 60vw' },
+  { src: '/images/shopify-demo/coleccion/wachi-mobile-left.webp', sizes: '100vw' },
+  { src: '/images/shopify-demo/accesorios-tarjetero.jpeg', sizes: '(max-width: 850px) 100vw, 50vw' },
+  { src: '/images/shopify-demo/joyeria/cosmos-hero.webp', sizes: '(max-width: 850px) 100vw, 50vw' },
+];
+
+export function preloadShoppableGalleryCovers(priority: 'high' | 'low' = 'low'): Promise<void[]> {
+  return Promise.all(
+    GALLERY_COVER_SOURCES.map(({ src, sizes }) => preloadResponsiveImage(src, sizes, priority)),
+  );
+}
+
 interface UseCollectionGridReadyOptions {
   gridSources: readonly string[];
   gridSizes: string;

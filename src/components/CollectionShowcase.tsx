@@ -5,6 +5,7 @@ import { catalogImageProps } from '@/lib/catalog-images';
 import {
   COLLECTION_REGISTRY,
   preloadResponsiveSources,
+  preloadShoppableGalleryCovers,
   useCollectionGridReady,
   type CollectionId,
 } from '@/lib/collection-images';
@@ -158,6 +159,21 @@ const CollectionShowcase = ({
     perspectiveSizes: stageSizes,
   });
 
+  useEffect(() => {
+    if (!isGridReady) return;
+    void preloadShoppableGalleryCovers('low');
+  }, [isGridReady]);
+
+  const handleIntentPreloadGallery = () => {
+    void preloadShoppableGalleryCovers('high');
+  };
+
+  const handleExitToGallery = () => {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  };
+
   const clearFeedbackTimer = () => {
     if (feedbackTimerRef.current !== null) {
       window.clearTimeout(feedbackTimerRef.current);
@@ -260,13 +276,25 @@ const CollectionShowcase = ({
             <ChevronLeft size={22} strokeWidth={1.5} />
           </button>
         ) : (
-          <Link to={galleryUrl} className="wachi-collection__icon" aria-label="Volver a la galería">
+          <Link
+            to={galleryUrl}
+            onClick={handleExitToGallery}
+            onMouseEnter={handleIntentPreloadGallery}
+            onFocus={handleIntentPreloadGallery}
+            onTouchStart={handleIntentPreloadGallery}
+            className="wachi-collection__icon"
+            aria-label="Volver a la galería"
+          >
             <ArrowLeft size={23} strokeWidth={1.45} />
           </Link>
         )}
 
         <Link
           to={galleryUrl}
+          onClick={handleExitToGallery}
+          onMouseEnter={handleIntentPreloadGallery}
+          onFocus={handleIntentPreloadGallery}
+          onTouchStart={handleIntentPreloadGallery}
           className={`wachi-collection__wordmark${activePiece ? ' wachi-collection__wordmark--hidden' : ''}`}
           tabIndex={activePiece ? -1 : undefined}
         >

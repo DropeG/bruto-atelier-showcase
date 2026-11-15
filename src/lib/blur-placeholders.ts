@@ -26,6 +26,9 @@ export const blurPlaceholders: { [key: string]: string } = {
   accesorios: "data:image/webp;base64,UklGRmIAAABXRUJQVlA4IFYAAABwAgCdASoKAAoAAUAmJZQCdAYqN2zMmMeXIakAAP7z8Sv8oqygoh6Cw6u2I3UhTfaZLbzmetUf63+P9uQuOp+iZNhuQLUW5qpnJwZH0CkEhY4oMnGAAA==",
   vestuario: "data:image/webp;base64,UklGRngAAABXRUJQVlA4IGwAAAAQAgCdASoKAAoAAUAmJQBOgCL4kEqwvD5AAP78OgDf4TiY7SJjenqhgD2sP28LiEC8ntr0VSrGCsPBncfGcWmmLcB8X9WQ/n3zzOphfbQbWeta8C9d3ZnkNQ0pkefH7VxmH0iZhf1t8ZWkAAA=",
   joyeria: "data:image/webp;base64,UklGRpIAAABXRUJQVlA4IIYAAAAwAgCdASoKAAoAAUAmJbACdAEWzMXzCWIJgAD+x3tFr7dUqzVe9Xcisj4rhTCP359eMrLHeR88pzcs3iAGtdCi/6CaNTXpY1QP/jlpyJfdWzX+X+i33inqgpjMD0gxPpGauePV8UjN5BVu0R8FH437mTmr4Xv2BXn9LuHqTAXgP/qG1s7gAA==",
+  wachiHero: "data:image/webp;base64,UklGRjIAAABXRUJQVlA4ICYAAADwAQCdASoKAAYABUB8JZQCdAELWnNXmgAA94yyHXqzDG9CnJMAAA==",
+  cuoroHero: "data:image/webp;base64,UklGRjoAAABXRUJQVlA4IC4AAACQAQCdASoKAAkABUB8JZwAAlj8utwA/mVCjpnpqvFX4Wriz+jLf9hWMYx4A8AA",
+  cosmosHero: "data:image/webp;base64,UklGRjgAAABXRUJQVlA4ICwAAACwAQCdASoIAAoABUB8JZACdADcc5QAAPcm2oEgwJAb+nNDZiSMNGdstEbAAA==",
 };
 
 export const getBlurDataUrl = (imageKey: string): string | undefined => {

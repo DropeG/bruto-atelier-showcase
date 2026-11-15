@@ -5,6 +5,7 @@ import { catalogImageProps } from '@/lib/catalog-images';
 import {
   COLLECTION_REGISTRY,
   preloadResponsiveSources,
+  preloadShoppableGalleryCovers,
   useCollectionGridReady,
 } from '@/lib/collection-images';
 import { Link } from 'react-router-dom';
@@ -208,6 +209,15 @@ const WachiCollection = () => {
     perspectiveSizes: STAGE_IMAGE_SIZES,
   });
 
+  useEffect(() => {
+    if (!isGridReady) return;
+    void preloadShoppableGalleryCovers('low');
+  }, [isGridReady]);
+
+  const handleIntentPreloadGallery = () => {
+    void preloadShoppableGalleryCovers('high');
+  };
+
   const handleOpenPiece = (kind: WachiPiece['kind']) => {
     const target = pieces.find((piece) => piece.kind === kind);
     if (target) preloadPiecePerspectives(target);
@@ -284,7 +294,15 @@ const WachiCollection = () => {
             <ChevronLeft size={22} strokeWidth={1.5} />
           </button>
         ) : (
-          <Link to={galleryUrl} onClick={handleExitToGallery} className="wachi-collection__icon" aria-label="Volver a la galería">
+          <Link
+            to={galleryUrl}
+            onClick={handleExitToGallery}
+            onMouseEnter={handleIntentPreloadGallery}
+            onFocus={handleIntentPreloadGallery}
+            onTouchStart={handleIntentPreloadGallery}
+            className="wachi-collection__icon"
+            aria-label="Volver a la galería"
+          >
             <ArrowLeft size={23} strokeWidth={1.45} />
           </Link>
         )}
@@ -292,6 +310,9 @@ const WachiCollection = () => {
         <Link
           to={galleryUrl}
           onClick={handleExitToGallery}
+          onMouseEnter={handleIntentPreloadGallery}
+          onFocus={handleIntentPreloadGallery}
+          onTouchStart={handleIntentPreloadGallery}
           className={`wachi-collection__wordmark${showPieceOrCheckoutHeader ? ' wachi-collection__wordmark--hidden' : ''}`}
           tabIndex={showPieceOrCheckoutHeader ? -1 : undefined}
         >

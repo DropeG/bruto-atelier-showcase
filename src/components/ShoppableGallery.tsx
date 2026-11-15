@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { catalogImageProps } from '@/lib/catalog-images';
+import { blurPlaceholders } from '@/lib/blur-placeholders';
 import { preloadCollectionGrid, type CollectionId } from '@/lib/collection-images';
 import { Link } from 'react-router-dom';
 import { useCollectionSnap } from '@/hooks/useCollectionSnap';
@@ -48,6 +49,13 @@ const CatalogCollectionCard = ({ collection, isDemo, position, onNavigate }: Cat
         ? '/images/shopify-demo/joyeria/cosmos-hero.webp'
         : undefined;
   const imageUrl = localHeroFallback || image?.url;
+  const blurPlaceholder = isWachi
+    ? blurPlaceholders.wachiHero
+    : isCuoro
+      ? blurPlaceholders.cuoroHero
+      : isCosmos
+        ? blurPlaceholders.cosmosHero
+        : undefined;
   const actionLabel = 'Ver';
   const collectionId = collectionIdForHandle(collection.handle);
   const articleRef = useRef<HTMLElement>(null);
@@ -89,7 +97,18 @@ const CatalogCollectionCard = ({ collection, isDemo, position, onNavigate }: Cat
         className="catalog-piece__link"
         aria-label={`${actionLabel} ${collection.title}`}
       >
-        <div className="catalog-piece__media">
+        <div
+          className="catalog-piece__media"
+          style={
+            blurPlaceholder
+              ? {
+                  backgroundImage: `url(${blurPlaceholder})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                }
+              : undefined
+          }
+        >
           {imageUrl && (
             <picture>
               {mobileImage && (

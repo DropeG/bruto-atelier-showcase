@@ -13,8 +13,41 @@ type HomepageCollectionsResult = {
 const PREFERRED_HANDLES = ["wachi", "cuoro", "cosmos"];
 const EXCLUDED_HANDLES = new Set(["frontpage", "homepage-featured"]);
 const COLLECTION_LIMIT = 3;
+const SESSION_CACHE_KEY = "bruto_homepage_collections_v1";
 
 let cachedCollections: ShopifyCollection[] | null = null;
+let hasValidatedLiveCollections = false;
+
+function readSessionCollections(): ShopifyCollection[] | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.sessionStorage.getItem(SESSION_CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) && parsed.length > 0 ? (parsed as ShopifyCollection[]) : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeSessionCollections(collections: ShopifyCollection[]): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.sessionStorage.setItem(SESSION_CACHE_KEY, JSON.stringify(collections));
+  } catch {
+    // Ignore storage quota or private-mode restrictions.
+  }
+}
+
+function getInitialCollections(): ShopifyCollection[] {
+  if (cachedCollections !== null) return cachedCollections;
+  const fromSession = readSessionCollections();
+  if (fromSession) {
+    cachedCollections = fromSession;
+    return fromSession;
+  }
+  return selectHomepageCollections(MOCK_COLLECTIONS);
+}
 
 function selectHomepageCollections(collections: ShopifyCollection[]): ShopifyCollection[] {
   const visible = collections.filter((item) => !EXCLUDED_HANDLES.has(item.handle));
@@ -34,10 +67,9 @@ function selectHomepageCollections(collections: ShopifyCollection[]): ShopifyCol
  */
 export function useHomepageCollections(): HomepageCollectionsResult {
   const { status, isLoading: contextIsLoading } = useShopify();
-  const [collections, setCollections] = useState<ShopifyCollection[] | null>(
-    () => cachedCollections,
+  const [collections, setCollections] = useState<ShopifyCollection[]>(
+    () => getInitialCollections(),
   );
-  const [isFetching, setIsFetching] = useState(false);
 
   const forcedDemo = useMemo(() => {
     if (typeof window === "undefined") return false;
@@ -51,19 +83,16 @@ export function useHomepageCollections(): HomepageCollectionsResult {
   useEffect(() => {
     if (isDemo) {
       cachedCollections = null;
-      setCollections(null);
-      setIsFetching(false);
+      hasValidatedLiveCollections = false;
       return;
     }
 
-    if (cachedCollections !== null) {
+    if (hasValidatedLiveCollections && cachedCollections !== null) {
       setCollections(cachedCollections);
-      setIsFetching(false);
       return;
     }
 
     let active = true;
-    setIsFetching(true);
 
     shopifyClient
       .getHomepageCollections(10)
@@ -71,13 +100,12 @@ export function useHomepageCollections(): HomepageCollectionsResult {
         if (!active) return;
         const selected = selectHomepageCollections(result.collections);
         cachedCollections = selected;
+        hasValidatedLiveCollections = true;
+        writeSessionCollections(selected);
         setCollections(selected);
       })
       .catch(() => {
-        if (active) setCollections([]);
-      })
-      .finally(() => {
-        if (active) setIsFetching(false);
+        // Keep immediate fallback/session collections on network error.
       });
 
     return () => {
@@ -94,8 +122,8 @@ export function useHomepageCollections(): HomepageCollectionsResult {
   }
 
   return {
-    collections: collections ?? [],
-    isLoading: isFetching || (collections === null && contextIsLoading),
+    collections,
+    isLoading: false,
     isDemo: false,
   };
 }
