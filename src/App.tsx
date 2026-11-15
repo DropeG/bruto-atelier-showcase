@@ -47,7 +47,8 @@ const App = () => (
               <Route path="/esenciales" element={<Category />} />
               <Route path="/joyeria" element={<Navigate to="/coleccion/cosmos" replace />} />
               <Route path="/showcase/joyeria" element={<Navigate to="/coleccion/cosmos" replace />} />
-              <Route path="/accesorios" element={<Category />} />
+              <Route path="/accesorios" element={<Navigate to="/coleccion/accesorios" replace />} />
+              <Route path="/showcase/accesorios" element={<Navigate to="/coleccion/accesorios" replace />} />
               <Route path="/categoria/:category/:title/:id" element={<Category />} />
               
               <Route path="/*" element={<NotFound />} />

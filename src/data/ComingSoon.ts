@@ -29,11 +29,4 @@ export const comingSoonCategories: Record<string, ComingSoonCategory> = {
     description: "Diseños de vestuario atemporal en lino y fibras naturales de confección delicada. Próximamente.",
     bgImage: "/images/vestuario/vestuario.webp",
   },
-  accesorios: {
-    id: "accesorios",
-    title: "ACCESORIOS",
-    subtitle: "Objetos de acento & carácter",
-    description: "Detalles que transforman el ambiente y expresan singularidad. Disponible pronto.",
-    bgImage: "/images/accesorios/accesorios.webp",
-  },
 };
