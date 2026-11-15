@@ -11,6 +11,7 @@ import {
 import { SingleVideoBanner } from "@/components/VideoSection";
 import { useScroll } from "@/contexts/ScrollContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useShopify } from "@/contexts/ShopifyContext";
 import { blurPlaceholders } from "@/lib/blur-placeholders";
 import { GalleryService } from "@/lib/gallery";
 import imageHome1 from "/images/home/image1.webp";
@@ -27,6 +28,7 @@ import ImageRow from "@/components/ImageRow";
  
 const Index = () => {
   const { user, openAuthModal } = useAuth();
+  const { isCartOpen } = useShopify();
   const [openNosotros, setOpenNosotros] = useState(false);
   const [showDiscount, setShowDiscount] = useState(true);
   const { getSectionId, scrollToSection } = useScroll();
@@ -95,8 +97,8 @@ const Index = () => {
   return (
     <div className="relative">
       {!isDemoMode && <NosotrosModal isOpen={openNosotros} onClose={() => setOpenNosotros(false)} />}
-      {!isDemoMode && <WhatsAppButton />}
-      {!isDemoMode && !user && <DiscountButton onClick={openAuthModal} isVisible={showDiscount} />}
+      {!isDemoMode && !isCartOpen && <WhatsAppButton />}
+      {!isDemoMode && !isCartOpen && !user && <DiscountButton onClick={openAuthModal} isVisible={showDiscount} />}
 
       {/* Main Collection Container */}
       <div

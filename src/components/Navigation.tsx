@@ -9,6 +9,7 @@ import { comingSoonCategories } from "@/data/ComingSoon";
 import { getBlurDataUrl } from "@/lib/blur-placeholders";
 import NextSeasonDepthCarousel from "./NextSeasonDepthCarousel";
 import { useAuth } from "@/contexts/AuthContext";
+import { useShopify } from "@/contexts/ShopifyContext";
 
 const navLinks = [
   { label: "Arquitectura", href: "#arquitectura" },
@@ -27,6 +28,7 @@ type NavigationProps = {
 
 const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) => {
   const { user, logout, openAuthModal, authModalMode } = useAuth();
+  const { cart, openCart } = useShopify();
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -130,10 +132,17 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
 
               {/* Shopping cart icon */}
               <button
-                className="p-2 hover:opacity-60 transition-opacity"
-                aria-label="Shopping cart"
+                type="button"
+                onClick={openCart}
+                className="flex items-center justify-center min-w-[48px] min-h-[48px] p-1.5 hover:opacity-60 transition-opacity cursor-pointer"
+                aria-label={`Abrir bolsa${cart?.totalQuantity ? `, ${cart.totalQuantity} piezas` : ""}`}
               >
-                <img src="/bag.svg" alt="Carrito" className="w-12 h-12" />
+                {cart?.totalQuantity ? (
+                  <span className="font-sans text-[13px] font-medium tracking-[0.04em] tabular-nums text-foreground -mr-3">
+                    {cart.totalQuantity}
+                  </span>
+                ) : null}
+                <img src="/bag.svg" alt="Carrito" className="w-14 h-14 shrink-0" />
               </button>
 
               {/* User/Login icon (to the right of the cart) */}
@@ -199,10 +208,17 @@ const Navigation = ({ position = "fixed", hideIcons = false }: NavigationProps) 
             <div className={`items-center gap-4 order-3 md:hidden ${isMenuOpen ? "hidden" : "flex"}`}>
               {/* Shopping bag - mobile */}
               <button
-                className="relative z-50 p-2"
-                aria-label="Shopping cart"
+                type="button"
+                onClick={openCart}
+                className="relative z-50 flex items-center justify-center min-w-[52px] min-h-[52px] p-1.5 -mr-2 active:opacity-60 transition-opacity touch-manipulation cursor-pointer"
+                aria-label={`Abrir bolsa${cart?.totalQuantity ? `, ${cart.totalQuantity} piezas` : ""}`}
               >
-                <img src="/bag.svg" alt="Carrito" className="w-14 h-14" />
+                {cart?.totalQuantity ? (
+                  <span className="font-sans text-[14px] font-medium tracking-[0.04em] tabular-nums text-foreground -mr-3.5">
+                    {cart.totalQuantity}
+                  </span>
+                ) : null}
+                <img src="/bag.svg" alt="Carrito" className="w-16 h-16 shrink-0" />
               </button>
             </div>
           )}
