@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { ArrowLeft, ChevronLeft, ChevronRight, ShoppingBag, X } from 'lucide-react';
-import { AnimatePresence, LayoutGroup, motion } from 'framer-motion';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowLeft, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion';
 import { catalogImageProps } from '@/lib/catalog-images';
 import {
   COLLECTION_REGISTRY,
@@ -10,6 +10,7 @@ import {
 } from '@/lib/collection-images';
 import { Link } from 'react-router-dom';
 import { useShopify } from '@/contexts/ShopifyContext';
+import { useStageVerticalNav, type VerticalSlideDirection } from '@/hooks/use-stage-vertical-nav';
 import WachiRequestDrawer, { type WachiRequestLineItem } from '@/components/WachiRequestDrawer';
 import '@/styles/wachi-collection.css';
 
@@ -140,6 +141,11 @@ const yeezySpring = {
   mass: 0.9,
 } as const;
 
+const stageSlideTransition = {
+  duration: 0.42,
+  ease: [0.22, 1, 0.36, 1],
+} as const;
+
 const WACHI_GRID_SIZES = COLLECTION_REGISTRY.wachi.gridSizes;
 const WACHI_GRID_SOURCES = COLLECTION_REGISTRY.wachi.gridSources;
 const STAGE_IMAGE_SIZES = '(max-width: 850px) 84vw, 44vw';
@@ -155,14 +161,25 @@ function preloadPiecePerspectives(piece: WachiPiece) {
   );
 }
 
+function preloadNeighbourPieces(index: number) {
+  if (pieces.length <= 1) return;
+  const next = pieces[(index + 1) % pieces.length];
+  const prev = pieces[(index - 1 + pieces.length) % pieces.length];
+  if (next) preloadPiecePerspectives(next);
+  if (prev && prev.kind !== next?.kind) preloadPiecePerspectives(prev);
+}
+
 const WachiCollection = () => {
-  const { cart, openCart } = useShopify();
+  const { cart, isCartOpen, openCart } = useShopify();
+  const mainRef = useRef<HTMLElement | null>(null);
   const [selectedKind, setSelectedKind] = useState<WachiPiece['kind'] | null>(null);
+  const [slideDirection, setSlideDirection] = useState<VerticalSlideDirection>(0);
   const [perspectiveIndex, setPerspectiveIndex] = useState(0);
   const [isSizePickerOpen, setIsSizePickerOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [isRequestDrawerOpen, setIsRequestDrawerOpen] = useState(false);
   const [requestItems, setRequestItems] = useState<WachiRequestLineItem[]>([]);
+  const shouldReduceMotion = useReducedMotion();
 
   const stockBagCount = cart?.totalQuantity || 0;
 
@@ -219,8 +236,14 @@ const WachiCollection = () => {
   };
 
   const handleOpenPiece = (kind: WachiPiece['kind']) => {
-    const target = pieces.find((piece) => piece.kind === kind);
-    if (target) preloadPiecePerspectives(target);
+    const targetIndex = pieces.findIndex((piece) => piece.kind === kind);
+    const target = targetIndex !== -1 ? pieces[targetIndex] : undefined;
+    if (target) {
+      preloadPiecePerspectives(target);
+      preloadNeighbourPieces(targetIndex);
+    }
+    mainRef.current?.scrollIntoView?.({ block: 'start', behavior: 'instant' as ScrollBehavior });
+    setSlideDirection(0);
     setPerspectiveIndex(0);
     setIsSizePickerOpen(false);
     setSelectedSize(null);
@@ -229,11 +252,58 @@ const WachiCollection = () => {
   };
 
   const handleClosePiece = () => {
+    setSlideDirection(0);
     setPerspectiveIndex(0);
     setIsSizePickerOpen(false);
     setSelectedSize(null);
     setIsRequestDrawerOpen(false);
     setSelectedKind(null);
+  };
+
+  const handleVerticalNavigatePiece = (direction: -1 | 1) => {
+    if (!selectedKind || pieces.length <= 1) return;
+    const currentIndex = pieces.findIndex((piece) => piece.kind === selectedKind);
+    if (currentIndex === -1) return;
+    const nextIndex = (currentIndex + direction + pieces.length) % pieces.length;
+    const nextPiece = pieces[nextIndex];
+    if (!nextPiece) return;
+
+    preloadPiecePerspectives(nextPiece);
+    preloadNeighbourPieces(nextIndex);
+    setSlideDirection(direction);
+    setPerspectiveIndex(0);
+    setIsSizePickerOpen(false);
+    setSelectedSize(null);
+    setSelectedKind(nextPiece.kind);
+  };
+
+  useStageVerticalNav({
+    enabled: Boolean(activePiece) && !isRequestDrawerOpen && !isCartOpen,
+    itemCount: pieces.length,
+    onNavigate: handleVerticalNavigatePiece,
+  });
+
+  const mediaSlideVariants = {
+    enter: (dir: VerticalSlideDirection) =>
+      dir === 0
+        ? { opacity: 1, y: 0 }
+        : {
+            opacity: 0,
+            y: shouldReduceMotion ? 0 : dir > 0 ? '100%' : '-100%',
+          },
+    center: (dir: VerticalSlideDirection) => ({
+      opacity: 1,
+      y: 0,
+      transition: dir === 0 ? yeezySpring : stageSlideTransition,
+    }),
+    exit: (dir: VerticalSlideDirection) =>
+      dir === 0
+        ? { opacity: 0, y: 0, transition: { duration: 0.18, ease: 'easeOut' } }
+        : {
+            opacity: 0,
+            y: shouldReduceMotion ? 0 : dir > 0 ? '-100%' : '100%',
+            transition: stageSlideTransition,
+          },
   };
 
   const handlePrevPerspective = () => {
@@ -271,9 +341,15 @@ const WachiCollection = () => {
   }, [activePiece, isSizePickerOpen, isRequestDrawerOpen]);
 
   const showPieceOrCheckoutHeader = Boolean(activePiece || isRequestDrawerOpen);
+  const isPieceStageLocked = Boolean(activePiece) && !isRequestDrawerOpen;
 
   return (
-    <main className={`wachi-collection${showPieceOrCheckoutHeader ? ' wachi-collection--stage-active' : ''}`}>
+    <main
+      ref={mainRef}
+      className={`wachi-collection${showPieceOrCheckoutHeader ? ' wachi-collection--stage-active' : ''}${
+        isPieceStageLocked ? ' wachi-collection--piece-stage' : ''
+      }`}
+    >
       <header className="wachi-collection__header">
         {isRequestDrawerOpen ? (
           <button
@@ -326,7 +402,7 @@ const WachiCollection = () => {
           aria-label={`Abrir bolsa${stockBagCount ? `, ${stockBagCount} piezas` : ''}`}
         >
           {stockBagCount ? <span className="wachi-collection__bag-count">{stockBagCount}</span> : null}
-          <ShoppingBag size={20} strokeWidth={1.45} />
+          <img src="/bag.svg" alt="" aria-hidden="true" className="wachi-collection__bag-img" />
         </button>
       </header>
 
@@ -406,9 +482,10 @@ const WachiCollection = () => {
             </motion.section>
           ) : (
             <motion.section
-              key={`wachi-stage-${activePiece.kind}`}
+              key="wachi-stage"
               className="wachi-stage"
               aria-label={`Vista detallada de ${activePiece.name}`}
+              data-slide-direction={slideDirection}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -428,26 +505,41 @@ const WachiCollection = () => {
                   <ChevronLeft size={22} strokeWidth={1.6} />
                 </motion.button>
 
-                <motion.div
-                  layoutId={`wachi-piece-image-${activePiece.kind}`}
-                  transition={yeezySpring}
-                  className="wachi-stage__media"
+                <div
+                  className={`wachi-stage__media-slot${
+                    slideDirection !== 0 ? ' wachi-stage__media-slot--sliding' : ''
+                  }`}
                 >
-                  {activePiece.perspectives.map((perspective, idx) => {
-                    const isActive = idx === perspectiveIndex;
-                    return (
-                      <img
-                        key={perspective.src}
-                        {...catalogImageProps(perspective.src, STAGE_IMAGE_SIZES)}
-                        alt={perspective.alt}
-                        loading="eager"
-                        decoding="sync"
-                        aria-hidden={!isActive}
-                        className={`wachi-stage__img ${perspective.className ?? ''}${isActive ? '' : ' wachi-stage__img--hidden'}`}
-                      />
-                    );
-                  })}
-                </motion.div>
+                  <AnimatePresence mode="popLayout" custom={slideDirection} initial={false}>
+                    <motion.div
+                      key={activePiece.kind}
+                      layoutId={
+                        slideDirection === 0 ? `wachi-piece-image-${activePiece.kind}` : undefined
+                      }
+                      custom={slideDirection}
+                      variants={mediaSlideVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      className="wachi-stage__media"
+                    >
+                      {activePiece.perspectives.map((perspective, idx) => {
+                        const isActive = idx === perspectiveIndex;
+                        return (
+                          <img
+                            key={perspective.src}
+                            {...catalogImageProps(perspective.src, STAGE_IMAGE_SIZES)}
+                            alt={perspective.alt}
+                            loading="eager"
+                            decoding="sync"
+                            aria-hidden={!isActive}
+                            className={`wachi-stage__img ${perspective.className ?? ''}${isActive ? '' : ' wachi-stage__img--hidden'}`}
+                          />
+                        );
+                      })}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
 
                 <motion.button
                   type="button"
@@ -488,7 +580,7 @@ const WachiCollection = () => {
 
                 <div className="wachi-stage__title-row">
                   <motion.h2
-                    layoutId={`wachi-piece-title-${activePiece.kind}`}
+                    layoutId={slideDirection === 0 ? `wachi-piece-title-${activePiece.kind}` : undefined}
                     transition={yeezySpring}
                     className="wachi-stage__title"
                   >

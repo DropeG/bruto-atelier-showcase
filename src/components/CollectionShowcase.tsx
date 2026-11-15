@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowLeft, Check, ChevronLeft, ChevronRight, Loader2, Plus, ShoppingBag, X } from 'lucide-react';
+import { ArrowLeft, Check, ChevronLeft, ChevronRight, Loader2, Plus, X } from 'lucide-react';
 import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from 'framer-motion';
 import { catalogImageProps } from '@/lib/catalog-images';
 import {
@@ -11,6 +11,7 @@ import {
 } from '@/lib/collection-images';
 import { Link } from 'react-router-dom';
 import { useShopify } from '@/contexts/ShopifyContext';
+import { useStageVerticalNav, type VerticalSlideDirection } from '@/hooks/use-stage-vertical-nav';
 import { MOCK_PRODUCTS } from '@/lib/shopify/mockData';
 import '@/styles/wachi-collection.css';
 import '@/styles/accessories-collection.css';
@@ -62,6 +63,11 @@ const springTransition = {
   mass: 0.9,
 } as const;
 
+const stageSlideTransition = {
+  duration: 0.42,
+  ease: [0.22, 1, 0.36, 1],
+} as const;
+
 const DEFAULT_STAGE_SIZES = '(max-width: 850px) 84vw, 44vw';
 
 function preloadPiecePerspectives(piece: CollectionPiece, stageSizes: string) {
@@ -72,6 +78,18 @@ function preloadPiecePerspectives(piece: CollectionPiece, stageSizes: string) {
     ]),
   );
   void preloadResponsiveSources(sources, stageSizes, 'high');
+}
+
+function preloadNeighbourPieces(
+  pieces: readonly CollectionPiece[],
+  index: number,
+  stageSizes: string,
+) {
+  if (pieces.length <= 1) return;
+  const next = pieces[(index + 1) % pieces.length];
+  const prev = pieces[(index - 1 + pieces.length) % pieces.length];
+  if (next) preloadPiecePerspectives(next, stageSizes);
+  if (prev && prev.id !== next?.id) preloadPiecePerspectives(prev, stageSizes);
 }
 
 function formatClpPrice(amount?: string, fallback?: string): string {
@@ -96,7 +114,9 @@ const CollectionShowcase = ({
   pieces,
 }: CollectionShowcaseProps) => {
   const { cart, isCartOpen, openCart, products, addToCart, isCartLoading } = useShopify();
+  const mainRef = useRef<HTMLElement | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [slideDirection, setSlideDirection] = useState<VerticalSlideDirection>(0);
   const [perspectiveIndex, setPerspectiveIndex] = useState(0);
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
   const [selectedColorId, setSelectedColorId] = useState<string | null>(null);
@@ -186,8 +206,14 @@ const CollectionShowcase = ({
   const handleOpenPiece = (id: string) => {
     clearFeedbackTimer();
     setAddStatus('idle');
-    const target = pieces.find((piece) => piece.id === id);
-    if (target) preloadPiecePerspectives(target, stageSizes);
+    const targetIndex = pieces.findIndex((piece) => piece.id === id);
+    const target = targetIndex !== -1 ? pieces[targetIndex] : undefined;
+    if (target) {
+      preloadPiecePerspectives(target, stageSizes);
+      preloadNeighbourPieces(pieces, targetIndex, stageSizes);
+    }
+    mainRef.current?.scrollIntoView?.({ block: 'start', behavior: 'instant' as ScrollBehavior });
+    setSlideDirection(0);
     setPerspectiveIndex(0);
     setIsColorPickerOpen(false);
     setSelectedColorId(target?.colors?.[0]?.id ?? null);
@@ -197,10 +223,59 @@ const CollectionShowcase = ({
   const handleClosePiece = () => {
     clearFeedbackTimer();
     setAddStatus('idle');
+    setSlideDirection(0);
     setPerspectiveIndex(0);
     setIsColorPickerOpen(false);
     setSelectedColorId(null);
     setSelectedId(null);
+  };
+
+  const handleVerticalNavigatePiece = (direction: -1 | 1) => {
+    if (!selectedId || pieces.length <= 1) return;
+    const currentIndex = pieces.findIndex((piece) => piece.id === selectedId);
+    if (currentIndex === -1) return;
+    const nextIndex = (currentIndex + direction + pieces.length) % pieces.length;
+    const nextPiece = pieces[nextIndex];
+    if (!nextPiece) return;
+
+    clearFeedbackTimer();
+    setAddStatus('idle');
+    preloadPiecePerspectives(nextPiece, stageSizes);
+    preloadNeighbourPieces(pieces, nextIndex, stageSizes);
+    setSlideDirection(direction);
+    setPerspectiveIndex(0);
+    setIsColorPickerOpen(false);
+    setSelectedColorId(nextPiece.colors?.[0]?.id ?? null);
+    setSelectedId(nextPiece.id);
+  };
+
+  useStageVerticalNav({
+    enabled: Boolean(activePiece) && !isCartOpen,
+    itemCount: pieces.length,
+    onNavigate: handleVerticalNavigatePiece,
+  });
+
+  const mediaSlideVariants = {
+    enter: (dir: VerticalSlideDirection) =>
+      dir === 0
+        ? { opacity: 1, y: 0 }
+        : {
+            opacity: 0,
+            y: shouldReduceMotion ? 0 : dir > 0 ? '100%' : '-100%',
+          },
+    center: (dir: VerticalSlideDirection) => ({
+      opacity: 1,
+      y: 0,
+      transition: dir === 0 ? springTransition : stageSlideTransition,
+    }),
+    exit: (dir: VerticalSlideDirection) =>
+      dir === 0
+        ? { opacity: 0, y: 0, transition: { duration: 0.18, ease: 'easeOut' } }
+        : {
+            opacity: 0,
+            y: shouldReduceMotion ? 0 : dir > 0 ? '-100%' : '100%',
+            transition: stageSlideTransition,
+          },
   };
 
   const handleAddToCart = async () => {
@@ -264,7 +339,12 @@ const CollectionShowcase = ({
   const isSinglePiece = pieces.length === 1;
 
   return (
-    <main className={`wachi-collection ${className}${activePiece ? ' wachi-collection--stage-active' : ''}`}>
+    <main
+      ref={mainRef}
+      className={`wachi-collection ${className}${
+        activePiece ? ' wachi-collection--stage-active wachi-collection--piece-stage' : ''
+      }`}
+    >
       <header className="wachi-collection__header">
         {activePiece ? (
           <button
@@ -334,7 +414,7 @@ const CollectionShowcase = ({
             animate={bagPulseKey > 0 && !shouldReduceMotion ? { y: [0, -4, 0], scale: [1, 1.15, 1] } : undefined}
             transition={{ duration: 0.42, ease: [0.22, 1, 0.36, 1] }}
           >
-            <ShoppingBag size={20} strokeWidth={1.45} />
+            <img src="/bag.svg" alt="" aria-hidden="true" className="wachi-collection__bag-img" />
           </motion.div>
         </button>
       </header>
@@ -402,9 +482,10 @@ const CollectionShowcase = ({
             </motion.section>
           ) : (
             <motion.section
-              key={`${layoutPrefix}-stage-${activePiece.id}`}
+              key={`${layoutPrefix}-stage`}
               className="wachi-stage"
               aria-label={`Vista detallada de ${activePiece.name}`}
+              data-slide-direction={slideDirection}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -426,26 +507,41 @@ const CollectionShowcase = ({
                   </motion.button>
                 )}
 
-                <motion.div
-                  layoutId={`${layoutPrefix}-piece-image-${activePiece.id}`}
-                  transition={springTransition}
-                  className="wachi-stage__media"
+                <div
+                  className={`wachi-stage__media-slot${
+                    slideDirection !== 0 ? ' wachi-stage__media-slot--sliding' : ''
+                  }`}
                 >
-                  {activePerspectives.map((perspective, idx) => {
-                    const isActive = idx === perspectiveIndex;
-                    return (
-                      <img
-                        key={perspective.src}
-                        {...catalogImageProps(perspective.src, stageSizes)}
-                        alt={perspective.alt}
-                        loading="eager"
-                        decoding="sync"
-                        aria-hidden={!isActive}
-                        className={`wachi-stage__img ${perspective.className ?? ''}${isActive ? '' : ' wachi-stage__img--hidden'}`}
-                      />
-                    );
-                  })}
-                </motion.div>
+                  <AnimatePresence mode="popLayout" custom={slideDirection} initial={false}>
+                    <motion.div
+                      key={activePiece.id}
+                      layoutId={
+                        slideDirection === 0 ? `${layoutPrefix}-piece-image-${activePiece.id}` : undefined
+                      }
+                      custom={slideDirection}
+                      variants={mediaSlideVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      className="wachi-stage__media"
+                    >
+                      {activePerspectives.map((perspective, idx) => {
+                        const isActive = idx === perspectiveIndex;
+                        return (
+                          <img
+                            key={perspective.src}
+                            {...catalogImageProps(perspective.src, stageSizes)}
+                            alt={perspective.alt}
+                            loading="eager"
+                            decoding="sync"
+                            aria-hidden={!isActive}
+                            className={`wachi-stage__img ${perspective.className ?? ''}${isActive ? '' : ' wachi-stage__img--hidden'}`}
+                          />
+                        );
+                      })}
+                    </motion.div>
+                  </AnimatePresence>
+                </div>
 
                 {activePerspectives.length > 1 && (
                   <motion.button
@@ -490,7 +586,7 @@ const CollectionShowcase = ({
 
                 <div className="wachi-stage__title-row">
                   <motion.h2
-                    layoutId={`${layoutPrefix}-piece-title-${activePiece.id}`}
+                    layoutId={slideDirection === 0 ? `${layoutPrefix}-piece-title-${activePiece.id}` : undefined}
                     transition={springTransition}
                     className="wachi-stage__title"
                   >
