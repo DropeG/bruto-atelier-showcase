@@ -12,6 +12,7 @@ import WachiCollection from "./pages/WachiCollection";
 import AccessoriesCollection from "./pages/AccessoriesCollection";
 import CosmosCollection from "./pages/CosmosCollection";
 import CartDrawer from "./components/CartDrawer";
+import RouteMeta from "./components/RouteMeta";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,7 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
+            <RouteMeta />
             <CartDrawer />
             <Routes>
               <Route path="/" element={<Index />} />
