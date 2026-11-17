@@ -337,6 +337,7 @@ const CollectionShowcase = ({
   }, [activePiece, activePerspectives.length, isCartOpen, isColorPickerOpen]);
 
   const isSinglePiece = pieces.length === 1;
+  const pieceParity = pieces.length % 2 === 0 ? 'even' : 'odd';
 
   return (
     <main
@@ -425,6 +426,8 @@ const CollectionShowcase = ({
             <motion.section
               key={`${layoutPrefix}-grid`}
               className="wachi-collection__content"
+              data-piece-count={pieces.length}
+              data-piece-parity={pieceParity}
               aria-labelledby={titleId}
               initial={{ opacity: isGridReady ? 1 : 0 }}
               animate={{ opacity: isGridReady ? 1 : 0 }}
@@ -436,7 +439,11 @@ const CollectionShowcase = ({
                 <h1 id={titleId}>{title}</h1>
               </div>
 
-              <div className={`wachi-collection__grid${isSinglePiece ? ' wachi-collection__grid--single' : ''}`}>
+              <div
+                className={`wachi-collection__grid${isSinglePiece ? ' wachi-collection__grid--single' : ''}`}
+                data-piece-count={pieces.length}
+                data-piece-parity={pieceParity}
+              >
                 {pieces.map((piece) => {
                   const shopifyPiece =
                     products.find((product) => product.handle === piece.id) ??

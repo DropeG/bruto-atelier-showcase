@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import CosmosCollection from './CosmosCollection';
+import CollectionShowcase, { type CollectionPiece } from '@/components/CollectionShowcase';
 import { MOCK_PRODUCTS } from '@/lib/shopify/mockData';
 
 const { addToCartMock } = vi.hoisted(() => ({
@@ -75,5 +76,70 @@ describe('CosmosCollection — Selector de Color Estilo Yeezy', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Cerrar selector de color' }));
     expect(screen.queryByText('SELECCIONAR COLOR')).toBeNull();
     expect(screen.getAllByText('Anillo Cosmos').length).toBeGreaterThan(0);
+  });
+
+  it('exposes data-piece-count and data-piece-parity on grid and content for 1, 2, 3, and 4 pieces', () => {
+    const { container } = render(
+      <MemoryRouter>
+        <CosmosCollection />
+      </MemoryRouter>,
+    );
+
+    const content = container.querySelector('.wachi-collection__content');
+    const grid = container.querySelector('.wachi-collection__grid');
+    expect(content?.getAttribute('data-piece-count')).toBe('1');
+    expect(content?.getAttribute('data-piece-parity')).toBe('odd');
+    expect(grid?.getAttribute('data-piece-count')).toBe('1');
+    expect(grid?.getAttribute('data-piece-parity')).toBe('odd');
+    expect(grid?.classList.contains('wachi-collection__grid--single')).toBe(true);
+
+    cleanup();
+
+    const makePiece = (id: string, name: string): CollectionPiece => ({
+      id,
+      name,
+      description: 'Pieza de prueba',
+      image: '/images/shopify-demo/joyeria/anillo-fondo-blanco.webp',
+      width: 896,
+      height: 896,
+      price: '$100.000',
+      perspectives: [
+        {
+          src: '/images/shopify-demo/joyeria/anillo-fondo-blanco.webp',
+          alt: name,
+          width: 896,
+          height: 896,
+        },
+      ],
+    });
+
+    for (const [count, expectedParity] of [
+      [2, 'even'],
+      [3, 'odd'],
+      [4, 'even'],
+    ] as const) {
+      const pieces = Array.from({ length: count }, (_, idx) => makePiece(`pieza-${idx + 1}`, `Pieza ${idx + 1}`));
+      const rendered = render(
+        <MemoryRouter>
+          <CollectionShowcase
+            collectionId="cosmos"
+            title="COSMOS"
+            titleId={`cosmos-test-${count}`}
+            layoutPrefix="cosmos"
+            className="accessories-collection cosmos-collection"
+            pieces={pieces}
+          />
+        </MemoryRouter>,
+      );
+
+      const multiContent = rendered.container.querySelector('.wachi-collection__content');
+      const multiGrid = rendered.container.querySelector('.wachi-collection__grid');
+      expect(multiContent?.getAttribute('data-piece-count')).toBe(String(count));
+      expect(multiContent?.getAttribute('data-piece-parity')).toBe(expectedParity);
+      expect(multiGrid?.getAttribute('data-piece-count')).toBe(String(count));
+      expect(multiGrid?.getAttribute('data-piece-parity')).toBe(expectedParity);
+      expect(multiGrid?.classList.contains('wachi-collection__grid--single')).toBe(false);
+      cleanup();
+    }
   });
 });

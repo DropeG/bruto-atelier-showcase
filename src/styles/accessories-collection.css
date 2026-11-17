@@ -29,7 +29,20 @@
   justify-content: center;
 }
 
+.accessories-collection .wachi-collection__grid[data-piece-count="2"] {
+  grid-template-columns: repeat(2, minmax(0, 420px));
+  justify-content: center;
+}
+
 @media (max-width: 700px) {
+  .accessories-collection .wachi-collection__content[data-piece-count="1"],
+  .accessories-collection .wachi-collection__content[data-piece-count="2"] {
+    min-height: calc(100dvh - 5.5rem);
+    justify-content: center;
+    padding-top: 1.25rem;
+    padding-bottom: 2.5rem;
+  }
+
   .accessories-collection .wachi-collection__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     row-gap: 2rem;
@@ -39,17 +52,36 @@
     height: min(42vw, 260px);
   }
 
-  .accessories-collection .wachi-collection__piece:last-child {
+  .accessories-collection
+    .wachi-collection__grid[data-piece-parity="odd"]:not([data-piece-count="1"])
+    .wachi-collection__piece:last-child {
     grid-column: 1 / -1;
     width: calc(50% - .75rem);
     justify-self: center;
   }
 
-  .accessories-collection .wachi-collection__grid--single {
-    grid-template-columns: minmax(0, 260px);
+  .accessories-collection .wachi-collection__grid--single,
+  .accessories-collection .wachi-collection__grid[data-piece-count="1"] {
+    grid-template-columns: minmax(0, min(84vw, 380px));
+    margin-top: clamp(1.5rem, 4dvh, 2.5rem);
   }
 
-  .accessories-collection .wachi-collection__grid--single .wachi-collection__piece:last-child {
+  .accessories-collection .wachi-collection__grid[data-piece-count="1"] .wachi-collection__image {
+    height: clamp(250px, 42dvh, 380px);
+  }
+
+  .accessories-collection .wachi-collection__grid[data-piece-count="1"] .wachi-collection__image img {
     width: 100%;
+    height: 100%;
+  }
+
+  .accessories-collection .wachi-collection__grid[data-piece-count="2"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin-top: clamp(1.75rem, 5dvh, 3rem);
+  }
+
+  .accessories-collection .wachi-collection__grid[data-piece-count="2"] .wachi-collection__image {
+    height: clamp(190px, 34dvh, 280px);
   }
 }
