@@ -400,15 +400,17 @@ const WachiCollection = () => {
           BRUTO Atelier
         </Link>
 
-        <button
-          type="button"
-          className="wachi-collection__icon wachi-collection__bag"
-          onClick={openCart}
-          aria-label={`Abrir bolsa${stockBagCount ? `, ${stockBagCount} piezas` : ''}`}
-        >
-          {stockBagCount ? <span className="wachi-collection__bag-count">{stockBagCount}</span> : null}
-          <img src="/bag.svg" alt="" aria-hidden="true" className="wachi-collection__bag-img" />
-        </button>
+        {!isRequestDrawerOpen && (
+          <button
+            type="button"
+            className="wachi-collection__icon wachi-collection__bag"
+            onClick={openCart}
+            aria-label={`Abrir bolsa${stockBagCount ? `, ${stockBagCount} piezas` : ''}`}
+          >
+            {stockBagCount ? <span className="wachi-collection__bag-count">{stockBagCount}</span> : null}
+            <img src="/bag.svg" alt="" aria-hidden="true" className="wachi-collection__bag-img" />
+          </button>
+        )}
       </header>
 
       <LayoutGroup>

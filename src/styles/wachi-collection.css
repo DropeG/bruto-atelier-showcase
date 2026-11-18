@@ -650,16 +650,20 @@ body:has(.wachi-collection--piece-stage) {
 
 /* Yeezy-structured 2-Column Request / Checkout View with Bruto Atelier Typography */
 .wachi-checkout {
-  max-width: 1220px;
+  max-width: 1080px;
   min-height: calc(100dvh - clamp(4.5rem, 9vh, 6rem));
   margin: 0 auto;
-  padding: clamp(1rem, 3.5vh, 2.5rem) clamp(1.25rem, 4.5vw, 4.5rem) clamp(3rem, 7vh, 5rem);
+  padding: clamp(1.25rem, 4vh, 2.75rem) clamp(1.25rem, 4.5vw, 4rem) clamp(3rem, 7vh, 5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .wachi-checkout__grid {
+  width: 100%;
   display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
-  gap: clamp(2.5rem, 7vw, 6.5rem);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2.5rem, 5.5vw, 5rem);
   align-items: start;
 }
 
@@ -1152,6 +1156,24 @@ body:has(.wachi-collection--piece-stage) {
   letter-spacing: 0.16em;
 }
 
+@media (max-width: 1023px) {
+  .wachi-checkout {
+    justify-content: flex-start;
+  }
+  .wachi-checkout__grid {
+    grid-template-columns: 1fr;
+    max-width: 580px;
+    margin: 0 auto;
+    gap: 2.25rem;
+  }
+  .wachi-checkout__summary {
+    order: -1;
+  }
+  .wachi-checkout__field--desktop-only {
+    display: none;
+  }
+}
+
 @media (max-width: 850px) {
   .wachi-collection-flow > .wachi-collection-flow__grid {
     padding-top: 88px;
@@ -1175,12 +1197,17 @@ body:has(.wachi-collection--piece-stage) {
   }
   .wachi-stage__arrow--prev { left: 0; }
   .wachi-stage__arrow--next { right: 0; }
-  .wachi-checkout__grid {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
+}
+
+@media (max-width: 600px) {
+  .wachi-checkout {
+    padding: 1.25rem 1.25rem 3rem;
   }
-  .wachi-checkout__summary {
-    order: -1;
+  .wachi-checkout__row-2 {
+    grid-template-columns: 1fr;
+  }
+  .wachi-checkout__submit {
+    min-height: 48px;
   }
 }
 
@@ -1189,9 +1216,6 @@ body:has(.wachi-collection--piece-stage) {
   .wachi-collection__content { padding-inline: .75rem; }
   .wachi-collection__grid { column-gap: .3rem; }
   .wachi-collection__image { height: 42vw; }
-  .wachi-checkout__row-2 {
-    grid-template-columns: 1fr;
-  }
   .wachi-checkout--summary-only .wachi-checkout__item {
     grid-template-columns: 88px minmax(0, 1fr);
     gap: 1.15rem;

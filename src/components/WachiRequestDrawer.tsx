@@ -36,14 +36,6 @@ interface DraftOrderConfirmation {
   totalAmount: number;
 }
 
-const CLIENT_PROFILES = [
-  'PARTICULAR',
-  'ARQUITECTO / DISEÑADOR',
-  'PROYECTO COMERCIAL',
-] as const;
-
-type ClientProfile = (typeof CLIENT_PROFILES)[number];
-
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function parseClpAmount(priceLabel: string): number {
@@ -64,15 +56,10 @@ const WachiRequestDrawer = ({
   onUpdateItemQuantity,
   onClearItems,
 }: WachiRequestDrawerProps) => {
-  const [clientProfile, setClientProfile] = useState<ClientProfile>('PARTICULAR');
   const [customerEmail, setCustomerEmail] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [address1, setAddress1] = useState('');
-  const [address2, setAddress2] = useState('');
-  const [city, setCity] = useState('');
-  const [country, setCountry] = useState('CHILE');
   const [comments, setComments] = useState('');
   const [fallbackQuantity, setFallbackQuantity] = useState(1);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -132,21 +119,9 @@ const WachiRequestDrawer = ({
     const trimmedPhone = customerPhone.trim();
     const trimmedFirstName = firstName.trim();
     const trimmedLastName = lastName.trim();
-    const trimmedAddress1 = address1.trim();
-    const trimmedAddress2 = address2.trim();
-    const trimmedCity = city.trim();
-    const trimmedCountry = country.trim() || 'Chile';
     const trimmedComments = comments.trim();
     const fullName = [trimmedFirstName, trimmedLastName].filter(Boolean).join(' ').trim();
 
-    if (!EMAIL_REGEX.test(trimmedEmail)) {
-      setErrorMessage('Ingresa un correo electrónico válido.');
-      return;
-    }
-    if (trimmedPhone.replace(/[^\d]/g, '').length < 7) {
-      setErrorMessage('Ingresa un teléfono de contacto válido.');
-      return;
-    }
     if (trimmedFirstName.length < 2) {
       setErrorMessage('Ingresa tu nombre.');
       return;
@@ -155,12 +130,12 @@ const WachiRequestDrawer = ({
       setErrorMessage('Ingresa tu apellido.');
       return;
     }
-    if (trimmedAddress1.length < 3) {
-      setErrorMessage('Ingresa tu dirección de despacho.');
+    if (!EMAIL_REGEX.test(trimmedEmail)) {
+      setErrorMessage('Ingresa un correo electrónico válido.');
       return;
     }
-    if (trimmedCity.length < 2) {
-      setErrorMessage('Ingresa tu ciudad o comuna.');
+    if (trimmedPhone.replace(/[^\d]/g, '').length < 7) {
+      setErrorMessage('Ingresa un teléfono de contacto válido.');
       return;
     }
 
@@ -184,16 +159,11 @@ const WachiRequestDrawer = ({
           priceAmount: parseClpAmount(snapshotItems[0]?.piece.price || '0'),
           selectedSize: snapshotItems[0]?.selectedSize || null,
           quantity: snapshotItems[0]?.quantity || 1,
-          clientProfile,
           customerFirstName: trimmedFirstName,
           customerLastName: trimmedLastName,
           customerName: fullName,
           customerEmail: trimmedEmail,
           customerPhone: trimmedPhone,
-          address1: trimmedAddress1,
-          address2: trimmedAddress2,
-          city: trimmedCity,
-          country: trimmedCountry,
           comments: trimmedComments,
         }),
       });
@@ -286,31 +256,39 @@ const WachiRequestDrawer = ({
           <div className="wachi-checkout__section">
             <h2 className="wachi-checkout__heading">INFORMACIÓN DE CONTACTO</h2>
 
-            <div className="wachi-checkout__field">
-              <span className="wachi-checkout__label">PERFIL DEL SOLICITANTE</span>
-              <div
-                className="wachi-checkout__profile-group"
-                role="radiogroup"
-                aria-label="Perfil del solicitante"
-              >
-                {CLIENT_PROFILES.map((profile) => {
-                  const isActive = clientProfile === profile;
-                  return (
-                    <button
-                      key={profile}
-                      type="button"
-                      role="radio"
-                      aria-checked={isActive}
-                      disabled={isSubmitting}
-                      onClick={() => setClientProfile(profile)}
-                      className={`wachi-checkout__profile-btn${
-                        isActive ? ' wachi-checkout__profile-btn--active' : ''
-                      }`}
-                    >
-                      {profile}
-                    </button>
-                  );
-                })}
+            <div className="wachi-checkout__row-2">
+              <div className="wachi-checkout__field">
+                <label htmlFor="wachi-checkout-first-name" className="wachi-checkout__label">
+                  NOMBRE
+                </label>
+                <input
+                  id="wachi-checkout-first-name"
+                  name="firstName"
+                  type="text"
+                  required
+                  autoComplete="given-name"
+                  value={firstName}
+                  onChange={(event) => setFirstName(event.target.value)}
+                  disabled={isSubmitting}
+                  className="wachi-checkout__input"
+                />
+              </div>
+
+              <div className="wachi-checkout__field">
+                <label htmlFor="wachi-checkout-last-name" className="wachi-checkout__label">
+                  APELLIDO
+                </label>
+                <input
+                  id="wachi-checkout-last-name"
+                  name="lastName"
+                  type="text"
+                  required
+                  autoComplete="family-name"
+                  value={lastName}
+                  onChange={(event) => setLastName(event.target.value)}
+                  disabled={isSubmitting}
+                  className="wachi-checkout__input"
+                />
               </div>
             </div>
 
@@ -349,118 +327,8 @@ const WachiRequestDrawer = ({
                 className="wachi-checkout__input"
               />
             </div>
-          </div>
 
-          <div className="wachi-checkout__section">
-            <h2 className="wachi-checkout__heading">DIRECCIÓN DE DESPACHO</h2>
-
-            <div className="wachi-checkout__row-2">
-              <div className="wachi-checkout__field">
-                <label htmlFor="wachi-checkout-first-name" className="wachi-checkout__label">
-                  NOMBRE
-                </label>
-                <input
-                  id="wachi-checkout-first-name"
-                  name="firstName"
-                  type="text"
-                  required
-                  autoComplete="given-name"
-                  value={firstName}
-                  onChange={(event) => setFirstName(event.target.value)}
-                  disabled={isSubmitting}
-                  className="wachi-checkout__input"
-                />
-              </div>
-
-              <div className="wachi-checkout__field">
-                <label htmlFor="wachi-checkout-last-name" className="wachi-checkout__label">
-                  APELLIDO
-                </label>
-                <input
-                  id="wachi-checkout-last-name"
-                  name="lastName"
-                  type="text"
-                  required
-                  autoComplete="family-name"
-                  value={lastName}
-                  onChange={(event) => setLastName(event.target.value)}
-                  disabled={isSubmitting}
-                  className="wachi-checkout__input"
-                />
-              </div>
-            </div>
-
-            <div className="wachi-checkout__field">
-              <label htmlFor="wachi-checkout-address1" className="wachi-checkout__label">
-                DIRECCIÓN
-              </label>
-              <input
-                id="wachi-checkout-address1"
-                name="address1"
-                type="text"
-                required
-                autoComplete="address-line1"
-                value={address1}
-                onChange={(event) => setAddress1(event.target.value)}
-                disabled={isSubmitting}
-                placeholder="ESCRIBE TU DIRECCIÓN..."
-                className="wachi-checkout__input"
-              />
-            </div>
-
-            <div className="wachi-checkout__field">
-              <label htmlFor="wachi-checkout-address2" className="wachi-checkout__label">
-                DEPARTAMENTO, CASA, OFICINA, ETC. (OPCIONAL)
-              </label>
-              <input
-                id="wachi-checkout-address2"
-                name="address2"
-                type="text"
-                autoComplete="address-line2"
-                value={address2}
-                onChange={(event) => setAddress2(event.target.value)}
-                disabled={isSubmitting}
-                placeholder="DEPARTAMENTO, CASA, PISO, ETC."
-                className="wachi-checkout__input"
-              />
-            </div>
-
-            <div className="wachi-checkout__row-2">
-              <div className="wachi-checkout__field">
-                <label htmlFor="wachi-checkout-city" className="wachi-checkout__label">
-                  CIUDAD / COMUNA
-                </label>
-                <input
-                  id="wachi-checkout-city"
-                  name="city"
-                  type="text"
-                  required
-                  autoComplete="address-level2"
-                  value={city}
-                  onChange={(event) => setCity(event.target.value)}
-                  disabled={isSubmitting}
-                  className="wachi-checkout__input"
-                />
-              </div>
-
-              <div className="wachi-checkout__field">
-                <label htmlFor="wachi-checkout-country" className="wachi-checkout__label">
-                  PAÍS
-                </label>
-                <input
-                  id="wachi-checkout-country"
-                  name="country"
-                  type="text"
-                  autoComplete="country-name"
-                  value={country}
-                  onChange={(event) => setCountry(event.target.value)}
-                  disabled={isSubmitting}
-                  className="wachi-checkout__input"
-                />
-              </div>
-            </div>
-
-            <div className="wachi-checkout__field">
+            <div className="wachi-checkout__field wachi-checkout__field--desktop-only">
               <label htmlFor="wachi-checkout-comments" className="wachi-checkout__label">
                 COMENTARIOS / MEDIDAS EXACTAS (OPCIONAL)
               </label>
@@ -471,7 +339,7 @@ const WachiRequestDrawer = ({
                 value={comments}
                 onChange={(event) => setComments(event.target.value)}
                 disabled={isSubmitting}
-                placeholder="MEDIDAS EXACTAS DESEADAS, DETALLES DE ACCESO O COMENTARIOS..."
+                placeholder="MEDIDAS EXACTAS DESEADAS O COMENTARIOS..."
                 className="wachi-checkout__textarea"
               />
             </div>
