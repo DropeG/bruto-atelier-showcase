@@ -110,14 +110,14 @@ const pieces: readonly WachiPiece[] = [
   },
   {
     name: 'Banqueta',
-    description: 'Banqueta en lenga patagónica maciza, terminación en aceite-cera inocuo.',
+    description: 'Banqueta en lenga patagónica maciza a medida, terminación en aceite-cera inocuo.',
     image: '/images/shopify-demo/coleccion/banqueta-fondo-blanco.png',
     kind: 'bench',
     price: '$890.000',
     sizes: [
-      'Largo entre 140-156 cm Ancho 45 cm',
-      'Largo entre 157-189 cm Ancho 45 cm',
-      'Largo entre 190-220 cm Ancho 45 cm',
+      '160 X 45 X 45',
+      '150 X 45 X 45',
+      '130 X 45 X 45',
     ],
     perspectives: [
       {
