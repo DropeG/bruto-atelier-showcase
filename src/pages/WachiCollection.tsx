@@ -33,7 +33,7 @@ interface WachiPiece {
 const pieces: readonly WachiPiece[] = [
   {
     name: 'Set',
-    description: 'Comedor completo tallado en lenga maciza de origen austral.',
+    description: 'Set en lenga patagónica maciza a medida, terminación en aceite-cera inocuo.',
     image: '/images/shopify-demo/coleccion/wachi-fondo-blanco.png',
     kind: 'ensemble',
     price: '$4.990.000',
@@ -57,7 +57,7 @@ const pieces: readonly WachiPiece[] = [
   },
   {
     name: 'Mesa',
-    description: 'Cubierta de bordes orgánicos sobre dos apoyos escultóricos en lenga.',
+    description: 'Mesa en lenga patagónica maciza a medida, terminación en aceite-cera inocuo.',
     image: '/images/shopify-demo/coleccion/mesa-fondo-blanco.png',
     kind: 'table',
     price: '$3.290.000',
@@ -86,7 +86,7 @@ const pieces: readonly WachiPiece[] = [
   },
   {
     name: 'Silla',
-    description: 'Estructura de lenga ensamblada a mano con respaldo curvo envolvente.',
+    description: 'Silla en lenga patagónica maciza, terminación en aceite-cera inocuo.',
     image: '/images/shopify-demo/coleccion/silla-fondo-blanco.png',
     kind: 'chair',
     price: '$620.000',
@@ -110,10 +110,15 @@ const pieces: readonly WachiPiece[] = [
   },
   {
     name: 'Banqueta',
-    description: 'Asiento continuo de perfil limpio en madera de lenga natural.',
+    description: 'Banqueta en lenga patagónica maciza, terminación en aceite-cera inocuo.',
     image: '/images/shopify-demo/coleccion/banqueta-fondo-blanco.png',
     kind: 'bench',
     price: '$890.000',
+    sizes: [
+      'Largo entre 140-156 cm Ancho 45 cm',
+      'Largo entre 157-189 cm Ancho 45 cm',
+      'Largo entre 190-220 cm Ancho 45 cm',
+    ],
     perspectives: [
       {
         src: '/images/shopify-demo/coleccion/banqueta-fondo-blanco.png',
